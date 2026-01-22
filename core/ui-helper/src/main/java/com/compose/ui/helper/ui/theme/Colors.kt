@@ -82,6 +82,7 @@ object Colors {
     val GreenLight = Color(0xFF4CAF50)
 
 
+
     // Blue Donker shades
     val BlueDonker10 = Color(0xFFF6F9FD)
     val BlueDonker50 = Color(0xFFE7EAF1)
@@ -109,35 +110,17 @@ object Colors {
     val Orange900 = Color(0xFFE65100)
 
     // Green shades
-    val Green10 = Color(0xFFE3FFEC)
-    val Green50 = Color(0xFFe5f5e5)
-    val Green100 = Color(0xFFc1e7bf)
-    val Green200 = Color(0xFF99d796)
-    val Green300 = Color(0xFF6cc86a)
-    val Green400 = Color(0xFF45bc47)
-    val Green500 = Color(0xFF00b01d)
-    val Green600 = Color(0xFF00a112)
-    val Green700 = Color(0xFF008f00)
-    val Green800 = Color(0xFF007e00)
-    val Green900 = Color(0xFF006000)
-
-//    <color name="green_10">#E3FFEC</color>
-//    <color name="green_50">#e5f5e5</color>
-//    <color name="green_100">#c1e7bf</color>
-//    <color name="green_200">#99d796</color>
-//    <color name="green_300">#6cc86a</color>
-//    <color name="green_400">#45bc47</color>
-//    <color name="green_500">#00b01d</color>
-//    <color name="green_600">#00a112</color>
-//    <color name="green_700">#008f00</color>
-//    <color name="green_800">#007e00</color>
-//    <color name="green_900">#006000</color>
-
-    val GradeA = Color(0xFF00875F)
-    val GradeB = Color(0xFF00B881)
-    val GradeC = Color(0xFF00EBA5)
-    val GradeD = Color(0xFF1FFFBD)
-    val GradeE = Color(0xFF85FFDB)
+    val Green10 = Color(0xFFF9FFFC)
+    val Green50 = Color(0xFFE5F6EC)
+    val Green100 = Color(0xFFC1E8D1)
+    val Green200 = Color(0xFF98D8B4)
+    val Green300 = Color(0xFF6BCA97)
+    val Green400 = Color(0xFF45BF81)
+    val Green500 = Color(0xFF07B36B)
+    val Green600 = Color(0xFF00A461)
+    val Green700 = Color(0xFF009154)
+    val Green800 = Color(0xFF008048)
+    val Green900 = Color(0xFF006133)
 
     // Blue shades
     val Blue10 = Color(0xFFF5FBFF)
@@ -184,5 +167,45 @@ object Colors {
     val Orange4 = Color(0xFFFFB185)
     val Orange5 = Color(0xFFFFF3EB)
 
+    // Primary colors (blue_donker shades)
+    val ColorPrimary10 = Color(BlueDonker10.value)
+    val ColorPrimary50 = Color(BlueDonker50.value)
+    val ColorPrimary100 = Color(BlueDonker100.value)
+    val ColorPrimary200 = Color(BlueDonker200.value)
+    val ColorPrimary300 = Color(BlueDonker300.value)
+    val ColorPrimary400 = Color(BlueDonker400.value)
+    val ColorPrimary500 = Color(BlueDonker500.value)
+    val ColorPrimary600 = Color(BlueDonker600.value)
+    val ColorPrimary700 = Color(BlueDonker700.value)
+    val ColorPrimary800 = Color(BlueDonker800.value)
+    val ColorPrimary900 = Color(BlueDonker900.value)
 
+    // Secondary colors (orange shades)
+    val ColorSecondary10 = Color(Orange10.value)
+    val ColorSecondary50 = Color(Orange50.value)
+    val ColorSecondary100 = Color(Orange100.value)
+    val ColorSecondary200 = Color(Orange200.value)
+    val ColorSecondary300 = Color(Orange300.value)
+    val ColorSecondary400 = Color(Orange400.value)
+    val ColorSecondary500 = Color(Orange500.value)
+    val ColorSecondary600 = Color(Orange600.value)
+    val ColorSecondary700 = Color(Orange700.value)
+    val ColorSecondary800 = Color(Orange800.value)
+    val ColorSecondary900 = Color(Orange900.value)
+
+    // Other colors
+    val Outline = Color(0xFF000000)
+    val ColorPrimary =
+        Color(ColorPrimary700.value) // Assuming colorPrimary_700 is the same as Primary
+    val ColorPrimaryDark =
+        Color(ColorPrimary800.value) // Assuming colorPrimary_800 is the same as PrimaryVariant
+    val ColorPrimaryVariant = Color(0xFFF9591D)
+    val ColorAccent = Color(0xFF34407D) // Assuming colorPrimary_700 is the same as Primary
+    val ColorText = Color(0xFF121931)
+    val ColorText2 = Color(0xFFDB3975)
+
+    val ColorSecondary =
+        Color(ColorSecondary700.value) // Assuming colorSecondary_700 is the same as Secondary
+    val ColorSecondaryDark =
+        Color(ColorSecondary800.value) // Assuming colorSecondary_800 is the same as SecondaryVariant
 }
