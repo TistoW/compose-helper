@@ -26,6 +26,7 @@ fun ButtonOutlinePrimary(
     textStyle: TextStyle = TextAppearance.body2Bold(),
     enabled: Boolean = true,
     horizontalContentPadding: Dp = Spacing.box,
+    colorPrimary: Color = Colors.Green700,
     onClick: () -> Unit
 ) {
     OutlinedButton(
@@ -35,10 +36,10 @@ fun ButtonOutlinePrimary(
 
         shape = RoundedCornerShape(Radius.normal),
         colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = Colors.ColorPrimary
+            contentColor = colorPrimary
         ),
         border = BorderStroke(
-            width = 1.dp, color = if (enabled) Colors.ColorPrimary else Colors.Gray4
+            width = 1.dp, color = if (enabled) colorPrimary else Colors.Gray4
         ),
         contentPadding = PaddingValues(horizontal = horizontalContentPadding, vertical = 0.dp)
     ) {
@@ -46,7 +47,7 @@ fun ButtonOutlinePrimary(
             text = text,
             style = textStyle,
             textAlign = TextAlign.Center,
-            color = if (enabled) Colors.ColorPrimary else Colors.Gray4
+            color = if (enabled) colorPrimary else Colors.Gray4
         )
     }
 }
@@ -58,6 +59,7 @@ fun ButtonNormal(
     textStyle: TextStyle = TextAppearance.body2Bold(),
     enabled: Boolean = true,
     horizontalContentPadding: Dp = Spacing.box,
+    colorPrimary: Color = Colors.Green700,
     onClick: () -> Unit
 ) {
     Button(
@@ -65,7 +67,7 @@ fun ButtonNormal(
         modifier = modifier,
         shape = RoundedCornerShape(Radius.normal),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (enabled) Colors.ColorPrimary else Colors.Gray4,
+            containerColor = if (enabled) colorPrimary else Colors.Gray4,
             contentColor = Color.White
         ),
         enabled = enabled,
