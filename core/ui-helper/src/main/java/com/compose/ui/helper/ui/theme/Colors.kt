@@ -166,46 +166,4 @@ object Colors {
     val Orange3 = Color(0xFFFF711F)
     val Orange4 = Color(0xFFFFB185)
     val Orange5 = Color(0xFFFFF3EB)
-
-    // Primary colors (blue_donker shades)
-    val ColorPrimary10 = Color(BlueDonker10.value)
-    val ColorPrimary50 = Color(BlueDonker50.value)
-    val ColorPrimary100 = Color(BlueDonker100.value)
-    val ColorPrimary200 = Color(BlueDonker200.value)
-    val ColorPrimary300 = Color(BlueDonker300.value)
-    val ColorPrimary400 = Color(BlueDonker400.value)
-    val ColorPrimary500 = Color(BlueDonker500.value)
-    val ColorPrimary600 = Color(BlueDonker600.value)
-    val ColorPrimary700 = Color(BlueDonker700.value)
-    val ColorPrimary800 = Color(BlueDonker800.value)
-    val ColorPrimary900 = Color(BlueDonker900.value)
-
-    // Secondary colors (orange shades)
-    val ColorSecondary10 = Color(Orange10.value)
-    val ColorSecondary50 = Color(Orange50.value)
-    val ColorSecondary100 = Color(Orange100.value)
-    val ColorSecondary200 = Color(Orange200.value)
-    val ColorSecondary300 = Color(Orange300.value)
-    val ColorSecondary400 = Color(Orange400.value)
-    val ColorSecondary500 = Color(Orange500.value)
-    val ColorSecondary600 = Color(Orange600.value)
-    val ColorSecondary700 = Color(Orange700.value)
-    val ColorSecondary800 = Color(Orange800.value)
-    val ColorSecondary900 = Color(Orange900.value)
-
-    // Other colors
-    val Outline = Color(0xFF000000)
-    val ColorPrimary =
-        Color(ColorPrimary700.value) // Assuming colorPrimary_700 is the same as Primary
-    val ColorPrimaryDark =
-        Color(ColorPrimary800.value) // Assuming colorPrimary_800 is the same as PrimaryVariant
-    val ColorPrimaryVariant = Color(0xFFF9591D)
-    val ColorAccent = Color(0xFF34407D) // Assuming colorPrimary_700 is the same as Primary
-    val ColorText = Color(0xFF121931)
-    val ColorText2 = Color(0xFFDB3975)
-
-    val ColorSecondary =
-        Color(ColorSecondary700.value) // Assuming colorSecondary_700 is the same as Secondary
-    val ColorSecondaryDark =
-        Color(ColorSecondary800.value) // Assuming colorSecondary_800 is the same as SecondaryVariant
 }
