@@ -117,4 +117,6 @@ object TextAppearance {
     @Composable
     fun display3Bold() = display3().copy(fontWeight = FontWeight.Bold)
 
+    @Composable
+    fun display4Bold() = display3().copy(fontWeight = FontWeight.Bold)
 }
