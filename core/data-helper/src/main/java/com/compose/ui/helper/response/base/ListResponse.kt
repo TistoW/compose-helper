@@ -13,8 +13,8 @@ data class ListResponse<T>(
     val per_page: Int? = null,
     val prev_page_url: String? = null,
     val to: Int? = null,
-    val meta: Meta = Meta(),
     override var data: List<T> = arrayListOf(),
+    val meta: Meta = Meta(),
     override val total: Int?,
     override val lastSync: String?,
 ) : BaseResponse<List<T>> {
