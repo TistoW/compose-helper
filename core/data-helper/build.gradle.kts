@@ -61,4 +61,13 @@ dependencies {
 
     // Koin
     implementation(libs.koin.androidx.compose)
+
+    // =====================
+    // 🌐 Networking (Retrofit / OkHttp / Gson)
+    // =====================
+    implementation(libs.okhttp)
+    implementation(libs.retrofit)
+    implementation(libs.logging.interceptor)
+    implementation(libs.converter.gson)
+    implementation(libs.gson)
 }

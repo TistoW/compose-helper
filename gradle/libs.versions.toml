@@ -12,7 +12,14 @@ appcompat = "1.7.1"
 material = "1.13.0"
 
 # Dependency Injection
-koinAndroid = "4.1.0"
+koinAndroid = "4.1.1"
+
+# Network & Data
+retrofit = "3.0.0"
+converterGson = "3.0.0"
+okhttp = "5.3.2"
+loggingInterceptor = "5.3.2"
+gson = "2.13.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -38,6 +45,14 @@ material = { group = "com.google.android.material", name = "material", version.r
 # DI
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroid" }
+
+# Network & Data
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
