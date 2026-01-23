@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.compose.ui.helper"
+    namespace = "com.compose.data.helper"
     compileSdk {
         version = release(36)
     }

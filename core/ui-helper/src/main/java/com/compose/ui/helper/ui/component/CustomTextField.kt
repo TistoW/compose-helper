@@ -49,13 +49,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.compose.ui.helper.R
 import com.compose.ui.helper.ui.theme.Colors
 import com.compose.ui.helper.ui.theme.ComposeHelperTheme
 import com.compose.ui.helper.ui.theme.Radius
 import com.compose.ui.helper.ui.theme.Spacing
 import com.compose.ui.helper.ui.theme.TextAppearance
 import com.compose.ui.helper.utils.MobilePreview
+import com.compose.ui.helper.R
 import kotlin.collections.isNotEmpty
 import kotlin.let
 import kotlin.ranges.coerceAtMost

@@ -29,11 +29,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices.TABLET
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.compose.ui.helper.R
 import com.compose.ui.helper.ui.theme.ComposeHelperTheme
 import com.compose.ui.helper.ui.theme.Heights
 import com.compose.ui.helper.ui.theme.Padding
 import com.compose.ui.helper.ui.theme.TextAppearance
+import com.compose.ui.helper.R
 
 @Composable
 fun Toolbars(
