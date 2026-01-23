@@ -45,4 +45,20 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // =====================================================
+    // Jetpack Compose (BOM)
+    // =====================================================
+    implementation(platform(libs.androidx.compose.bom))
+
+    // =====================================================
+    // Compose UI
+    // =====================================================
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+
+    // Koin
+    implementation(libs.koin.androidx.compose)
 }
