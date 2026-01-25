@@ -11,6 +11,7 @@ import java.text.DecimalFormatSymbols
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.compareTo
 import kotlin.random.Random
 
 fun String.remove(string: String): String = replace(string, "")
@@ -58,6 +59,16 @@ fun String.convertDate(
     return this.convertTanggal(toFormat, fromFormat)
 }
 
+fun String?.reformatDate(
+    toFormat: String = "dd MMM yyyy HH:mm:ss",
+    fromFormat: String = "yyyy-MM-dd HH:mm:ss"
+): String {
+    return this?.convertDate(toFormat, fromFormat).def(
+        dummyResult(
+            toFormat
+        )
+    )
+}
 
 const val defaultDateFormat = "yyyy-MM-dd kk:mm:ss"
 const val defaultDateFormatMillisecond = "yyyy-MM-dd kk:mm:ss.SSS"
@@ -430,4 +441,50 @@ fun String?.startWithZero(): String {
 fun String.isEmailValid(): Boolean {
     val emailRegex = Regex("^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})")
     return emailRegex.matches(this)
+}
+
+
+fun String?.shorten(maxLength: Int = 10): String {
+    val displaySearch = if (this?.length.def(0) > maxLength) {
+        this?.take(10) + "..."
+    } else {
+        this.def()
+    }
+    return displaySearch
+}
+
+fun String.ellipsis(maxLength: Int = 10) = shorten(maxLength)
+
+fun String?.startWithZeroPhone(): String? {
+    if (this.isNullOrEmpty()) return this
+    return if (this.startsWith("62")) {
+        "0${this.substring(2)}"
+    } else {
+        this
+    }
+}
+
+fun String.removeTrailingCommaZero(): String {
+    return if (endsWith(",0") || endsWith(".0")) {
+        dropLast(2)
+    } else {
+        this
+    }
+}
+
+fun String?.ifZero(default: String = ""): String {
+    return if (this == "0" || this == "0.0" || this == "0,0" || this == "null" || this == null) default
+    else this.removeTrailingCommaZero()
+}
+
+fun Double?.ifZero(default: String = ""): String {
+    return this.toString().ifZero(default)
+}
+
+fun Int?.ifZero(default: String = ""): String {
+    return this.toString().ifZero(default)
+}
+
+inline fun <T> T.ifCondition(condition: (T) -> Boolean, ifTrue: () -> T): T {
+    return if (this != null && condition(this)) ifTrue() else this
 }

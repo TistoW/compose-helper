@@ -4,15 +4,21 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.More
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -34,26 +41,35 @@ import com.compose.ui.helper.ui.theme.Heights
 import com.compose.ui.helper.ui.theme.Padding
 import com.compose.ui.helper.ui.theme.TextAppearance
 import com.compose.ui.helper.R
+import com.compose.ui.helper.ui.theme.Colors
+import com.compose.ui.helper.ui.theme.Spacing
+import com.compose.ui.helper.utils.MobilePreview
+import com.compose.ui.helper.utils.TabletPreview
 
 @Composable
 fun Toolbars(
     title: String? = null,
-    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
-    iconBack: Painter? = painterResource(R.drawable.ic_arrow_back_black_24dp),
-    iconMore: Painter = painterResource(R.drawable.ic_baseline_more_vert_24),
+    modifier: Modifier = Modifier,
+    iconBack: ImageVector? = Icons.AutoMirrored.Filled.ArrowBack, // ImageVector.vectorResource(id = uiDrawable.ic_arrow_back_black_24dp)
+    iconMore: ImageVector = Icons.AutoMirrored.Filled.More,
     saveText: String? = null,
     deleteText: String? = null,
+    isHideBack: Boolean = false,
     onBack: (() -> Unit)? = null,
     onMore: (() -> Unit)? = null,
     onDelete: (() -> Unit)? = null,
-    onSave: (() -> Unit)? = null
+    isEnabledDelete: Boolean = true,
+    isLoadingDelete: Boolean = false,
+    onSave: (() -> Unit)? = null,
+    isEnabledSave: Boolean = true,
+    isLoadingSave: Boolean = false,
 ) {
 
     Box(
         modifier = modifier
             .fillMaxWidth()
             .height(56.dp)
-            .background(MaterialTheme.colorScheme.surface)
+            .background(Colors.White)
     ) {
         Row(
             modifier = Modifier
@@ -61,16 +77,19 @@ fun Toolbars(
                 .padding(start = Padding.small, end = Padding.box),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (onBack != null) {
+            if (onBack != null && !isHideBack) {
                 IconButton(onClick = onBack) {
                     Icon(
-                        painter = iconBack ?: painterResource(R.drawable.ic_arrow_back_black_24dp),
+                        imageVector = iconBack
+                            ?: Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back"
                     )
                 }
+            } else {
+                Spacer(modifier = Modifier.width(Spacing.box))
             }
             Text(
-                text = title ?: stringResource(id = R.string.toolbar),
+                text = title ?: "Title",
                 style = TextAppearance.body1Bold(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -81,54 +100,61 @@ fun Toolbars(
             )
 
             if (onDelete != null) {
-                ButtonOutlinePrimary(
-                    text = deleteText ?: stringResource(id = R.string.hapus),
+                SimpleButton(
+                    text = deleteText ?: "Hapus",
                     onClick = onDelete,
-                    modifier = Modifier
-                        .height(Heights.normal)
+                    isLoading = isLoadingDelete,
+                    enabled = isEnabledDelete,
+                    modifier = Modifier.height(Heights.normal)
                         .padding(end = Padding.box)
+                        .defaultMinSize(minWidth = 90.dp),
+                    strokeWidth = 1.dp,
+                    textColor = Colors.ColorPrimary
                 )
             }
 
             if (onSave != null) {
-                ButtonNormal(
-                    text = saveText ?: stringResource(id = R.string.simpan),
+                SimpleButton(
+                    text = saveText ?: "Simpan",
                     onClick = onSave,
+                    isLoading = isLoadingSave,
+                    enabled = isEnabledSave,
                     modifier = Modifier.height(Heights.normal)
+                        .defaultMinSize(minWidth = 90.dp)
                 )
             }
 
             if (onMore != null) {
                 IconButton(onClick = onMore) {
                     Icon(
-                        painter = iconMore, contentDescription = "Add"
+                        imageVector = iconMore, contentDescription = "Add"
                     )
                 }
             }
 
         }
 
-        HorizontalDivider(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .height(0.5.dp),
-            color = Color.LightGray
-        )
+        SimpleHorizontalDivider(modifier = Modifier.align(Alignment.BottomCenter))
     }
 }
 
 
-@Preview(showBackground = true)
-@Preview(name = "Tablet", device = TABLET)
+@MobilePreview
 @Composable
-fun ToolbarPreview() {
+fun MobileToolbarPreviews() {
     ComposeHelperTheme {
         Toolbars()
     }
 }
 
+@TabletPreview
 @Composable
-fun Modifier.insertTopBarPadding() = this.windowInsetsPadding(
-    WindowInsets.statusBars.only(WindowInsetsSides.Top)
-)
+fun TabletToolbarPreviews() {
+    ComposeHelperTheme {
+        Toolbars(
+            onSave = {},
+            onDelete = {},
+        )
+    }
+
+}

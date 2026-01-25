@@ -2,6 +2,8 @@ package com.compose.ui.helper.utils
 
 import android.os.Handler
 import android.os.Looper
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 
 class DebouncedTextWatcher(
     private val delay: Long = 750L,
@@ -30,5 +32,15 @@ class DebouncedTextWatcher(
 
     fun cancel() {
         handler.removeCallbacks(runnable)
+    }
+}
+
+@Composable
+fun rememberDebouncedTextWatcher(
+    delay: Long = 750L,
+    onDebounce: (String) -> Unit
+): DebouncedTextWatcher {
+    return remember(delay) {
+        DebouncedTextWatcher(delay, onDebounce)
     }
 }

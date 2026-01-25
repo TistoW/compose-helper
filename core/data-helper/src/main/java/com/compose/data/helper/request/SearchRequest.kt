@@ -3,6 +3,7 @@ package com.compose.data.helper.request
 import kotlin.collections.toMutableList
 import kotlin.text.isNullOrEmpty
 
+
 data class SearchRequest(
     var advanceQuery: List<Search>? = null,
     var page: Int = 1,

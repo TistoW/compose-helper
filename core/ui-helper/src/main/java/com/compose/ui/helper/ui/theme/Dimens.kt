@@ -12,15 +12,15 @@ object Radius {
 }
 
 object Spacing {
-    val tiny = 4.dp       // dulu marginTiny
-    val extraSmall = 6.dp       // dulu marginTiny
-    val small = 8.dp      // dulu marginSmall / paddingSmall
-    val box = 12.dp       // dulu marginBox / paddingBox
-    val normal = 20.dp    // <- sesuai request (default)
-    val medium = 24.dp
-    val large = 32.dp
-    val extra = 40.dp
-    val extraLarge = 48.dp
+    val tiny = 4.dp
+    val small = 8.dp
+    val box = 12.dp
+    val normal = 16.dp    // default
+    val medium = 20.dp
+    val large = 24.dp
+    val extraLarge = 32.dp
+    val huge = 48.dp
+    val extraHuge = 54.dp
 }
 
 object Heights {
@@ -38,8 +38,8 @@ object Padding {
     val normal = Spacing.normal
     val medium = Spacing.medium
     val large = Spacing.large
-    val extra = Spacing.extra
-    val extraLarge = Spacing.extraLarge
+    val extra = Spacing.extraLarge
+    val extraLarge = Spacing.huge
 }
 
 object Margin {
@@ -49,8 +49,8 @@ object Margin {
     val normal = Spacing.normal
     val medium = Spacing.medium
     val large = Spacing.large
-    val extra = Spacing.extra
-    val extraLarge = Spacing.extraLarge
+    val extra = Spacing.extraLarge
+    val extraLarge = Spacing.huge
 }
 
 object Dimens {
@@ -75,8 +75,8 @@ object Dimens {
     val marginNormal = Spacing.normal
     val marginMedium = Spacing.medium
     val marginLarge = Spacing.large
-    val marginExtra = Spacing.extra
-    val marginExtraLarge = Spacing.extraLarge
+    val marginExtra = Spacing.extraLarge
+    val marginExtraLarge = Spacing.huge
 
     // Padding
     val paddingTiny = Spacing.tiny
@@ -84,6 +84,6 @@ object Dimens {
     val paddingBox = Spacing.box
     val paddingNormal = Spacing.normal
     val paddingMedium = Spacing.medium
-    val paddingExtra = Spacing.large
-    val paddingExtraLarge = Spacing.extra
+    val paddingExtra = Spacing.extraLarge
+    val paddingExtraLarge = Spacing.huge
 }
