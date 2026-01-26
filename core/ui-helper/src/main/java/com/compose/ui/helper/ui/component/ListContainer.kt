@@ -39,9 +39,10 @@ fun <STATE> ListContainer(
     uiState: BaseUiState<STATE>,
     updateState: (BaseUiState<STATE>.() -> BaseUiState<STATE>) -> Unit = {},
     onSearch: (String) -> Unit = {},
-    filterOptions: List<FilterGroup> = defaultFilter(),
+    filterOptions: List<FilterGroup> = listOf(),
     horizontalPadding: Float? = null,
-    showForm: () -> Unit = {},
+    showSearch: Boolean = true,
+    showForm: (() -> Unit)? = null,
     onRefresh: () -> Unit = {},
     onLoadMore: () -> Unit = {},
     onBack: (() -> Unit)? = null,
@@ -100,26 +101,29 @@ fun <STATE> ListContainer(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    CustomTextField(
-                        value = searchQuery,
-                        onValueChange = {
-                            onSearch(it)
-                            searchQuery = it
-                        },
-                        hint = "Cari...",
-                        style = TextFieldStyle.OUTLINED,
-                        strokeWidth = 0.5.dp,
-                        strokeColor = Colors.Gray3,
-                        floatingLabel = false,
-                        cornerRadius = Radius.normal,
-                        leadingIcon = painterResource(R.drawable.ic_search),
-                        endIcon = if (searchQuery.isNotEmpty()) painterResource(R.drawable.ic_asset_close) else null,
-                        endIconOnClick = {
-                            searchQuery = ""
-                            onSearch("")
-                        },
-                        modifier = Modifier.weight(1f)
-                    )
+                    if (showSearch) {
+                        CustomTextField(
+                            value = searchQuery,
+                            onValueChange = {
+                                onSearch(it)
+                                searchQuery = it
+                            },
+                            hint = "Cari...",
+                            style = TextFieldStyle.OUTLINED,
+                            strokeWidth = 0.5.dp,
+                            strokeColor = Colors.Gray3,
+                            floatingLabel = false,
+                            cornerRadius = Radius.normal,
+                            leadingIcon = painterResource(R.drawable.ic_search),
+                            endIcon = if (searchQuery.isNotEmpty()) painterResource(R.drawable.ic_asset_close) else null,
+                            endIconOnClick = {
+                                searchQuery = ""
+                                onSearch("")
+                            },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+
 
                     if (!isMobile) {
                         Box(modifier = Modifier.weight(1.5f))
@@ -129,20 +133,11 @@ fun <STATE> ListContainer(
                         modifier = Modifier
                             .height(IntrinsicSize.Min)
                     ) {
-                        Row(
-                            modifier = Modifier.align(Alignment.CenterEnd),
-                        ) {
-
-                            if (!isMobile) {
-                                RefreshButton(onClick = onRefresh)
-                                Spacer(Modifier.width(Spacing.small))
-                            }
-
+                        if (filterOptions.isNotEmpty()) {
                             FilterButton(
                                 count = uiState.filters.size,
                                 onClick = { showSheetFilter = true }
                             )
-
                         }
                     }
                 }
@@ -182,20 +177,22 @@ fun <STATE> ListContainer(
                         }
                     }
 
-                    FloatingActionButton(
-                        onClick = {
-                            showForm()
-                        },
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(Spacing.normal),
-                        containerColor = Colors.ColorPrimary
-                    ) {
-                        Icon(
-                            Icons.Default.Add,
-                            contentDescription = "Add Category",
-                            tint = Colors.White
-                        )
+                    if (showForm != null) {
+                        FloatingActionButton(
+                            onClick = {
+                                showForm()
+                            },
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(Spacing.normal),
+                            containerColor = Colors.ColorPrimary
+                        ) {
+                            Icon(
+                                Icons.Default.Add,
+                                contentDescription = "Add Category",
+                                tint = Colors.White
+                            )
+                        }
                     }
 
                     if (showSheetFilter) {
