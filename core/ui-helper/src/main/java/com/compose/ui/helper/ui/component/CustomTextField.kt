@@ -49,6 +49,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.compose.data.helper.utils.ext.ifZero
 import com.compose.ui.helper.ui.theme.Colors
 import com.compose.ui.helper.ui.theme.ComposeHelperTheme
 import com.compose.ui.helper.ui.theme.Radius
@@ -140,20 +141,24 @@ fun CustomTextField(
         strokeWidth
     }
 
+
     var tfv by remember {
-        mutableStateOf(TextFieldValue(text = value, selection = TextRange(value.length)))
+        val mValue = if (formatCurrency) value.ifZero() else value
+        mutableStateOf(TextFieldValue(text = mValue, selection = TextRange(mValue.length)))
     }
 
+
     LaunchedEffect(value, formatCurrency) {
+        val mValue = if (formatCurrency) value.ifZero() else value
         if (formatCurrency) {
-            val formatted = formatCurrencyValue(value)
+            val formatted = formatCurrencyValue(mValue)
             if (tfv.text != formatted) {
                 tfv = TextFieldValue(formatted, TextRange(formatted.length))
             }
         } else {
-            if (tfv.text != value) {
-                val cur = tfv.selection.start.coerceAtMost(value.length)
-                tfv = tfv.copy(text = value, selection = TextRange(cur))
+            if (tfv.text != mValue) {
+                val cur = tfv.selection.start.coerceAtMost(mValue.length)
+                tfv = tfv.copy(text = mValue, selection = TextRange(cur))
             }
         }
     }
@@ -294,7 +299,7 @@ fun CustomTextField(
                 placeholder = {
                     Text(
                         text = if (!floatingLabel && hint.isNotEmpty()) hint else placeholder,
-                        style = if (!floatingLabel && hint.isNotEmpty()) hintStyle else placeholderStyle
+                        style = if (!floatingLabel && hint.isNotEmpty()) hintStyle else placeholderStyle,
                     )
                 },
                 prefix = {

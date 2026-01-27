@@ -59,7 +59,7 @@ fun ButtonNormal(
     textStyle: TextStyle = TextAppearance.body2Bold(),
     enabled: Boolean = true,
     horizontalContentPadding: Dp = Spacing.box,
-    colorPrimary: Color = Colors.Green700,
+    colorPrimary: Color = Colors.ColorPrimary,
     onClick: () -> Unit
 ) {
     Button(
