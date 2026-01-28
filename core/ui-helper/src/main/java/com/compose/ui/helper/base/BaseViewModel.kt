@@ -199,7 +199,7 @@ abstract class BaseViewModel<STATE> : ViewModel() {
         _uiState.update { it.reducer() }
     }
 
-    protected fun setState(
+    fun setState(
         reducer: STATE.() -> STATE
     ) {
         _uiState.update {
