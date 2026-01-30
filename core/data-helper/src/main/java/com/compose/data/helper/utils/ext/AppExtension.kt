@@ -38,7 +38,10 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import androidx.core.graphics.createBitmap
+import androidx.core.graphics.set
 import com.compose.data.helper.utils.ext.AppConstants.TIME_STAMP_FORMAT
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.qrcode.QRCodeWriter
 
 fun visible() = View.VISIBLE
 fun invisible() = View.INVISIBLE
@@ -483,6 +486,17 @@ fun String.convertUrlToBitmap(): Bitmap? {
         bitmap = BitmapFactory.decodeStream(input)
     } catch (e: Exception) {
         e.printStackTrace()
+    }
+    return bitmap
+}
+
+fun String.toQRCode(dimensions: Int): Bitmap {
+    val bitMatrix = QRCodeWriter().encode(this, BarcodeFormat.QR_CODE, dimensions, dimensions)
+    val bitmap = createBitmap(dimensions, dimensions, Bitmap.Config.RGB_565)
+    for (x in 0 until dimensions) {
+        for (y in 0 until dimensions) {
+            bitmap[x, y] = if (bitMatrix[x, y]) Color.BLACK else Color.WHITE
+        }
     }
     return bitmap
 }

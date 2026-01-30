@@ -70,4 +70,7 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.converter.gson)
     implementation(libs.gson)
+
+    implementation(libs.zxing.android.embedded)
+    implementation(libs.qrgenerator)
 }
