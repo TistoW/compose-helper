@@ -45,6 +45,7 @@ android {
 dependencies {
 
     implementation(project(":core:data-helper"))
+    implementation(project(":core:helper"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
