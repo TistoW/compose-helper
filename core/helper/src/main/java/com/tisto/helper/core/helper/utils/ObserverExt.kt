@@ -1,10 +1,10 @@
-package com.compose.data.helper.utils
+package com.tisto.helper.core.helper.utils
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import com.compose.data.helper.network.Resource
-import com.compose.data.helper.network.State
-import com.compose.data.helper.response.base.ErrorResponse
+import com.tisto.helper.core.helper.retrofit.network.Resource
+import com.tisto.helper.core.helper.retrofit.network.State
+import com.tisto.helper.core.helper.retrofit.response.base.ErrorResponse
 
 fun <T> LiveData<Resource<T>>.observer(
     lifecycleOwner: LifecycleOwner,

@@ -10,7 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.compose.data.helper.utils.ext.shorten
+import com.tisto.helper.core.helper.utils.ext.shorten
 import com.compose.ui.helper.utils.ext.ScreenConfig
 import com.compose.ui.helper.ui.theme.Spacing
 import com.compose.ui.helper.ui.theme.Colors

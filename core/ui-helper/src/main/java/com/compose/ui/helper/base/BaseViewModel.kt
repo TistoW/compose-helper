@@ -9,8 +9,8 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
-import com.compose.data.helper.network.Resource
-import com.compose.data.helper.network.State
+import com.tisto.helper.core.helper.retrofit.network.Resource
+import com.tisto.helper.core.helper.retrofit.network.State
 import com.compose.ui.helper.model.FilterItem
 import com.compose.ui.helper.ui.component.showError
 import com.compose.ui.helper.ui.component.showInfo
@@ -197,14 +197,6 @@ abstract class BaseViewModel<STATE> : ViewModel() {
         reducer: BaseUiState<STATE>.() -> BaseUiState<STATE>
     ) {
         _uiState.update { it.reducer() }
-    }
-
-    protected fun updateState(
-        reducer: STATE.() -> STATE
-    ) {
-        _uiState.update {
-            it.copy(data = it.data?.reducer())
-        }
     }
 
     fun updateState(

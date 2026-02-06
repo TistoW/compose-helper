@@ -1,4 +1,4 @@
-package com.compose.data.helper.response.base
+package com.tisto.helper.core.helper.retrofit.response.base
 
 data class DataResponse<T>(
     override var message: String = "",

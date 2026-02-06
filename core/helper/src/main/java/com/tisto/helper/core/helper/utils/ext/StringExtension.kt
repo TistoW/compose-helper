@@ -1,9 +1,8 @@
-package com.compose.data.helper.utils.ext
+package com.tisto.helper.core.helper.utils.ext
 
 import android.annotation.SuppressLint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -11,7 +10,6 @@ import java.text.DecimalFormatSymbols
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.compareTo
 import kotlin.random.Random
 
 fun String.remove(string: String): String = replace(string, "")
@@ -185,13 +183,13 @@ fun String.getYoutubeId(): String {
     }
 }
 
-fun String.toRequestBody(): RequestBody {
-    return this.toRequestBody("text/plain".toMediaTypeOrNull())
-}
-
-fun Int.toRequestBody(): RequestBody {
-    return this.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-}
+//fun String.toRequestBody(): RequestBody {
+//    return this.toRequestBody("text/plain".toMediaTypeOrNull())
+//}
+//
+//fun Int.toRequestBody(): RequestBody {
+//    return this.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+//}
 
 @SuppressLint("SimpleDateFormat")
 fun String.toSalam(): String {

@@ -1,4 +1,4 @@
-package com.compose.data.helper.utils.ext
+package com.tisto.helper.core.helper.utils.ext
 
 object AppConstants {
     const val TIME_STAMP_FORMAT = "yyyy-MM-dd"

@@ -1,4 +1,4 @@
-package com.compose.data.helper.response.base
+package com.tisto.helper.core.helper.retrofit.response.base
 
 interface BaseResponse<T> {
     val data: T?

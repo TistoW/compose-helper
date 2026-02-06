@@ -1,9 +1,9 @@
-package com.compose.data.helper.utils
+package com.tisto.helper.core.helper.utils
 
-import com.compose.data.helper.request.SearchRequest
-import com.compose.data.helper.utils.ext.logs
-import com.compose.data.helper.utils.ext.toJson
-import com.compose.data.helper.utils.ext.translateJson
+import com.tisto.helper.core.helper.retrofit.request.SearchRequest
+import com.tisto.helper.core.helper.utils.ext.logs
+import com.tisto.helper.core.helper.utils.ext.toJson
+import com.tisto.helper.core.helper.utils.ext.translateJson
 import java.util.HashMap
 
 fun SearchRequest?.convertToQuery(): HashMap<String, String> {

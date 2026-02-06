@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.compose.data.helper.utils.ext.reformatDate
+import com.tisto.helper.core.helper.utils.ext.reformatDate
 import com.compose.ui.helper.base.BaseUiState
 import com.compose.ui.helper.model.FilterGroup
 import com.compose.ui.helper.ui.theme.Colors

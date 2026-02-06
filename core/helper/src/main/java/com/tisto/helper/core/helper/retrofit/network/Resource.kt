@@ -1,6 +1,5 @@
-package com.compose.data.helper.network
-
-import com.compose.data.helper.utils.ext.def
+package com.tisto.helper.core.helper.retrofit.network
+import com.tisto.helper.core.helper.utils.ext.def
 
 data class Resource<out T>(
     val state: State,

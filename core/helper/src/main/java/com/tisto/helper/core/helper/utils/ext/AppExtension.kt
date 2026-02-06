@@ -1,4 +1,4 @@
-package com.compose.data.helper.utils.ext
+package com.tisto.helper.core.helper.utils.ext
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -39,7 +39,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
-import com.compose.data.helper.utils.ext.AppConstants.TIME_STAMP_FORMAT
+import com.tisto.helper.core.helper.utils.ext.AppConstants.TIME_STAMP_FORMAT
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
 

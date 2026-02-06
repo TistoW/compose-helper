@@ -49,7 +49,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.compose.data.helper.utils.ext.ifZero
+import com.tisto.helper.core.helper.utils.ext.ifZero
 import com.compose.ui.helper.ui.theme.Colors
 import com.compose.ui.helper.ui.theme.ComposeHelperTheme
 import com.compose.ui.helper.ui.theme.Radius
