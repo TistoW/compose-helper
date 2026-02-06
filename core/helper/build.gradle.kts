@@ -81,13 +81,12 @@ dependencies {
     implementation(libs.zxing.android.embedded)
     implementation(libs.qrgenerator)
 
-    implementation(platform("io.ktor:ktor-bom:3.4.0"))
-
-    implementation("io.ktor:ktor-client-core")
-    implementation("io.ktor:ktor-client-okhttp") // Android engine (recommended)
-    implementation("io.ktor:ktor-client-content-negotiation")
-    implementation("io.ktor:ktor-serialization-kotlinx-json")
-    implementation("io.ktor:ktor-client-logging")
+    implementation(platform(libs.ktor.bom))
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp) // Android engine (recommended)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.logging)
 
     implementation(libs.filekit.dialogs.compose)
     implementation(libs.filekit.core)
