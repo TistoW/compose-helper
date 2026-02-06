@@ -237,7 +237,7 @@ fun <STATE, ITEMS> ListScaffold(
                 }
 
                 if (onSave != null && screenConfig.isMobileOnly) {
-                    ButtonNormal(
+                    ButtonNormalSimple(
                         text = saveText,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -255,7 +255,9 @@ fun <STATE, ITEMS> ListScaffold(
 @Serializable
 data class Example(
     val id: String = "",
+    val code: String = "",
     val name: String = "",
+    val daerah: String = "",
     val createdAt: String = "",
 )
 
@@ -263,7 +265,9 @@ data class Example(
 private val list = List(10) {
     Example(
         id = it.toString(),
-        name = "Category $it",
+        name = "Desa $it",
+        code = "CODE-${it}${it - 1}",
+        daerah = "Kabupaten $it",
         createdAt = "12 Des 2025"
     )
 }
@@ -325,12 +329,12 @@ fun ScreenContentPreview(
 @MobilePreview
 @Composable
 fun MobilePreview() {
-    ScreenContentPreview(ScreenConfig(500.dp))
+    ScreenContentPreview()
 }
 
 @TabletPreview
 @Composable
 fun TabletPreview() {
-    ScreenContentPreview()
+    ScreenContentPreview(ScreenConfig(700.dp))
 }
 

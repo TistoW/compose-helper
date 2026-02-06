@@ -22,3 +22,5 @@ fun String.title(isDataAvailable: Boolean): String {
     }$this"
     return title
 }
+
+fun isMobilePhone(): Boolean = false // for real device android

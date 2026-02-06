@@ -53,7 +53,7 @@ fun ButtonOutlinePrimary(
 }
 
 @Composable
-fun ButtonNormal(
+fun ButtonNormalSimple(
     modifier: Modifier = Modifier,
     text: String,
     textStyle: TextStyle = TextAppearance.body2Bold(),

@@ -207,6 +207,14 @@ abstract class BaseViewModel<STATE> : ViewModel() {
         }
     }
 
+    fun updateState(
+        reducer: STATE.() -> STATE
+    ) {
+        _uiState.update {
+            it.copy(data = it.data?.reducer())
+        }
+    }
+
     protected fun setLoadingProcess(value: Boolean) {
         updateUiState { copy(isLoadingProcess = value) }
     }
