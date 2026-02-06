@@ -199,7 +199,7 @@ abstract class BaseViewModel<STATE> : ViewModel() {
         _uiState.update { it.reducer() }
     }
 
-    fun setState(
+    protected fun updateState(
         reducer: STATE.() -> STATE
     ) {
         _uiState.update {
@@ -318,15 +318,15 @@ abstract class StatefulViewModel<STATE : BaseState<R, I, STATE>, R, I> : BaseVie
     fun getItem() = uiState.value.data?.item
 
     fun updateItems(update: List<I>.() -> List<I>) {
-        setState { copies(items = items.update()) }
+        updateState { copies(items = items.update()) }
     }
 
     fun updateItem(update: I.() -> I?) {
-        setState { copies(item = item?.update()) }
+        updateState { copies(item = item?.update()) }
     }
 
     fun updateRequest(update: R.() -> R) {
-        setState { copies(request = request?.update()) }
+        updateState { copies(request = request?.update()) }
     }
 
     fun <T> onLoaded(page: Int, res: Resource<List<T>>) {
