@@ -1,6 +1,6 @@
 package com.tisto.helper.core.helper.retrofit.response.base
 
-data class ListResponse<T>(
+data class ListResponseRetrofit<T>(
     override var message: String = "",
     var code: String = "",
     val current_page: Int = 0,
@@ -17,7 +17,7 @@ data class ListResponse<T>(
     val meta: Meta = Meta(),
     override val total: Int?,
     override val lastSync: String?,
-) : BaseResponse<List<T>> {
+) : BaseResponseRetrofit<List<T>> {
     data class Meta(
         val offset: Int = 0,
         val page: Int = 0,

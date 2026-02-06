@@ -1,6 +1,6 @@
 package com.tisto.helper.core.helper.retrofit.response.base
 
-interface BaseResponse<T> {
+interface BaseResponseRetrofit<T> {
     val data: T?
     val message: String?
     val last_page: Int?

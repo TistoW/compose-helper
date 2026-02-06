@@ -1,4 +1,4 @@
-package com.tisto.helper.core.helper.retrofit.base
+package com.tisto.helper.core.helper.base
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.lazy.LazyListState
@@ -9,13 +9,15 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
-import com.tisto.helper.core.helper.retrofit.network.Resource
-import com.tisto.helper.core.helper.retrofit.network.State
+import com.tisto.helper.core.helper.retrofit.network.ResourceRetrofit
 import com.tisto.helper.core.helper.retrofit.model.FilterItem
-import com.tisto.helper.core.helper.ui.component.showError
-import com.tisto.helper.core.helper.ui.component.showInfo
-import com.tisto.helper.core.helper.ui.component.showSuccess
-import com.tisto.helper.core.helper.ui.component.showWarning
+import com.tisto.helper.core.helper.component.showError
+import com.tisto.helper.core.helper.component.showInfo
+import com.tisto.helper.core.helper.component.showSuccess
+import com.tisto.helper.core.helper.component.showWarning
+import com.tisto.helper.core.helper.retrofit.base.BaseRetrofitViewModel
+import com.tisto.helper.core.helper.source.network.Resource
+import com.tisto.helper.core.helper.utils.ext.def
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -24,7 +26,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -219,59 +220,61 @@ abstract class BaseViewModel<STATE> : ViewModel() {
         _uiState.update { it.copy(screen = screen) }
     }
 
-    protected fun <T> Flow<Resource<T>>.collectResource(
+    protected fun <R> Flow<Resource<R>>.collectResource(
         isLoading: Boolean = true,
         toastError: Boolean = true,
         onError: (String) -> Unit = {},
-        onComplete: () -> Unit = {},
-        onSuccessAllRes: (Resource<T>) -> Unit = {},
-        onSuccess: (T) -> Unit = {},
+        onSuccess: (R) -> Unit = {},
+        onSuccessAllRes: (Resource<R>) -> Unit = {},
     ) {
         viewModelScope.launch {
             try {
-                this@collectResource
-                    .catch { e -> onError(e.message ?: "Unknown Error") }
-                    .collect { res ->
-                        when (res.state) {
-                            State.LOADING -> if (isLoading) setLoading(true)
-                            State.SUCCESS -> {
-                                setLoading(false)
-                                setLoadingProcess(false)
-                                onSuccessAllRes(res)
-                                res.body?.let { onSuccess(it) } ?: onError("Data is null")
-                            }
+                collect { result ->
+                    when (result) {
+                        is Resource.Loading -> {
+                            if (isLoading) setLoading(true)
+                        }
 
-                            State.ERROR -> {
-                                setLoading(false)
-                                setLoadingProcess(false)
-                                val message = res.message
-                                if (toastError) toastError(message)
-                                onError(message)
+                        is Resource.Success -> {
+                            setLoading(false)
+                            setLoadingProcess(false)
+                            onSuccess(result.data)
+                            onSuccessAllRes(result)
+                            updateUiState {
+                                copy(
+                                    totalPage = result.lastPage.def(1),
+                                    totalSize = result.total.def(0)
+                                )
                             }
                         }
+
+                        is Resource.Error -> {
+                            setLoading(false)
+                            setLoadingProcess(false)
+                            val message = result.message ?: "Unknown error"
+                            if (toastError) toastError(message)
+                            onError(message)
+                        }
                     }
+                }
             } catch (e: Exception) {
                 setLoading(false)
                 setLoadingProcess(false)
                 val message = e.message ?: "Unknown error"
                 if (toastError) toastError(message)
                 onError(e.message ?: "Exception error")
-            } finally {
-                onComplete()
             }
+
         }
     }
 
-    fun <T> onLoaded(page: Int, currentList: List<T>, res: Resource<List<T>>) {
-        val items = res.body ?: listOf()
+    fun <T> onLoaded(page: Int, currentItems: List<T>, items: List<T>) {
         updateUiState {
             copy(
-                page = page,
                 hasMore = items.size >= perPage,
-                totalPage = res.lastPage,
-                totalSize = res.total,
+                page = page,
                 loadingSize = items.size,
-                loadedCount = currentList.size + items.size
+                loadedCount = currentItems.size + items.size
             )
         }
     }
@@ -303,7 +306,8 @@ class StateHandler<STATE, R, I>(
 
 }
 
-abstract class StatefulViewModel<STATE : BaseState<R, I, STATE>, R, I> : BaseViewModel<STATE>() {
+abstract class StatefulViewModel<STATE : BaseState<R, I, STATE>, R, I> :
+    BaseRetrofitViewModel<STATE>() {
 
     fun getItems() = uiState.value.data?.items ?: emptyList()
     fun getRequest() = uiState.value.data?.request
@@ -321,7 +325,7 @@ abstract class StatefulViewModel<STATE : BaseState<R, I, STATE>, R, I> : BaseVie
         updateState { copies(request = request?.update()) }
     }
 
-    fun <T> onLoaded(page: Int, res: Resource<List<T>>) {
+    fun <T> onLoaded(page: Int, res: ResourceRetrofit<List<T>>) {
         val items = res.body ?: listOf()
         updateUiState {
             copy(
@@ -338,7 +342,7 @@ abstract class StatefulViewModel<STATE : BaseState<R, I, STATE>, R, I> : BaseVie
 
 @Composable
 fun <REQ> ObserveUiEffect(
-    vm: BaseViewModel<REQ>,
+    vm: BaseRetrofitViewModel<REQ>,
 ) {
     val uiState by vm.uiState.collectAsStateWithLifecycle()
 

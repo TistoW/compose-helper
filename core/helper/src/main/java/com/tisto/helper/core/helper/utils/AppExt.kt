@@ -1,6 +1,6 @@
 package com.tisto.helper.core.helper.utils
 
-import com.tisto.helper.core.helper.retrofit.request.SearchRequest
+import com.tisto.helper.core.helper.source.request.SearchRequest
 import com.tisto.helper.core.helper.utils.ext.logs
 import com.tisto.helper.core.helper.utils.ext.toJson
 import com.tisto.helper.core.helper.utils.ext.translateJson

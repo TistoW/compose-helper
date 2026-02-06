@@ -1,31 +1,27 @@
-package com.tisto.helper.core.helper.ui.component
+package com.tisto.helper.core.helper.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.tisto.helper.core.helper.ui.theme.TextAppearance
 import com.tisto.helper.core.helper.ui.theme.Colors
 import com.tisto.helper.core.helper.ui.theme.Radius
 import com.tisto.helper.core.helper.ui.theme.Spacing
+import com.tisto.helper.core.helper.ui.theme.TextAppearance
 
 @Composable
-fun ButtonNormal(
+fun SimpleButton(
     modifier: Modifier = Modifier,
     text: String,
     textStyle: TextStyle = TextAppearance.body2Bold(),
@@ -39,8 +35,6 @@ fun ButtonNormal(
     cornerRadius: Dp = Radius.normal,
     strokeColor: Color = Colors.ColorPrimary,
     textColor: Color = Colors.White,
-    imageVector: ImageVector? = null,
-    imageTint: Color = Colors.White,
     onClick: () -> Unit
 ) {
     val isOutlined = strokeWidth > 0.dp
@@ -59,7 +53,7 @@ fun ButtonNormal(
             disabledContentColor = Colors.Gray3
         ),
         border = if (isOutlined) {
-            BorderStroke(strokeWidth, if (enabled) strokeColor else Colors.Gray4)
+            BorderStroke(strokeWidth, if (enabled && !isLoading) strokeColor else Colors.Gray4)
         } else null,
         enabled = enabled && !isLoading,
         contentPadding = PaddingValues(horizontal = horizontalContentPadding, vertical = 0.dp),
@@ -77,13 +71,6 @@ fun ButtonNormal(
                 strokeWidth = 2.dp
             )
         } else {
-
-            if (imageVector != null) {
-                Icon(imageVector, null, tint = imageTint)
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-
-
             Text(
                 text = text,
                 style = textStyle,

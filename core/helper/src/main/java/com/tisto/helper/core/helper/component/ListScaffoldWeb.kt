@@ -1,4 +1,4 @@
-package com.tisto.helper.core.helper.ui.component
+package com.tisto.helper.core.helper.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tisto.helper.core.helper.R
-import com.tisto.helper.core.helper.retrofit.base.BaseUiState
+import com.tisto.helper.core.helper.base.BaseUiState
 import com.tisto.helper.core.helper.retrofit.model.FilterGroup
 import com.tisto.helper.core.helper.ui.theme.Colors
 import com.tisto.helper.core.helper.ui.theme.Radius

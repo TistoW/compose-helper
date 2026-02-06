@@ -1,6 +1,6 @@
 package com.tisto.helper.core.helper.retrofit.network
 
-import com.tisto.helper.core.helper.retrofit.response.base.BaseResponse
+import com.tisto.helper.core.helper.retrofit.response.base.BaseResponseRetrofit
 import com.tisto.helper.core.helper.utils.ext.def
 import com.tisto.helper.core.helper.utils.ext.getErrorBody
 import com.tisto.helper.core.helper.utils.ext.logs
@@ -13,18 +13,18 @@ import retrofit2.Response
 import kotlin.let
 
 fun <T, R> apiCall(
-    apiCall: suspend () -> Response<out BaseResponse<T>>,
+    apiCall: suspend () -> Response<out BaseResponseRetrofit<T>>,
     onSuccess: ((R?) -> Unit)? = null,
     mapper: (T) -> R
-): Flow<Resource<R>> = flow {
-    emit(Resource.loading())
+): Flow<ResourceRetrofit<R>> = flow {
+    emit(ResourceRetrofit.loading())
     val response = apiCall()
     if (response.isSuccessful) {
         val result = response.body()
         val data = result?.data?.let(mapper)
         onSuccess?.invoke(data)
         emit(
-            Resource.success(
+            ResourceRetrofit.success(
                 data,
                 result?.message ?: "Server Error",
                 lastPage = result?.last_page.def(),
@@ -35,12 +35,12 @@ fun <T, R> apiCall(
     } else {
         val errorBody = response.getErrorBody()
         val errorCode = errorBody?.code
-        emit(Resource.error(errorBody?.message ?: "Server Error", errorCode))
+        emit(ResourceRetrofit.error(errorBody?.message ?: "Server Error", errorCode))
     }
 }.catch { e ->
     logResponse(e.message)
     e.printStackTrace()
-    emit(Resource.error(e.message.convertErrorMessage(), null))
+    emit(ResourceRetrofit.error(e.message.convertErrorMessage(), null))
 }.flowOn(Dispatchers.IO)
 
 fun logResponse(message: String?) {

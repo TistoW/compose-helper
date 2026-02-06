@@ -1,4 +1,4 @@
-package com.tisto.helper.core.helper.ui.component
+package com.tisto.helper.core.helper.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height

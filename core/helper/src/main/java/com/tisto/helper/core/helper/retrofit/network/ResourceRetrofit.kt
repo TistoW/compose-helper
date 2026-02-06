@@ -1,7 +1,7 @@
 package com.tisto.helper.core.helper.retrofit.network
 import com.tisto.helper.core.helper.utils.ext.def
 
-data class Resource<out T>(
+data class ResourceRetrofit<out T>(
     val state: State,
     val body: T? = null,
     val message: String = "Server Error",
@@ -19,8 +19,8 @@ data class Resource<out T>(
             lastPage: Int = 1,
             total: Int? = 0,
             lastSync: String? = null
-        ): Resource<T> {
-            return Resource(
+        ): ResourceRetrofit<T> {
+            return ResourceRetrofit(
                 state = State.SUCCESS,
                 body = data,
                 message = message,
@@ -30,16 +30,16 @@ data class Resource<out T>(
             )
         }
 
-        fun <T> error(msg: String?, errorCode: String?): Resource<T> {
-            return Resource(
+        fun <T> error(msg: String?, errorCode: String?): ResourceRetrofit<T> {
+            return ResourceRetrofit(
                 state = State.ERROR,
                 message = msg ?: "Server Error",
                 errorCode = errorCode ?: "ERROR"
             )
         }
 
-        fun <T> loading(): Resource<T> {
-            return Resource(State.LOADING, body = null)
+        fun <T> loading(): ResourceRetrofit<T> {
+            return ResourceRetrofit(State.LOADING, body = null)
         }
 
     }

@@ -1,4 +1,4 @@
-package com.tisto.helper.core.helper.ui.component
+package com.tisto.helper.core.helper.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

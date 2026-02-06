@@ -2,17 +2,17 @@ package com.tisto.helper.core.helper.utils
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import com.tisto.helper.core.helper.retrofit.network.Resource
+import com.tisto.helper.core.helper.retrofit.network.ResourceRetrofit
 import com.tisto.helper.core.helper.retrofit.network.State
 import com.tisto.helper.core.helper.retrofit.response.base.ErrorResponse
 
-fun <T> LiveData<Resource<T>>.observer(
+fun <T> LiveData<ResourceRetrofit<T>>.observer(
     lifecycleOwner: LifecycleOwner,
     onError: (ErrorResponse) -> Unit = {},
-    onErrorAllResponse: ((Resource<T>) -> Unit) = { },
+    onErrorAllResponse: ((ResourceRetrofit<T>) -> Unit) = { },
     onLoading: () -> Unit = { },
     onFinished: () -> Unit = { },
-    onSuccessAllResponse: (Resource<T>) -> Unit = {},
+    onSuccessAllResponse: (ResourceRetrofit<T>) -> Unit = {},
     onSuccess: (T) -> Unit = {}
 ) {
     observe(lifecycleOwner) {
