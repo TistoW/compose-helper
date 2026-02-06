@@ -23,3 +23,4 @@ rootProject.name = "compose-helper"
 include(":app")
 include(":core:ui-helper")
 include(":core:data-helper")
+include(":core:helper")
