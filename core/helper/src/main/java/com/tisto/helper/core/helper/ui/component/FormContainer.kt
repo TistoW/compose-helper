@@ -1,4 +1,4 @@
-package com.compose.ui.helper.ui.component
+package com.tisto.helper.core.helper.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,13 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.tisto.helper.core.helper.utils.ext.shorten
-import com.compose.ui.helper.utils.ext.ScreenConfig
-import com.compose.ui.helper.ui.theme.Spacing
-import com.compose.ui.helper.ui.theme.Colors
-import com.compose.ui.helper.ui.theme.ComposeHelperTheme
-import com.compose.ui.helper.utils.MobilePreview
-import com.compose.ui.helper.utils.TabletPreview
-import com.compose.ui.helper.utils.title
+import com.tisto.helper.core.helper.utils.ext.ScreenConfig
+import com.tisto.helper.core.helper.ui.theme.Spacing
+import com.tisto.helper.core.helper.ui.theme.Colors
+import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
+import com.tisto.helper.core.helper.utils.MobilePreview
+import com.tisto.helper.core.helper.utils.TabletPreview
+import com.tisto.helper.core.helper.utils.title
 
 @Composable
 fun <ITEM> FormContainer(

@@ -1,4 +1,4 @@
-package com.compose.ui.helper.ui.component
+package com.tisto.helper.core.helper.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,16 +17,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.tisto.helper.core.helper.utils.ext.reformatDate
-import com.compose.ui.helper.base.BaseUiState
-import com.compose.ui.helper.model.FilterGroup
-import com.compose.ui.helper.ui.theme.Colors
-import com.compose.ui.helper.ui.theme.Radius
-import com.compose.ui.helper.ui.theme.Spacing
-import com.compose.ui.helper.R
-import com.compose.ui.helper.ui.theme.TextAppearance
-import com.compose.ui.helper.utils.MobilePreview
-import com.compose.ui.helper.utils.TabletPreview
-import com.compose.ui.helper.utils.ext.ScreenConfig
+import com.tisto.helper.core.helper.retrofit.base.BaseUiState
+import com.tisto.helper.core.helper.retrofit.model.FilterGroup
+import com.tisto.helper.core.helper.ui.theme.Colors
+import com.tisto.helper.core.helper.ui.theme.Radius
+import com.tisto.helper.core.helper.ui.theme.Spacing
+import com.tisto.helper.core.helper.ui.theme.TextAppearance
+import com.tisto.helper.core.helper.utils.MobilePreview
+import com.tisto.helper.core.helper.utils.TabletPreview
+import com.tisto.helper.core.helper.utils.ext.ScreenConfig
+import com.tisto.helper.core.helper.R
 import kotlinx.serialization.Serializable
 
 @OptIn(ExperimentalMaterial3Api::class)

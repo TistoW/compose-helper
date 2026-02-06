@@ -1,4 +1,4 @@
-package com.compose.ui.helper.ui.component
+package com.tisto.helper.core.helper.ui.component
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
@@ -18,9 +18,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.compose.ui.helper.R
-import com.compose.ui.helper.ui.theme.ComposeHelperTheme
-import com.compose.ui.helper.ui.theme.TextAppearance
+import com.tisto.helper.core.helper.R
+import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
+import com.tisto.helper.core.helper.ui.theme.TextAppearance
 
 @Composable
 fun EmptyState(

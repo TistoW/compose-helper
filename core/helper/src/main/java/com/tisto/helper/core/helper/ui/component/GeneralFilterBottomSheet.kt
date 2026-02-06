@@ -1,4 +1,4 @@
-package com.compose.ui.helper.ui.component
+package com.tisto.helper.core.helper.ui.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,14 +41,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.compose.ui.helper.R
-import com.compose.ui.helper.model.FilterGroup
-import com.compose.ui.helper.model.FilterItem
-import com.compose.ui.helper.model.FilterType
-import com.compose.ui.helper.ui.theme.Colors
-import com.compose.ui.helper.ui.theme.ComposeHelperTheme
-import com.compose.ui.helper.ui.theme.Spacing
-import com.compose.ui.helper.ui.theme.TextAppearance
+import com.tisto.helper.core.helper.R
+import com.tisto.helper.core.helper.retrofit.model.FilterGroup
+import com.tisto.helper.core.helper.retrofit.model.FilterItem
+import com.tisto.helper.core.helper.retrofit.model.FilterType
+import com.tisto.helper.core.helper.ui.theme.Colors
+import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
+import com.tisto.helper.core.helper.ui.theme.Spacing
+import com.tisto.helper.core.helper.ui.theme.TextAppearance
 import kotlin.apply
 import kotlin.collections.filterNotNull
 import kotlin.collections.firstOrNull

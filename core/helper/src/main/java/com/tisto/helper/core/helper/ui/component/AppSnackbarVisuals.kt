@@ -1,4 +1,4 @@
-package com.compose.ui.helper.ui.component
+package com.tisto.helper.core.helper.ui.component
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.compose.ui.helper.base.SnackbarType
+import com.tisto.helper.core.helper.retrofit.base.SnackbarType
 
 /** Tambahan 'type' di visuals biar SnackbarHost bisa ganti warna/icon */
 class AppSnackbarVisuals(

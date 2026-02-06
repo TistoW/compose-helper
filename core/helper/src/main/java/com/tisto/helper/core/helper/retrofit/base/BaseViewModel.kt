@@ -1,4 +1,4 @@
-package com.compose.ui.helper.base
+package com.tisto.helper.core.helper.retrofit.base
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.lazy.LazyListState
@@ -11,11 +11,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.tisto.helper.core.helper.retrofit.network.Resource
 import com.tisto.helper.core.helper.retrofit.network.State
-import com.compose.ui.helper.model.FilterItem
-import com.compose.ui.helper.ui.component.showError
-import com.compose.ui.helper.ui.component.showInfo
-import com.compose.ui.helper.ui.component.showSuccess
-import com.compose.ui.helper.ui.component.showWarning
+import com.tisto.helper.core.helper.retrofit.model.FilterItem
+import com.tisto.helper.core.helper.ui.component.showError
+import com.tisto.helper.core.helper.ui.component.showInfo
+import com.tisto.helper.core.helper.ui.component.showSuccess
+import com.tisto.helper.core.helper.ui.component.showWarning
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow

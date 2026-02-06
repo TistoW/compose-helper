@@ -1,6 +1,4 @@
-package com.compose.ui.helper.model
-
-import androidx.compose.runtime.Composable
+package com.tisto.helper.core.helper.retrofit.model
 
 const val defaultOrderType = "ASC"
 const val defaultOrderBy = "name"

@@ -1,4 +1,4 @@
-package com.compose.ui.helper.ui.component
+package com.tisto.helper.core.helper.ui.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,11 +15,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.compose.ui.helper.ui.theme.Colors
-import com.compose.ui.helper.ui.theme.Dimens
-import com.compose.ui.helper.ui.theme.Radius
-import com.compose.ui.helper.ui.theme.Spacing
-import com.compose.ui.helper.ui.theme.TextAppearance
+import com.tisto.helper.core.helper.ui.theme.Colors
+import com.tisto.helper.core.helper.ui.theme.Radius
+import com.tisto.helper.core.helper.ui.theme.Spacing
+import com.tisto.helper.core.helper.ui.theme.TextAppearance
 
 @Composable
 fun SimpleButton(

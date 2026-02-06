@@ -1,4 +1,4 @@
-package com.compose.ui.helper.utils
+package com.tisto.helper.core.helper.utils
 
 import android.os.Handler
 import android.os.Looper

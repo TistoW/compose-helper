@@ -1,4 +1,4 @@
-package com.compose.ui.helper.ui.component
+package com.tisto.helper.core.helper.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -49,14 +49,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.tisto.helper.core.helper.R
 import com.tisto.helper.core.helper.utils.ext.ifZero
-import com.compose.ui.helper.ui.theme.Colors
-import com.compose.ui.helper.ui.theme.ComposeHelperTheme
-import com.compose.ui.helper.ui.theme.Radius
-import com.compose.ui.helper.ui.theme.Spacing
-import com.compose.ui.helper.ui.theme.TextAppearance
-import com.compose.ui.helper.utils.MobilePreview
-import com.compose.ui.helper.R
+import com.tisto.helper.core.helper.ui.theme.Colors
+import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
+import com.tisto.helper.core.helper.ui.theme.Radius
+import com.tisto.helper.core.helper.ui.theme.Spacing
+import com.tisto.helper.core.helper.ui.theme.TextAppearance
+import com.tisto.helper.core.helper.utils.MobilePreview
 import kotlin.collections.isNotEmpty
 import kotlin.let
 import kotlin.ranges.coerceAtMost

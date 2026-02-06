@@ -1,11 +1,11 @@
-package com.compose.ui.helper.utils
+package com.tisto.helper.core.helper.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices.PHONE
 import androidx.compose.ui.tooling.preview.Devices.TABLET
 import androidx.compose.ui.tooling.preview.Preview
-import com.compose.ui.helper.R
+import com.tisto.helper.core.helper.R
 
 @Preview(showBackground = true, device = PHONE)
 annotation class MobilePreview

@@ -1,4 +1,4 @@
-package com.compose.ui.helper.ui.theme
+package com.tisto.helper.core.helper.ui.theme
 
 import androidx.compose.ui.unit.dp
 
