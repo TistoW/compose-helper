@@ -21,5 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "compose-helper"
 include(":app")
-include(":core:ui-helper")
 include(":core:helper")
