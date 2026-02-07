@@ -25,7 +25,7 @@ data class ScreenConfig(
     val isTabletOnly get() = deviceType == DeviceType.Tablet
     val isDesktopOnly get() = deviceType == DeviceType.Desktop
 
-    fun getHorizontalPaddingWeight(weight: Float? = null): Float {
+    fun getHorizontalPaddingListWeight(weight: Float? = null): Float {
         return weight ?: if (isMobileOnly) 1f
         else if (isTabletOnly) 0.8f
         else if (isDesktopOnly) 0.7f

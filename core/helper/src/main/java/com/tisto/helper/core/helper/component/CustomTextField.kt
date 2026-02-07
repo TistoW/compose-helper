@@ -1,5 +1,6 @@
 package com.tisto.helper.core.helper.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -35,8 +36,10 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -56,7 +59,8 @@ import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
 import com.tisto.helper.core.helper.ui.theme.Radius
 import com.tisto.helper.core.helper.ui.theme.Spacing
 import com.tisto.helper.core.helper.ui.theme.TextAppearance
-import com.tisto.helper.core.helper.utils.MobilePreview
+import com.tisto.helper.core.helper.utils.ext.MobilePreview
+import com.tisto.helper.core.helper.utils.ext.def
 import kotlin.collections.isNotEmpty
 import kotlin.let
 import kotlin.ranges.coerceAtMost
@@ -71,7 +75,7 @@ import kotlin.text.take
 @Composable
 fun CustomTextField(
     modifier: Modifier = Modifier,
-    value: String = "",
+    value: String? = "",
     textStyle: TextStyle = TextAppearance.body1(),
     hint: String = "",
     hintStyle: TextStyle = TextAppearance.body2(),
@@ -84,10 +88,10 @@ fun CustomTextField(
     supportingText: String? = null,
     supportingTextStyle: TextStyle = TextAppearance.body2(),
     editable: Boolean = true,
-    endIcon: Painter? = null,
+    endIcon: ImageVector? = null,
     endIconSize: Dp = 20.dp,
     endIconOnClick: () -> Unit = {},
-    leadingIcon: Painter? = null,
+    leadingIcon: ImageVector? = null,
     leadingIconSize: Dp = 20.dp,
     leadingIconOnClick: () -> Unit = {},
     inputType: KeyboardOptions = KeyboardOptions.Default, // KeyboardOptions(keyboardType = KeyboardType.Email)
@@ -144,21 +148,21 @@ fun CustomTextField(
 
     var tfv by remember {
         val mValue = if (formatCurrency) value.ifZero() else value
-        mutableStateOf(TextFieldValue(text = mValue, selection = TextRange(mValue.length)))
+        mutableStateOf(TextFieldValue(text = mValue.def(), selection = TextRange(mValue.def().length)))
     }
 
 
     LaunchedEffect(value, formatCurrency) {
         val mValue = if (formatCurrency) value.ifZero() else value
         if (formatCurrency) {
-            val formatted = formatCurrencyValue(mValue)
+            val formatted = formatCurrencyValue(mValue.def())
             if (tfv.text != formatted) {
                 tfv = TextFieldValue(formatted, TextRange(formatted.length))
             }
         } else {
             if (tfv.text != mValue) {
-                val cur = tfv.selection.start.coerceAtMost(mValue.length)
-                tfv = tfv.copy(text = mValue, selection = TextRange(cur))
+                val cur = tfv.selection.start.coerceAtMost(mValue.def().length)
+                tfv = tfv.copy(text = mValue.def(), selection = TextRange(cur))
             }
         }
     }
@@ -166,9 +170,9 @@ fun CustomTextField(
     // ✅ PERBAIKAN: Password icon di luar remember block
     val passwordToggleIcon = if (isPasswordField && autoHandlePassword && endIcon == null) {
         if (isPasswordVisible) {
-            rememberVectorPainter(Icons.Filled.Visibility)
+            Icons.Filled.Visibility
         } else {
-            rememberVectorPainter(Icons.Filled.VisibilityOff)
+            Icons.Filled.VisibilityOff
         }
     } else {
         null
@@ -325,7 +329,7 @@ fun CustomTextField(
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
-                                painter = it,
+                                imageVector = it,
                                 contentDescription = if (isPasswordField) {
                                     if (isPasswordVisible) "Hide password" else "Show password"
                                 } else null,
@@ -344,7 +348,7 @@ fun CustomTextField(
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
-                                painter = it,
+                                imageVector = it,
                                 contentDescription = null,
                                 modifier = Modifier.size(leadingIconSize)
                             )
@@ -593,8 +597,8 @@ fun EditTextCustomExamples() {
                 strokeWidth = 0.dp,
                 cornerRadius = 24.dp,
                 floatingLabel = false,
-                leadingIcon = painterResource(R.drawable.ic_search),
-                endIcon = painterResource(R.drawable.ic_search),
+                leadingIcon = vectorResource(R.drawable.ic_search),
+                endIcon = vectorResource(R.drawable.ic_search),
                 modifier = Modifier.fillMaxWidth()
             )
         }

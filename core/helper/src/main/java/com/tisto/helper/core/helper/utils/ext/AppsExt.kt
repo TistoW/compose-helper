@@ -1,4 +1,4 @@
-package com.tisto.helper.core.helper.utils
+package com.tisto.helper.core.helper.utils.ext
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource

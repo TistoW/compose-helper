@@ -15,9 +15,9 @@ import com.tisto.helper.core.helper.utils.ext.ScreenConfig
 import com.tisto.helper.core.helper.ui.theme.Spacing
 import com.tisto.helper.core.helper.ui.theme.Colors
 import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
-import com.tisto.helper.core.helper.utils.MobilePreview
-import com.tisto.helper.core.helper.utils.TabletPreview
-import com.tisto.helper.core.helper.utils.title
+import com.tisto.helper.core.helper.utils.ext.MobilePreview
+import com.tisto.helper.core.helper.utils.ext.TabletPreview
+import com.tisto.helper.core.helper.utils.ext.title
 
 @Composable
 fun <ITEM> FormContainer(
@@ -66,7 +66,7 @@ fun <ITEM> FormContainer(
             Column(
                 modifier = modifier
                     .fillMaxHeight()
-                    .fillMaxWidth(screenConfig.getHorizontalPaddingWeight(horizontalPadding))   // ✅ 80% width
+                    .fillMaxWidth(screenConfig.getHorizontalPaddingListWeight(horizontalPadding))   // ✅ 80% width
                     .padding(horizontal = if (isMobile) Spacing.normal else 0.dp),
                 verticalArrangement = Arrangement.Top
             ) {

@@ -28,8 +28,8 @@ import com.tisto.helper.core.helper.ui.theme.Padding
 import com.tisto.helper.core.helper.ui.theme.TextAppearance
 import com.tisto.helper.core.helper.ui.theme.Colors
 import com.tisto.helper.core.helper.ui.theme.Spacing
-import com.tisto.helper.core.helper.utils.MobilePreview
-import com.tisto.helper.core.helper.utils.TabletPreview
+import com.tisto.helper.core.helper.utils.ext.MobilePreview
+import com.tisto.helper.core.helper.utils.ext.TabletPreview
 
 @Composable
 fun Toolbars(

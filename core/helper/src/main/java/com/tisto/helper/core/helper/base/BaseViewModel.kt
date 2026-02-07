@@ -342,7 +342,7 @@ abstract class StatefulViewModel<STATE : BaseState<R, I, STATE>, R, I> :
 
 @Composable
 fun <REQ> ObserveUiEffect(
-    vm: BaseRetrofitViewModel<REQ>,
+    vm: BaseViewModel<REQ>,
 ) {
     val uiState by vm.uiState.collectAsStateWithLifecycle()
 

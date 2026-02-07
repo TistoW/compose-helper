@@ -1,53 +1,37 @@
 package com.tisto.helper.core.helper.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.tisto.helper.core.helper.R
 import com.tisto.helper.core.helper.base.BaseUiState
 import com.tisto.helper.core.helper.retrofit.model.FilterGroup
 import com.tisto.helper.core.helper.ui.theme.Colors
 import com.tisto.helper.core.helper.ui.theme.Radius
 import com.tisto.helper.core.helper.ui.theme.Spacing
-import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
 import com.tisto.helper.core.helper.ui.theme.TextAppearance
-import com.tisto.helper.core.helper.utils.MobilePreview
-import com.tisto.helper.core.helper.utils.TabletPreview
+import com.tisto.helper.core.helper.utils.ext.MobilePreview
+import com.tisto.helper.core.helper.utils.ext.TabletPreview
 import com.tisto.helper.core.helper.utils.ext.ScreenConfig
-import com.tisto.helper.core.helper.utils.isMobilePhone
-import kotlinx.coroutines.launch
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.roundToInt
+import com.tisto.helper.core.helper.utils.ext.isMobilePhone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,372 +40,211 @@ fun <STATE, ITEMS> ListScaffoldWeb(
     title: String = "Title",
     screenConfig: ScreenConfig = ScreenConfig(),
     uiState: BaseUiState<STATE>,
-    items: List<ITEMS> = listOf(),
+    items: List<ITEMS> = emptyList(),
     horizontalPadding: Float? = null,
+
+    // Keep your default width behavior (80% on web), but we’ll wrap it with fillMaxSize() internally
     contentModifier: Modifier = Modifier
-        .fillMaxWidth(
-            screenConfig.getHorizontalPaddingWeight(horizontalPadding)
-        )   // ✅ 80% width
-        .padding(top = if (screenConfig.isMobile) Spacing.normal else Spacing.extraLarge),
+        .fillMaxWidth(screenConfig.getHorizontalPaddingListWeight(horizontalPadding))
+        .then(
+            if (screenConfig.isMobile)
+                Modifier
+                    .padding(horizontal = Spacing.normal)
+            else
+                Modifier
+//                    .padding(top = Spacing.extraLarge)
+        ),
+
     onUpdateUiState: (BaseUiState<STATE>.() -> BaseUiState<STATE>) -> Unit = {},
     onSearch: (String) -> Unit = {},
     onRefresh: () -> Unit = {},
-    onLoadMore: () -> Unit = {},
-    onBack: (() -> Unit)? = null,
+    onRowsPerPageChange: (Int) -> Unit = {},
+    onPrevPage: () -> Unit = {},
+    onNextPage: () -> Unit = {},
     onAddClick: (() -> Unit)? = null,
-
     addText: String = "Tambah",
-    saveText: String = "Simpan",
-    onSave: (() -> Unit)? = null,
 
     filterOptions: List<FilterGroup> = emptyList(),
     showToolbar: Boolean = true,
     showSearch: Boolean = true,
     header: (@Composable () -> Unit)? = null,
-    content: LazyListScope.() -> Unit
-) {
+    content: LazyListScope.() -> Unit,
 
+    // ✅ New: minimum list height that follows perPage (estimation)
+    // If your row/table height differs, just adjust this value.
+    minListHeight: Dp = 350.dp,
+    estimatedRowHeight: Dp = 56.dp,
+) {
     val listState = uiState.listScrollState
     val isLoading = uiState.isLoading
     val isRefreshing = uiState.isRefreshing
 
-    var searchQuery by remember { mutableStateOf("") }
+    var searchQuery by rememberSaveable { mutableStateOf("") }
     var showFilterSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    /* =============================
-     * SIDE EFFECTS
-     * ============================= */
-
-    // scroll to top setelah refresh selesai
+    // ✅ Scroll to top after refresh is done
     LaunchedEffect(isRefreshing) {
         if (!isRefreshing && listState.firstVisibleItemIndex > 0) {
             listState.animateScrollToItem(0)
         }
     }
 
-    // load more ketika scroll mentok
-    LaunchedEffect(listState.canScrollForward, listState.isScrollInProgress) {
-        if (!listState.canScrollForward && !listState.isScrollInProgress && uiState.hasMore && !isLoading) {
-//            onLoadMore()
-        }
-    }
+    val isMobile = screenConfig.isMobile || isMobilePhone()
 
-    /* =============================
-     * UI
-     * ============================= */
+// ✅ static minimum list height logic
+    val contentHeight = estimatedRowHeight * items.size
+    val fillerHeight = (minListHeight - contentHeight)
+        .coerceAtLeast(0.dp)
 
     Box(
         modifier = modifier
             .background(Colors.White)
-            .fillMaxSize()
+            .fillMaxSize(),
+        contentAlignment = Alignment.TopCenter
     ) {
-        Column(
-            modifier = contentModifier.align(Alignment.Center)
+
+        RefreshContainer(
+            isRefreshing = isRefreshing || (isLoading && uiState.isSearching),
+            onRefresh = onRefresh,
+            modifier = contentModifier
         ) {
-
-            if (showToolbar) {
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = Spacing.normal)
-                ) {
-                    Text(
-                        title,
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.align(Alignment.CenterStart)
-                    )
-
-                    ButtonNormal(
-                        horizontalContentPadding = Spacing.normal,
-                        modifier = Modifier.align(Alignment.CenterEnd),
-                        text = addText,
-                        imageVector = Icons.Default.Add,
-                        onClick = {
-
-                        })
-                }
-            }
-            Surface(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = Spacing.normal)
-                    .padding(bottom = Spacing.normal)
-                    .shadow(
-                        elevation = 5.dp,
-                        shape = RoundedCornerShape(Radius.medium),
-                        ambientColor = Color.Black.copy(alpha = 0.10f),
-                        clip = false
-                    ), shape = RoundedCornerShape(Radius.medium), color = Color.White
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxSize(),
             ) {
-                Column(
-                    modifier = Modifier.fillMaxSize()
-                ) {
 
-                    /* =============================
-                     * SEARCH + FILTER
-                     * ============================= */
+                item {
+                    if (screenConfig.isMobile) {
+                        Spacer(modifier = Modifier.height(Spacing.normal))
+                    } else {
+                        Spacer(modifier = Modifier.height(Spacing.extraLarge))
+                    }
+                }
 
-                    if (showSearch || filterOptions.isNotEmpty()) {
-                        Row(
+
+                // =============================
+                // TOOLBAR
+                // =============================
+                if (showToolbar) {
+                    item(key = "toolbar") {
+                        ToolbarRow(
+                            title = title,
+                            addText = addText,
+                            onAddClick = onAddClick
+                        )
+                        Spacer(modifier = Modifier.height(Spacing.medium))
+                    }
+                }
+
+                // =============================
+                // SEARCH + FILTER
+                // =============================
+                if (showSearch || filterOptions.isNotEmpty()) {
+                    item(key = "search-filter") {
+                        SearchFilterRow(
+                            isMobile = isMobile,
+                            showSearch = showSearch,
+                            filterOptions = filterOptions,
+                            searchQuery = searchQuery,
+                            onSearchQueryChange = {
+                                searchQuery = it
+                                onSearch(it)
+                            },
+                            onClearSearch = {
+                                searchQuery = ""
+                                onSearch("")
+                            },
+                            refreshCount = uiState.filters.size,
+                            onRefresh = onRefresh,
+                            onOpenFilter = { showFilterSheet = true }
+                        )
+                        Spacer(modifier = Modifier.height(Spacing.normal))
+                    }
+                }
+
+                // =============================
+                // HEADER (e.g., table header)
+                // =============================
+                header?.let {
+                    item(key = "header") {
+                        it()
+                    }
+                }
+
+                // =============================
+                // CONTENT ROWS
+                // =============================
+                if (items.isEmpty() && !isLoading) {
+                    item(key = "empty") {
+                        EmptyState(
+                            title = "Data Kosong",
+                            subtitle = "Belum ada data tersedia",
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(Spacing.normal),
-                            horizontalArrangement = Arrangement.spacedBy(Spacing.small),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            if (showSearch) {
-                                CustomTextField(
-                                    value = searchQuery,
-                                    onValueChange = {
-                                        searchQuery = it
-                                        onSearch(it)
-                                    },
-                                    hint = "Cari...",
-                                    style = TextFieldStyle.OUTLINED,
-                                    strokeWidth = 0.5.dp,
-                                    strokeColor = Colors.Gray3,
-                                    floatingLabel = false,
-                                    cornerRadius = Radius.normal,
-                                    leadingIcon = painterResource(R.drawable.ic_search),
-                                    endIcon = if (searchQuery.isNotEmpty()) painterResource(
-                                        R.drawable.ic_asset_close
-                                    )
-                                    else null,
-                                    endIconOnClick = {
-                                        searchQuery = ""
-                                        onSearch("")
-                                    },
-                                    modifier = Modifier.weight(1f)
-                                )
-                            }
-
-                            if (!screenConfig.isMobile) {
-                                Box(modifier = Modifier.weight(1.5f))
-                            }
-
-                            if (filterOptions.isNotEmpty()) {
-                                Row(
-                                    modifier = Modifier,
-                                ) {
-                                    if (!isMobilePhone()) {
-                                        RefreshButton(onClick = onRefresh)
-                                        Spacer(Modifier.width(Spacing.small))
-                                    }
-                                    FilterButton(
-                                        count = uiState.filters.size,
-                                        onClick = { showFilterSheet = true })
-                                }
-                            }
-                        }
+                                .padding(vertical = Spacing.extraLarge)
+                        )
                     }
+                } else {
+                    content()
+                }
 
-
-                    if (header != null) {
-                        header()
+//                // ✅ Filler spacer to keep minimum list height based on perPage
+                if (!isLoading && items.isNotEmpty() && fillerHeight > 0.dp) {
+                    item(key = "filler") {
+                        Spacer(Modifier.height(fillerHeight))
                     }
+                }
 
-                    RefreshContainer(
-                        isRefreshing = isRefreshing || (isLoading && uiState.isSearching),
-                        onRefresh = onRefresh,
-                        modifier = Modifier.weight(1f)
-                    ) {
+                // Loading indicator (shown at the end of the list)
+                if (isLoading && !isRefreshing && !uiState.isSearching) {
+                    item(key = "loading") {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .fillMaxHeight()
+                                .padding(vertical = Spacing.large),
+                            contentAlignment = Alignment.Center
                         ) {
-
-                            LazyColumn(state = listState) {
-                                content()
-                            }
-
-                            DraggableScrollbar(
-                                listState = listState,
-                                modifier = Modifier
-                                    .align(Alignment.CenterEnd)
-                                    .padding(end = 4.dp)
-                            )
-
-                            // loading indicator
-                            if (isLoading && !isRefreshing && !uiState.isSearching) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier
-                                        .align(
-                                            if (uiState.isEmpty) Alignment.Center
-                                            else Alignment.BottomCenter
-                                        )
-                                        .padding(16.dp), color = Colors.ColorPrimary
-                                )
-                            }
-
-                            // empty state
-                            if (items.isEmpty() && !isLoading) {
-                                EmptyState(
-                                    title = "Data Kosong",
-                                    subtitle = "Belum ada data tersedia",
-                                    modifier = Modifier.align(Alignment.Center)
-                                )
-                            }
-
-                            // FAB add
-                            onAddClick?.let {
-                                FloatingActionButton(
-                                    onClick = it,
-                                    modifier = Modifier
-                                        .align(Alignment.BottomEnd)
-                                        .padding(Spacing.normal),
-                                    containerColor = Colors.ColorPrimary
-                                ) {
-                                    Icon(Icons.Default.Add, null, tint = Colors.White)
-                                }
-                            }
-
-                            // filter bottom sheet
-                            if (showFilterSheet) {
-                                ModalBottomSheet(
-                                    onDismissRequest = { showFilterSheet = false },
-                                    sheetState = sheetState,
-                                    shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
-                                ) {
-                                    GeneralFilterBottomSheet(
-                                        options = filterOptions,
-                                        preselected = uiState.filters,
-                                        onClose = { showFilterSheet = false },
-                                        onApply = { selected ->
-                                            onUpdateUiState { copy(filters = selected) }
-                                            showFilterSheet = false
-                                            onRefresh()
-                                        })
-                                }
-                            }
+                            CircularProgressIndicator(color = Colors.ColorPrimary)
                         }
                     }
+                }
 
-                    TablePaginationFooter(
-                        rowsPerPage = uiState.perPage,
-                        totalItems = uiState.totalSize,
-                        currentPage = uiState.page,
-                    )
-
+                // =============================
+                // FOOTER PAGINATION
+                // =============================
+                if (items.isNotEmpty()) {
+                    item(key = "pagination") {
+                        TablePaginationFooter(
+                            rowsPerPage = uiState.perPage,
+                            totalItems = uiState.totalSize,
+                            currentPage = uiState.page,
+                            onNextPage = onNextPage,
+                            onPrevPage = onPrevPage,
+                            onRowsPerPageChange = onRowsPerPageChange
+                        )
+                    }
                 }
             }
         }
-    }
 
-}
-
-@Composable
-fun TablePaginationFooter(
-    rowsPerPage: Int,
-    totalItems: Int,
-    currentPage: Int,
-    onRowsPerPageChange: (Int) -> Unit = {},
-    onPrevPage: () -> Unit = {},
-    onNextPage: () -> Unit = {},
-) {
-    val start = currentPage * rowsPerPage + 1
-    val end = min((currentPage + 1) * rowsPerPage, totalItems)
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Colors.Gray5)
-            .padding(horizontal = Spacing.medium, vertical = Spacing.small),
-        horizontalArrangement = Arrangement.End,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        // Rows per page
-        Text(
-            text = "Rows per page:",
-            style = TextAppearance.body1(),
-            color = Color.Gray
-        )
-
-        Spacer(Modifier.width(8.dp))
-
-        RowsPerPageDropdown(
-            value = rowsPerPage,
-            onValueChange = onRowsPerPageChange
-        )
-
-        Spacer(Modifier.width(24.dp))
-
-        // Range text
-        Text(
-            text = "$start–$end of $totalItems",
-            style = TextAppearance.body1(),
-            color = Color.Gray
-        )
-
-        Spacer(Modifier.width(16.dp))
-
-        // Prev
-        IconButton(
-            onClick = onPrevPage,
-            enabled = currentPage > 0
-        ) {
-            Icon(
-                Icons.Default.ChevronLeft,
-                contentDescription = "Previous",
-                tint = if (currentPage > 0) Color.DarkGray else Color.LightGray
-            )
-        }
-
-        // Next
-        IconButton(
-            onClick = onNextPage,
-            enabled = end < totalItems
-        ) {
-            Icon(
-                Icons.Default.ChevronRight,
-                contentDescription = "Next",
-                tint = if (end < totalItems) Color.DarkGray else Color.LightGray
-            )
-        }
-    }
-}
-
-@Composable
-fun RowsPerPageDropdown(
-    value: Int,
-    onValueChange: (Int) -> Unit
-) {
-    var expanded by remember { mutableStateOf(false) }
-    val options = listOf(5, 10, 20, 50)
-
-    Box {
-        Row(
-            modifier = Modifier
-                .clip(RoundedCornerShape(6.dp))
-                .clickable { expanded = true }
-                .padding(horizontal = 8.dp, vertical = 4.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = value.toString(),
-                fontSize = 13.sp
-            )
-            Icon(
-                Icons.Default.KeyboardArrowDown,
-                contentDescription = null,
-                modifier = Modifier.size(16.dp)
-            )
-        }
-
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            options.forEach {
-                DropdownMenuItem(
-                    text = { Text(it.toString()) },
-                    onClick = {
-                        expanded = false
-                        onValueChange(it)
+        // =============================
+        // FILTER SHEET (overlay)
+        // =============================
+        if (showFilterSheet) {
+            ModalBottomSheet(
+                onDismissRequest = { showFilterSheet = false },
+                sheetState = sheetState,
+                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+            ) {
+                GeneralFilterBottomSheet(
+                    options = filterOptions,
+                    preselected = uiState.filters,
+                    onClose = { showFilterSheet = false },
+                    onApply = { selected ->
+                        onUpdateUiState { copy(filters = selected) }
+                        showFilterSheet = false
+                        onRefresh()
                     }
                 )
             }
@@ -429,99 +252,125 @@ fun RowsPerPageDropdown(
     }
 }
 
+@Composable
+private fun ToolbarRow(
+    title: String,
+    addText: String,
+    onAddClick: (() -> Unit)?,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = title,
+            style = TextAppearance.headline2Bold(),
+            modifier = Modifier.weight(1f)
+        )
+
+        if (onAddClick != null) {
+            ButtonNormal(
+                backgroundColor = Colors.Black,
+                horizontalContentPadding = Spacing.normal,
+                text = addText,
+                imageVector = Icons.Default.Add,
+                onClick = onAddClick
+            )
+        }
+    }
+}
 
 @Composable
-fun DraggableScrollbar(
-    listState: LazyListState,
-    modifier: Modifier = Modifier,
-    width: Dp = 6.dp,
-    minThumbHeight: Dp = 32.dp
+private fun SearchFilterRow(
+    isMobile: Boolean,
+    showSearch: Boolean,
+    filterOptions: List<FilterGroup>,
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit,
+    onClearSearch: () -> Unit,
+    refreshCount: Int,
+    onRefresh: () -> Unit,
+    onOpenFilter: () -> Unit,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
-    val totalItems = listState.layoutInfo.totalItemsCount
-    val visibleItems = listState.layoutInfo.visibleItemsInfo.size
-
-    if (totalItems == 0 || visibleItems == 0) return
-
-    val proportion = visibleItems.toFloat() / totalItems.toFloat()
-    val thumbHeightFraction = proportion.coerceIn(0.1f, 1f)
-
-    BoxWithConstraints(
-        modifier = modifier
-            .width(width)
-            .fillMaxHeight()
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(Spacing.box),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        val density = LocalDensity.current
-
-        val containerHeightPx = constraints.maxHeight.toFloat()
-
-        val thumbHeightPx = with(density) {
-            max(
-                minThumbHeight.toPx(),
-                containerHeightPx * thumbHeightFraction
+        if (showSearch) {
+            CustomTextField(
+                value = searchQuery,
+                onValueChange = onSearchQueryChange,
+                hint = "Cari...",
+                style = TextFieldStyle.OUTLINED,
+                strokeWidth = 0.5.dp,
+                strokeColor = Colors.Gray3,
+                floatingLabel = false,
+                cornerRadius = Radius.normal,
+                leadingIcon = vectorResource(R.drawable.ic_search),
+                endIcon = if (searchQuery.isNotEmpty()) vectorResource(R.drawable.ic_asset_close) else null,
+                endIconOnClick = onClearSearch,
+                modifier = Modifier.weight(1f)
             )
         }
 
-        val maxOffsetPx = containerHeightPx - thumbHeightPx
-
-        var thumbOffsetPx by remember { mutableStateOf(0f) }
-
-        LaunchedEffect(listState.firstVisibleItemIndex) {
-            thumbOffsetPx =
-                (listState.firstVisibleItemIndex.toFloat() / totalItems) * maxOffsetPx
+        if (!isMobile) {
+            Spacer(Modifier.weight(1.5f))
         }
 
-        Box(
-            modifier = Modifier
-                .offset { IntOffset(0, thumbOffsetPx.roundToInt()) }
-                .width(width)
-                .height(with(LocalDensity.current) { thumbHeightPx.toDp() })
-                .clip(RoundedCornerShape(3.dp))
-                .background(Color.Black.copy(alpha = 0.25f))
-                .pointerInput(totalItems) {
-                    detectVerticalDragGestures { _, dragAmount ->
-                        thumbOffsetPx =
-                            (thumbOffsetPx + dragAmount).coerceIn(0f, maxOffsetPx)
+        if (filterOptions.isNotEmpty()) {
+            if (!isMobile) {
+                RefreshButton(onClick = onRefresh)
+//                Spacer(Modifier.width(Spacing.tiny))
+            }
+            FilterButton(count = refreshCount, onClick = onOpenFilter)
+        }
+    }
+}
 
-                        val scrollPercent = thumbOffsetPx / maxOffsetPx
-                        val targetIndex =
-                            (scrollPercent * totalItems).roundToInt()
-                                .coerceIn(0, totalItems - 1)
 
-                        coroutineScope.launch {
-                            listState.scrollToItem(targetIndex)
-                        }
-                    }
-                }
+fun exampleTableSpec(): TableSpec<Example> {
+    val columns = listOf(
+        TableColumn<Example>(
+            key = "name",
+            title = "Nama",
+            weight = 2f,
+            cell = { row ->
+                RowText(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = row.name,
+                    secondary = row.code
+                )
+            }
+        ),
+        TableColumn(
+            key = "region",
+            title = "Daerah",
+            weight = 2f,
+            cell = { row ->
+                RowText(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = row.daerah
+                )
+            }
+        ),
+        TableColumn(
+            key = "updated",
+            title = "Update",
+            weight = 1f,
+            cell = { row ->
+                RowText(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = row.createdAt
+                )
+            }
         )
-    }
-}
-
-private val list = List(10) {
-    Example(
-        id = it.toString(),
-        name = "Desa $it",
-        code = "CODE-${it}${it - 1}",
-        daerah = "Kabupaten $it",
-        createdAt = "12 Des 2025"
     )
-}
 
-@Composable
-fun TableHeader() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Colors.Gray5)
-            .padding(vertical = Spacing.normal, horizontal = Spacing.medium),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        HeaderText(text = "Nama", modifier = Modifier.weight(2f))
-        HeaderText(text = "Daerah", modifier = Modifier.weight(2f))
-        HeaderText(text = "Update", modifier = Modifier.weight(1f))
-        Spacer(Modifier.width(80.dp))
-    }
+    return TableSpec(
+        columns = columns,
+        actionsWidth = 80.dp
+    )
 }
 
 @Composable
@@ -549,35 +398,6 @@ fun HeaderText(
 }
 
 @Composable
-fun TableRow(user: Example) {
-    Column {
-        HorizontalDivider(modifier = Modifier, thickness = 0.5.dp, color = Colors.Gray4)
-    }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = Spacing.medium, vertical = Spacing.box),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        RowText(modifier = Modifier.weight(2f), text = user.name, secondary = user.code)
-        RowText(modifier = Modifier.weight(2f), text = user.daerah)
-        RowText(modifier = Modifier.weight(1f), text = user.createdAt)
-
-        Box(
-            modifier = Modifier.width(80.dp)
-        ) {
-            Row(modifier = Modifier.align(Alignment.CenterEnd)) {
-                Spacer(Modifier.width(Spacing.box))
-                Icon(Icons.Default.Edit, null, tint = Color.Gray)
-                Spacer(Modifier.width(Spacing.box))
-                Icon(Icons.Default.MoreVert, null, tint = Color.Gray)
-            }
-        }
-    }
-}
-
-@Composable
 fun RowText(
     modifier: Modifier = Modifier,
     text: String = "",
@@ -589,24 +409,40 @@ fun RowText(
         Text(
             text = text,
             modifier = Modifier,
-            style = TextAppearance.body1()
+            style = TextAppearance.body1(),
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
         )
         if (secondary != null) {
             Text(
                 text = secondary,
                 modifier = Modifier,
                 style = TextAppearance.body2(),
-                color = Colors.Gray2
+                color = Colors.Gray2,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
 }
 
 
+private val list = List(10) {
+    Example(
+        id = it.toString(),
+        name = "Desa $it",
+        code = "CODE-${it}${it - 1}",
+        daerah = "Kabupaten $it",
+        createdAt = "12 Des 2025"
+    )
+}
+
 @Composable
 fun ScreenContentWebPreview(
     screenConfig: ScreenConfig = ScreenConfig(),
 ) {
+    val spec = remember { exampleTableSpec() }
+
     ListScaffoldWeb(
         uiState = BaseUiState(
             data = Example()
@@ -614,10 +450,15 @@ fun ScreenContentWebPreview(
         items = list,
         screenConfig = screenConfig,
         filterOptions = defaultFilter(),
-        header = { TableHeader() },
+        header = { TableHeader(spec) },
+        onAddClick = {},
         content = {
             items(list, key = { it.id }) { item ->
-                TableRow(user = item)
+                TableRow(item, spec, actions = {
+                    Icon(Icons.Default.Edit, null)
+                    Spacer(Modifier.width(Spacing.box))
+                    Icon(Icons.Default.MoreVert, null)
+                })
             }
         })
 }
@@ -626,7 +467,7 @@ fun ScreenContentWebPreview(
 @TabletPreview
 @Composable
 fun TabletNewPreview() {
-    ScreenContentWebPreview(ScreenConfig(700.dp))
+    ScreenContentWebPreview(ScreenConfig(750.dp))
 }
 
 
@@ -640,9 +481,6 @@ fun TabletWebPreview() {
 @MobilePreview
 @Composable
 fun MobileWebPreview() {
-    ComposeHelperTheme {
-
-    }
     ScreenContentWebPreview(ScreenConfig(500.dp))
 }
 

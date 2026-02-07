@@ -90,4 +90,8 @@ dependencies {
 
     implementation(libs.filekit.dialogs.compose)
     implementation(libs.filekit.core)
+
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

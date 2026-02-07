@@ -453,3 +453,10 @@ fun AppCompatActivity.dateTimePicker(
 ) {
     dateTimePickerDialog(supportFragmentManager, titleDate, titleTime, dateTime, result)
 }
+
+fun String.formatDate(
+    toFormat: String = "dd MMM yyyy HH:mm:ss",
+    fromFormat: String = "yyyy-MM-dd HH:mm:ss"
+): String {
+    return convertDate(toFormat, fromFormat)
+}

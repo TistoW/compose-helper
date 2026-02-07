@@ -23,8 +23,8 @@ import com.tisto.helper.core.helper.ui.theme.Colors
 import com.tisto.helper.core.helper.ui.theme.Radius
 import com.tisto.helper.core.helper.ui.theme.Spacing
 import com.tisto.helper.core.helper.ui.theme.TextAppearance
-import com.tisto.helper.core.helper.utils.MobilePreview
-import com.tisto.helper.core.helper.utils.TabletPreview
+import com.tisto.helper.core.helper.utils.ext.MobilePreview
+import com.tisto.helper.core.helper.utils.ext.TabletPreview
 import com.tisto.helper.core.helper.utils.ext.ScreenConfig
 import com.tisto.helper.core.helper.R
 import kotlinx.serialization.Serializable
@@ -39,7 +39,7 @@ fun <STATE, ITEMS> ListScaffold(
     items: List<ITEMS> = listOf(),
     horizontalPadding: Float? = null,
     contentModifier: Modifier = Modifier
-        .fillMaxWidth(screenConfig.getHorizontalPaddingWeight(horizontalPadding))   // ✅ 80% width
+        .fillMaxWidth(screenConfig.getHorizontalPaddingListWeight(horizontalPadding))   // ✅ 80% width
         .padding(horizontal = if (screenConfig.isMobile) Spacing.normal else 0.dp)
         .padding(top = if (screenConfig.isMobile) Spacing.normal else Spacing.huge),
     onUpdateUiState: (BaseUiState<STATE>.() -> BaseUiState<STATE>) -> Unit = {},
@@ -143,9 +143,9 @@ fun <STATE, ITEMS> ListScaffold(
                                 strokeColor = Colors.Gray3,
                                 floatingLabel = false,
                                 cornerRadius = Radius.normal,
-                                leadingIcon = painterResource(R.drawable.ic_search),
+                                leadingIcon = vectorResource(R.drawable.ic_search),
                                 endIcon = if (searchQuery.isNotEmpty())
-                                    painterResource(R.drawable.ic_asset_close)
+                                    vectorResource(R.drawable.ic_asset_close)
                                 else null,
                                 endIconOnClick = {
                                     searchQuery = ""
