@@ -91,7 +91,7 @@ fun <ITEM> FormContainer(
                     ) {
 
                         if (item != null) {
-                            SimpleButton(
+                            ButtonNormal(
                                 text = "Hapus",
                                 onClick = ::onDeleteClick,
                                 isLoading = isLoadingProcess,
@@ -103,7 +103,7 @@ fun <ITEM> FormContainer(
                             )
                         }
 
-                        SimpleButton(
+                        ButtonNormal(
                             text = "Simpan",
                             onClick = onSave,
                             isLoading = isLoadingProcess,

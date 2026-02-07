@@ -62,7 +62,7 @@ fun EmptyState(
         Spacer(Modifier.height(5.dp))
         Text(textSubtitle, style = TextAppearance.body2(), textAlign = TextAlign.Center)
         Spacer(Modifier.height(16.dp))
-        if (actionText != null) SimpleButton(text = actionText) { onAction() }
+        if (actionText != null) ButtonNormal(text = actionText) { onAction() }
     }
 }
 

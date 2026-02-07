@@ -85,7 +85,7 @@ fun Toolbars(
             )
 
             if (onDelete != null) {
-                SimpleButton(
+                ButtonNormal(
                     text = deleteText ?: "Hapus",
                     onClick = onDelete,
                     isLoading = isLoadingDelete,
@@ -99,7 +99,7 @@ fun Toolbars(
             }
 
             if (onSave != null) {
-                SimpleButton(
+                ButtonNormal(
                     text = saveText ?: "Simpan",
                     onClick = onSave,
                     isLoading = isLoadingSave,

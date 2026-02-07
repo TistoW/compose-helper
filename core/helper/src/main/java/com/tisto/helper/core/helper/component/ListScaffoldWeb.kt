@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
@@ -18,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -25,6 +27,8 @@ import com.tisto.helper.core.helper.R
 import com.tisto.helper.core.helper.base.BaseUiState
 import com.tisto.helper.core.helper.retrofit.model.FilterGroup
 import com.tisto.helper.core.helper.ui.theme.Colors
+import com.tisto.helper.core.helper.ui.theme.Heights
+import com.tisto.helper.core.helper.ui.theme.Padding
 import com.tisto.helper.core.helper.ui.theme.Radius
 import com.tisto.helper.core.helper.ui.theme.Spacing
 import com.tisto.helper.core.helper.ui.theme.TextAppearance
@@ -61,12 +65,13 @@ fun <STATE, ITEMS> ListScaffoldWeb(
     onRowsPerPageChange: (Int) -> Unit = {},
     onPrevPage: () -> Unit = {},
     onNextPage: () -> Unit = {},
-    onAddClick: (() -> Unit)? = null,
-    addText: String = "Tambah",
+    onAdd: (() -> Unit)? = null,
+    onBack: (() -> Unit)? = null,
 
     filterOptions: List<FilterGroup> = emptyList(),
     showToolbar: Boolean = true,
     showSearch: Boolean = true,
+    showPaginationButton: Boolean = true,
     header: (@Composable () -> Unit)? = null,
     content: LazyListScope.() -> Unit,
 
@@ -104,129 +109,130 @@ fun <STATE, ITEMS> ListScaffoldWeb(
         contentAlignment = Alignment.TopCenter
     ) {
 
-        RefreshContainer(
-            isRefreshing = isRefreshing || (isLoading && uiState.isSearching),
-            onRefresh = onRefresh,
-            modifier = contentModifier
+        Column(
+            modifier = modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.fillMaxSize(),
+
+            // =============================
+            // TOOLBAR
+            // =============================
+            if (showToolbar) {
+                ToolbarRow(
+                    screenConfig = screenConfig,
+                    title = title,
+                    onAdd = onAdd,
+                    onBack = onBack
+                )
+            }
+
+            RefreshContainer(
+                isRefreshing = isRefreshing || (isLoading && uiState.isSearching),
+                onRefresh = onRefresh,
+                modifier = contentModifier
             ) {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.fillMaxSize(),
+                ) {
 
-                item {
-                    if (screenConfig.isMobile) {
-                        Spacer(modifier = Modifier.height(Spacing.normal))
+                    item {
+                        if (screenConfig.isMobile) {
+                            Spacer(modifier = Modifier.height(Spacing.normal))
+                        } else {
+                            Spacer(modifier = Modifier.height(Spacing.extraLarge))
+                        }
+                    }
+
+                    // =============================
+                    // SEARCH + FILTER
+                    // =============================
+                    if (showSearch || filterOptions.isNotEmpty()) {
+                        item(key = "search-filter") {
+                            SearchFilterRow(
+                                isMobile = isMobile,
+                                showSearch = showSearch,
+                                filterOptions = filterOptions,
+                                searchQuery = searchQuery,
+                                onSearchQueryChange = {
+                                    searchQuery = it
+                                    onSearch(it)
+                                },
+                                onClearSearch = {
+                                    searchQuery = ""
+                                    onSearch("")
+                                },
+                                refreshCount = uiState.filters.size,
+                                onRefresh = onRefresh,
+                                onOpenFilter = { showFilterSheet = true }
+                            )
+                            Spacer(modifier = Modifier.height(Spacing.normal))
+                        }
+                    }
+
+                    // =============================
+                    // HEADER (e.g., table header)
+                    // =============================
+                    header?.let { item(key = "header") { it() } }
+
+                    // =============================
+                    // CONTENT ROWS
+                    // =============================
+                    if (items.isEmpty() && !isLoading) {
+                        item(key = "empty") {
+                            EmptyState(
+                                title = "Data Kosong",
+                                subtitle = "Belum ada data tersedia",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = Spacing.extraLarge)
+                            )
+                        }
                     } else {
-                        Spacer(modifier = Modifier.height(Spacing.extraLarge))
+                        content()
                     }
-                }
-
-
-                // =============================
-                // TOOLBAR
-                // =============================
-                if (showToolbar) {
-                    item(key = "toolbar") {
-                        ToolbarRow(
-                            title = title,
-                            addText = addText,
-                            onAddClick = onAddClick
-                        )
-                        Spacer(modifier = Modifier.height(Spacing.medium))
-                    }
-                }
-
-                // =============================
-                // SEARCH + FILTER
-                // =============================
-                if (showSearch || filterOptions.isNotEmpty()) {
-                    item(key = "search-filter") {
-                        SearchFilterRow(
-                            isMobile = isMobile,
-                            showSearch = showSearch,
-                            filterOptions = filterOptions,
-                            searchQuery = searchQuery,
-                            onSearchQueryChange = {
-                                searchQuery = it
-                                onSearch(it)
-                            },
-                            onClearSearch = {
-                                searchQuery = ""
-                                onSearch("")
-                            },
-                            refreshCount = uiState.filters.size,
-                            onRefresh = onRefresh,
-                            onOpenFilter = { showFilterSheet = true }
-                        )
-                        Spacer(modifier = Modifier.height(Spacing.normal))
-                    }
-                }
-
-                // =============================
-                // HEADER (e.g., table header)
-                // =============================
-                header?.let {
-                    item(key = "header") {
-                        it()
-                    }
-                }
-
-                // =============================
-                // CONTENT ROWS
-                // =============================
-                if (items.isEmpty() && !isLoading) {
-                    item(key = "empty") {
-                        EmptyState(
-                            title = "Data Kosong",
-                            subtitle = "Belum ada data tersedia",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = Spacing.extraLarge)
-                        )
-                    }
-                } else {
-                    content()
-                }
 
 //                // ✅ Filler spacer to keep minimum list height based on perPage
-                if (!isLoading && items.isNotEmpty() && fillerHeight > 0.dp) {
-                    item(key = "filler") {
-                        Spacer(Modifier.height(fillerHeight))
+                    if (!isLoading && items.isNotEmpty() && fillerHeight > 0.dp) {
+                        item(key = "filler") {
+                            Spacer(Modifier.height(fillerHeight))
+                        }
                     }
-                }
 
-                // Loading indicator (shown at the end of the list)
-                if (isLoading && !isRefreshing && !uiState.isSearching) {
-                    item(key = "loading") {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = Spacing.large),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator(color = Colors.ColorPrimary)
+                    // Loading indicator (shown at the end of the list)
+                    if (isLoading && !isRefreshing && !uiState.isSearching) {
+                        item(key = "loading") {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = Spacing.large),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator(color = Colors.ColorPrimary)
+                            }
+                        }
+                    }
+
+                    // =============================
+                    // FOOTER PAGINATION
+                    // =============================
+                    if (items.isNotEmpty() && showPaginationButton) {
+                        item(key = "pagination") {
+                            TablePaginationFooter(
+                                rowsPerPage = uiState.perPage,
+                                totalItems = uiState.totalSize,
+                                currentPage = uiState.page,
+                                onNextPage = onNextPage,
+                                onPrevPage = onPrevPage,
+                                onRowsPerPageChange = onRowsPerPageChange
+                            )
                         }
                     }
                 }
-
-                // =============================
-                // FOOTER PAGINATION
-                // =============================
-                if (items.isNotEmpty()) {
-                    item(key = "pagination") {
-                        TablePaginationFooter(
-                            rowsPerPage = uiState.perPage,
-                            totalItems = uiState.totalSize,
-                            currentPage = uiState.page,
-                            onNextPage = onNextPage,
-                            onPrevPage = onPrevPage,
-                            onRowsPerPageChange = onRowsPerPageChange
-                        )
-                    }
-                }
             }
+
         }
+
 
         // =============================
         // FILTER SHEET (overlay)
@@ -254,29 +260,66 @@ fun <STATE, ITEMS> ListScaffoldWeb(
 
 @Composable
 private fun ToolbarRow(
+    screenConfig: ScreenConfig = ScreenConfig(),
     title: String,
-    addText: String,
-    onAddClick: (() -> Unit)?,
+    onBack: (() -> Unit)?,
+    onAdd: (() -> Unit)?,
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Colors.White)
     ) {
-        Text(
-            text = title,
-            style = TextAppearance.headline2Bold(),
-            modifier = Modifier.weight(1f)
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(
+                    if (onBack != null) {
+                        Modifier
+                            .padding(end = if (screenConfig.isMobile) Spacing.normal else Spacing.large)
+                            .padding(start = if (screenConfig.isMobile) Spacing.tiny else Spacing.normal)
+                    } else {
+                        Modifier.padding(horizontal = if (screenConfig.isMobile) Spacing.normal else Spacing.large)
+                    }
+                )
+                .padding(vertical = Spacing.small),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (onBack != null) {
+                IconButton(onClick = onBack) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                }
+                Spacer(modifier = Modifier.width(Spacing.tiny))
+            }
 
-        if (onAddClick != null) {
-            ButtonNormal(
-                backgroundColor = Colors.Black,
-                horizontalContentPadding = Spacing.normal,
-                text = addText,
-                imageVector = Icons.Default.Add,
-                onClick = onAddClick
+            Text(
+                text = title,
+                style = TextAppearance.title1Bold(),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .weight(1f)
+                    .align(Alignment.CenterVertically)
             )
+
+            if (onAdd != null) {
+                ButtonNormal(
+                    text = stringResource(R.string.tambah),
+                    backgroundColor = Colors.Black,
+                    horizontalContentPadding = Spacing.normal,
+                    imageVector = Icons.Default.Add,
+                    onClick = onAdd,
+                    modifier = Modifier
+                        .height(Heights.normal)
+                        .defaultMinSize(minWidth = 90.dp)
+                )
+            }
         }
+
+        SimpleHorizontalDivider(modifier = Modifier)
     }
 }
 
@@ -443,6 +486,10 @@ fun ScreenContentWebPreview(
 ) {
     val spec = remember { exampleTableSpec() }
 
+    fun onBack() {
+
+    }
+
     ListScaffoldWeb(
         uiState = BaseUiState(
             data = Example()
@@ -451,10 +498,11 @@ fun ScreenContentWebPreview(
         screenConfig = screenConfig,
         filterOptions = defaultFilter(),
         header = { TableHeader(spec) },
-        onAddClick = {},
+        onAdd = {},
+        onBack = if (screenConfig.isMobile) ::onBack else null,
         content = {
             items(list, key = { it.id }) { item ->
-                TableRow(item, spec, actions = {
+                TableRow(item = item, spec = spec, actions = {
                     Icon(Icons.Default.Edit, null)
                     Spacer(Modifier.width(Spacing.box))
                     Icon(Icons.Default.MoreVert, null)
@@ -469,14 +517,6 @@ fun ScreenContentWebPreview(
 fun TabletNewPreview() {
     ScreenContentWebPreview(ScreenConfig(750.dp))
 }
-
-
-@TabletPreview
-@Composable
-fun TabletWebPreview() {
-
-}
-
 
 @MobilePreview
 @Composable

@@ -1,5 +1,6 @@
 package com.tisto.helper.core.helper.component
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -7,7 +8,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -43,7 +47,62 @@ data class TableColumn<T>(
 data class TableSpec<T>(
     val columns: List<TableColumn<T>>,
     val actionsWidth: Dp = 80.dp, // your "action" area width
+    val actions: (@Composable RowScope.(T) -> Unit)? = null
 )
+
+
+fun <T> tableActions(
+    onEdit: (() -> Unit)? = null,
+    onDelete: (() -> Unit)? = null,
+    onMore: (() -> Unit)? = null,
+    onOptionsClicked: (String) -> Unit = {},
+    options: List<String> = listOf()
+): @Composable RowScope.(T) -> Unit = {
+
+    onEdit?.let {
+        IconButton(onClick = onEdit) {
+            Icon(Icons.Default.Edit, "Edit", tint = Color.Gray)
+        }
+    }
+
+    onDelete?.let {
+        IconButton(onClick = onDelete) {
+            Icon(Icons.Default.Delete, "Delete", tint = Color.Gray)
+        }
+    }
+
+    onMore?.let {
+        Box {
+            var expanded by remember { mutableStateOf(false) }
+
+            IconButton(onClick = { expanded = true }) {
+                Icon(
+                    imageVector = Icons.Default.MoreVert,
+                    contentDescription = "More",
+                    tint = Color.Gray
+                )
+            }
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = Modifier.background(Colors.White)
+            ) {
+                options.forEach {
+                    DropdownMenuItem(
+                        colors = MenuDefaults.itemColors(),
+                        text = { Text(it) },
+                        onClick = {
+                            expanded = false
+                            onOptionsClicked(it)
+                        }
+                    )
+                }
+            }
+        }
+    }
+
+}
 
 
 @Composable
@@ -93,26 +152,26 @@ fun <T> TableHeader(
 
 @Composable
 fun <T> TableRow(
+    contentPaddingVertical: Dp = Spacing.small,
+    contentPaddingHorizontal: Dp = Spacing.normal,
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier.padding(
+        horizontal = contentPaddingHorizontal,
+        vertical = contentPaddingVertical
+    ),
     item: T,
     spec: TableSpec<T>,
-    modifier: Modifier = Modifier,
-    showDividerTop: Boolean = true,
     showActions: Boolean = true,
     onClick: () -> Unit = {},
     actions: (@Composable RowScope.(T) -> Unit)? = null
 ) {
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     ) {
-        if (showDividerTop) {
-            HorizontalDivider(thickness = 0.5.dp, color = Colors.Gray4)
-        }
 
         Row(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
-                .clickable { onClick() }
-                .padding(horizontal = Spacing.medium, vertical = Spacing.box),
+                .clickable { onClick() },
             verticalAlignment = Alignment.CenterVertically
         ) {
             spec.columns.forEach { col ->
@@ -135,6 +194,8 @@ fun <T> TableRow(
                 }
             }
         }
+
+        HorizontalDivider(thickness = 0.4.dp, color = Colors.Gray4)
     }
 }
 

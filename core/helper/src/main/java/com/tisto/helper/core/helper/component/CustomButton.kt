@@ -83,7 +83,6 @@ fun ButtonNormal(
                 Spacer(modifier = Modifier.width(8.dp))
             }
 
-
             Text(
                 text = text,
                 style = textStyle,

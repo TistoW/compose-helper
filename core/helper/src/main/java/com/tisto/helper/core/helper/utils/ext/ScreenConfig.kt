@@ -19,6 +19,8 @@ data class ScreenConfig(
     val isMobile get() = maxWidth < 600.dp
     val isTablet get() = maxWidth >= 600.dp           // TRUE untuk Tablet & Desktop
     val isDesktop get() = maxWidth >= 1601.dp         // TRUE untuk Desktop saja
+    val isNotMobile get() = !isMobile
+
 
     // Bonus: Ekslusif checks
     val isMobileOnly get() = deviceType == DeviceType.Mobile
@@ -27,7 +29,7 @@ data class ScreenConfig(
 
     fun getHorizontalPaddingListWeight(weight: Float? = null): Float {
         return weight ?: if (isMobileOnly) 1f
-        else if (isTabletOnly) 0.8f
+        else if (isTabletOnly) 0.9f
         else if (isDesktopOnly) 0.7f
         else 1f
     }
