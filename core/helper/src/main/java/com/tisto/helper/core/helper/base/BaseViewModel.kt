@@ -60,7 +60,7 @@ data class BaseUiState<T>(
 
     // Pagination
     val page: Int = 1,
-    val perPage: Int = 20,
+    val pageLimit: Int = 10,
     val totalPage: Int = 1,
     val loadingSize: Int = 0, // yg sedang di load saat ini
     val loadedCount: Int = 0, // yg total semua sudah di load
@@ -271,7 +271,7 @@ abstract class BaseViewModel<STATE> : ViewModel() {
     fun <T> onLoaded(page: Int, currentItems: List<T>, items: List<T>) {
         updateUiState {
             copy(
-                hasMore = items.size >= perPage,
+                hasMore = items.size >= pageLimit,
                 page = page,
                 loadingSize = items.size,
                 loadedCount = currentItems.size + items.size
@@ -330,7 +330,7 @@ abstract class StatefulViewModel<STATE : BaseState<R, I, STATE>, R, I> :
         updateUiState {
             copy(
                 page = page,
-                hasMore = items.size >= perPage,
+                hasMore = items.size >= pageLimit,
                 totalPage = res.lastPage,
                 totalSize = res.total,
                 loadingSize = items.size,

@@ -18,7 +18,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -28,7 +27,6 @@ import com.tisto.helper.core.helper.base.BaseUiState
 import com.tisto.helper.core.helper.retrofit.model.FilterGroup
 import com.tisto.helper.core.helper.ui.theme.Colors
 import com.tisto.helper.core.helper.ui.theme.Heights
-import com.tisto.helper.core.helper.ui.theme.Padding
 import com.tisto.helper.core.helper.ui.theme.Radius
 import com.tisto.helper.core.helper.ui.theme.Spacing
 import com.tisto.helper.core.helper.ui.theme.TextAppearance
@@ -56,7 +54,6 @@ fun <STATE, ITEMS> ListScaffoldWeb(
                     .padding(horizontal = Spacing.normal)
             else
                 Modifier
-//                    .padding(top = Spacing.extraLarge)
         ),
 
     onUpdateUiState: (BaseUiState<STATE>.() -> BaseUiState<STATE>) -> Unit = {},
@@ -65,6 +62,7 @@ fun <STATE, ITEMS> ListScaffoldWeb(
     onRowsPerPageChange: (Int) -> Unit = {},
     onPrevPage: () -> Unit = {},
     onNextPage: () -> Unit = {},
+    onLoadMore: () -> Unit = {},
     onAdd: (() -> Unit)? = null,
     onBack: (() -> Unit)? = null,
 
@@ -92,6 +90,13 @@ fun <STATE, ITEMS> ListScaffoldWeb(
     LaunchedEffect(isRefreshing) {
         if (!isRefreshing && listState.firstVisibleItemIndex > 0) {
             listState.animateScrollToItem(0)
+        }
+    }
+
+    // load more ketika scroll mentok
+    LaunchedEffect(listState.canScrollForward, listState.isScrollInProgress) {
+        if (!listState.canScrollForward && !listState.isScrollInProgress && uiState.hasMore && !isLoading && !showPaginationButton) {
+            onLoadMore()
         }
     }
 
@@ -193,23 +198,9 @@ fun <STATE, ITEMS> ListScaffoldWeb(
                     }
 
 //                // ✅ Filler spacer to keep minimum list height based on perPage
-                    if (!isLoading && items.isNotEmpty() && fillerHeight > 0.dp) {
+                    if (items.isNotEmpty() && fillerHeight > 0.dp) {
                         item(key = "filler") {
                             Spacer(Modifier.height(fillerHeight))
-                        }
-                    }
-
-                    // Loading indicator (shown at the end of the list)
-                    if (isLoading && !isRefreshing && !uiState.isSearching) {
-                        item(key = "loading") {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = Spacing.large),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator(color = Colors.ColorPrimary)
-                            }
                         }
                     }
 
@@ -219,7 +210,7 @@ fun <STATE, ITEMS> ListScaffoldWeb(
                     if (items.isNotEmpty() && showPaginationButton) {
                         item(key = "pagination") {
                             TablePaginationFooter(
-                                rowsPerPage = uiState.perPage,
+                                rowsPerPage = uiState.pageLimit,
                                 totalItems = uiState.totalSize,
                                 currentPage = uiState.page,
                                 onNextPage = onNextPage,
@@ -233,6 +224,27 @@ fun <STATE, ITEMS> ListScaffoldWeb(
 
         }
 
+        // Loading indicator (shown at the end of the list)
+
+
+        if (isLoading && !isRefreshing) {
+            val isFirstLoading = !uiState.isSearching && uiState.page == 1
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = Spacing.normal)
+                    .then(
+                        if (isFirstLoading || showPaginationButton) {
+                            Modifier.align(Alignment.Center)
+                        } else {
+                            Modifier.align(Alignment.BottomCenter)
+                        }
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = Colors.ColorPrimary)
+            }
+        }
 
         // =============================
         // FILTER SHEET (overlay)
@@ -297,7 +309,7 @@ private fun ToolbarRow(
 
             Text(
                 text = title,
-                style = TextAppearance.title1Bold(),
+                style = TextAppearance.title2Bold(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
@@ -414,30 +426,6 @@ fun exampleTableSpec(): TableSpec<Example> {
         columns = columns,
         actionsWidth = 80.dp
     )
-}
-
-@Composable
-fun HeaderText(
-    modifier: Modifier = Modifier, text: String
-) {
-    Row(
-        modifier = modifier, verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = text,
-            modifier = Modifier.weight(1f),
-            style = TextAppearance.body1Bold(),
-            color = Color.Gray
-        )
-
-        VerticalDivider(
-            modifier = Modifier
-                .height(18.dp)
-                .padding(end = Spacing.small),
-            thickness = 1.dp,
-            color = Colors.Gray4
-        )
-    }
 }
 
 @Composable

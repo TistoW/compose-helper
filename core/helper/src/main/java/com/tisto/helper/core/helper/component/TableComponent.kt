@@ -161,7 +161,6 @@ fun <T> TableRow(
     item: T,
     spec: TableSpec<T>,
     showActions: Boolean = true,
-    onClick: () -> Unit = {},
     actions: (@Composable RowScope.(T) -> Unit)? = null
 ) {
     Column(
@@ -169,9 +168,7 @@ fun <T> TableRow(
     ) {
 
         Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .clickable { onClick() },
+            modifier = modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             spec.columns.forEach { col ->

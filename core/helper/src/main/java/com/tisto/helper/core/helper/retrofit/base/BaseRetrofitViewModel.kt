@@ -151,7 +151,7 @@ abstract class BaseRetrofitViewModel<STATE> : ViewModel() {
         updateUiState {
             copy(
                 page = page,
-                hasMore = items.size >= perPage,
+                hasMore = items.size >= pageLimit,
                 totalPage = res.lastPage,
                 totalSize = res.total,
                 loadingSize = items.size,
