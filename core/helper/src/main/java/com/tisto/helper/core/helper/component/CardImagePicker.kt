@@ -22,6 +22,7 @@ import com.tisto.helper.core.helper.ui.icon.myicon.IcCameraSolar
 import com.tisto.helper.core.helper.ui.theme.Colors
 import com.tisto.helper.core.helper.ui.theme.Spacing
 import com.tisto.helper.core.helper.ui.theme.TextAppearance
+import com.tisto.helper.core.helper.utils.ext.logs
 
 @Composable
 fun CardImagePicker(
@@ -35,6 +36,10 @@ fun CardImagePicker(
     val picker = rememberImagePickerState()
     LaunchedEffect(picker.picked) {
         onPicker?.invoke(picker.picked)
+    }
+
+    LaunchedEffect(picker.errorMessage) {
+        logs("picker.errorMessage: ${picker.errorMessage}")
     }
 
     CustomCard(
