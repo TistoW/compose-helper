@@ -91,6 +91,10 @@ dependencies {
     implementation(libs.filekit.dialogs.compose)
     implementation(libs.filekit.core)
 
+    implementation(libs.coil) // Core Coil
+    implementation(libs.coil3.coil.compose) // AsyncImage composable
+    implementation(libs.coil.network.ktor3)
+
     androidTestImplementation(platform(libs.androidx.compose.bom))
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)

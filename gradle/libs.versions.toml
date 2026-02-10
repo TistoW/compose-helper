@@ -23,6 +23,8 @@ loggingInterceptor = "5.3.2"
 gson = "2.13.2"
 ktorBom = "3.4.0"
 
+coilComposeVersion = "3.3.0"
+
 # Room
 roomRuntime = "2.7.1"
 roomKtx = "2.7.1"
@@ -70,6 +72,10 @@ material = { group = "com.google.android.material", name = "material", version.r
 # DI
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroid" }
+
+coil = { module = "io.coil-kt.coil3:coil", version.ref = "coilComposeVersion" }
+coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coilComposeVersion" }
+coil3-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilComposeVersion" }
 
 # Network & Data
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }

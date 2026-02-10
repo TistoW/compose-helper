@@ -1,0 +1,96 @@
+package com.tisto.helper.core.helper.component
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import com.tisto.helper.core.helper.ui.icon.MyIcon
+import com.tisto.helper.core.helper.ui.icon.myicon.IcCameraSolar
+import com.tisto.helper.core.helper.ui.theme.Colors
+import com.tisto.helper.core.helper.ui.theme.Spacing
+import com.tisto.helper.core.helper.ui.theme.TextAppearance
+
+@Composable
+fun CardImagePicker(
+    modifier: Modifier = Modifier
+        .width(150.dp)
+        .height(150.dp),
+    imageUrl: String? = null,
+    onPicker: ((PickedImage?) -> Unit)? = null
+) {
+
+    val picker = rememberImagePickerState()
+    LaunchedEffect(picker.picked) {
+        onPicker?.invoke(picker.picked)
+    }
+
+    CustomCard(
+        modifier = modifier,
+        elevation = 0.dp,
+        strokeWidth = 0.3.dp,
+        strokeColor = Colors.Gray4
+    ) {
+        CustomCardBox(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(Spacing.small),
+            elevation = 0.dp,
+            backgroundColor = Colors.Gray5,
+            onClick = picker::pick
+        ) {
+
+            if (picker.bitmap != null) {
+                Image(
+                    bitmap = picker.bitmap!!,
+                    contentDescription = picker.picked?.name,
+                    modifier = Modifier
+                        .fillMaxSize()
+                )
+            } else {
+                if (!imageUrl.isNullOrBlank()) {
+                    AsyncImage(
+                        model = imageUrl,
+                        contentDescription = "photoUrl",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.align(Alignment.Center)
+                    ) {
+                        Icon(
+                            imageVector = MyIcon.IcCameraSolar,
+                            contentDescription = null,
+                            modifier = Modifier.size(30.dp),
+                            tint = Colors.Gray3
+                        )
+
+                        Spacer(modifier = Modifier.height(Spacing.small))
+
+                        Text(
+                            text = "Upload Photo",
+                            style = TextAppearance.label2(),
+                            color = Colors.Gray3
+                        )
+                    }
+                }
+            }
+
+        }
+    }
+
+}
