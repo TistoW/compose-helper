@@ -1,6 +1,5 @@
 package com.tisto.helper.core.helper.component
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -35,11 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -55,7 +50,7 @@ import androidx.compose.ui.unit.sp
 import com.tisto.helper.core.helper.R
 import com.tisto.helper.core.helper.utils.ext.ifZero
 import com.tisto.helper.core.helper.ui.theme.Colors
-import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
+import com.tisto.helper.core.helper.ui.theme.ZenentaHelperTheme
 import com.tisto.helper.core.helper.ui.theme.Radius
 import com.tisto.helper.core.helper.ui.theme.Spacing
 import com.tisto.helper.core.helper.ui.theme.TextAppearance
@@ -696,7 +691,7 @@ fun EditTextCustomExamples() {
 @MobilePreview
 @Composable
 fun MobilePreviews() {
-    ComposeHelperTheme {
+    ZenentaHelperTheme {
         EditTextCustomExamples()
     }
 }

@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
+import com.tisto.helper.core.helper.ui.theme.ZenentaHelperTheme
 import com.tisto.helper.core.helper.ui.theme.Heights
 import com.tisto.helper.core.helper.ui.theme.Padding
 import com.tisto.helper.core.helper.ui.theme.TextAppearance
@@ -127,7 +127,7 @@ fun Toolbars(
 @MobilePreview
 @Composable
 fun MobileToolbarPreviews() {
-    ComposeHelperTheme {
+    ZenentaHelperTheme {
         Toolbars()
     }
 }
@@ -135,7 +135,7 @@ fun MobileToolbarPreviews() {
 @TabletPreview
 @Composable
 fun TabletToolbarPreviews() {
-    ComposeHelperTheme {
+    ZenentaHelperTheme {
         Toolbars(
             onSave = {},
             onDelete = {},

@@ -50,23 +50,22 @@ data class TableSpec<T>(
     val actions: (@Composable RowScope.(T) -> Unit)? = null
 )
 
-
 fun <T> tableActions(
-    onEdit: (() -> Unit)? = null,
-    onDelete: (() -> Unit)? = null,
-    onMore: (() -> Unit)? = null,
-    onOptionsClicked: (String) -> Unit = {},
+    onEdit: ((T) -> Unit)? = null,
+    onDelete: ((T) -> Unit)? = null,
+    onMore: ((T) -> Unit)? = null,
+    onOptionsClicked: (T, String) -> Unit = { _, _ -> },
     options: List<String> = listOf()
-): @Composable RowScope.(T) -> Unit = {
+): @Composable RowScope.(T) -> Unit = { item ->
 
     onEdit?.let {
-        IconButton(onClick = onEdit) {
+        IconButton(onClick = { it(item) }) {
             Icon(Icons.Default.Edit, "Edit", tint = Color.Gray)
         }
     }
 
     onDelete?.let {
-        IconButton(onClick = onDelete) {
+        IconButton(onClick = { it(item) }) {
             Icon(Icons.Default.Delete, "Delete", tint = Color.Gray)
         }
     }
@@ -88,21 +87,21 @@ fun <T> tableActions(
                 onDismissRequest = { expanded = false },
                 modifier = Modifier.background(Colors.White)
             ) {
-                options.forEach {
+                options.forEach { option ->
                     DropdownMenuItem(
                         colors = MenuDefaults.itemColors(),
-                        text = { Text(it) },
+                        text = { Text(option) },
                         onClick = {
                             expanded = false
-                            onOptionsClicked(it)
+                            onOptionsClicked(item, option)
                         }
                     )
                 }
             }
         }
     }
-
 }
+
 
 
 @Composable

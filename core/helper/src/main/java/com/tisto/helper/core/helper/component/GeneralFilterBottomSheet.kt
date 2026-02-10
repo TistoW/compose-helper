@@ -46,7 +46,7 @@ import com.tisto.helper.core.helper.retrofit.model.FilterGroup
 import com.tisto.helper.core.helper.retrofit.model.FilterItem
 import com.tisto.helper.core.helper.retrofit.model.FilterType
 import com.tisto.helper.core.helper.ui.theme.Colors
-import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
+import com.tisto.helper.core.helper.ui.theme.ZenentaHelperTheme
 import com.tisto.helper.core.helper.ui.theme.Spacing
 import com.tisto.helper.core.helper.ui.theme.TextAppearance
 import kotlin.apply
@@ -349,7 +349,7 @@ fun RefreshButton(
 @Preview(showBackground = true)
 @Composable
 fun FilterButtonPreview() {
-    ComposeHelperTheme {
+    ZenentaHelperTheme {
         FilterButton()
     }
 }
@@ -357,7 +357,7 @@ fun FilterButtonPreview() {
 @Preview(showBackground = true)
 @Composable
 fun FilterButtonActivePreview() {
-    ComposeHelperTheme {
+    ZenentaHelperTheme {
         FilterButton(
             count = 3
         )
@@ -367,7 +367,7 @@ fun FilterButtonActivePreview() {
 @Preview(showBackground = true)
 @Composable
 fun GeneralFilterPreview() {
-    ComposeHelperTheme {
+    ZenentaHelperTheme {
         GeneralFilterBottomSheet(
             onClose = {}
         )

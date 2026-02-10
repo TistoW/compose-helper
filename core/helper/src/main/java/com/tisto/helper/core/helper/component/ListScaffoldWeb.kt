@@ -18,6 +18,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -65,6 +66,7 @@ fun <STATE, ITEMS> ListScaffoldWeb(
     onLoadMore: () -> Unit = {},
     onAdd: (() -> Unit)? = null,
     onBack: (() -> Unit)? = null,
+    backIcon: ImageVector = Icons.AutoMirrored.Filled.ArrowBack,
 
     filterOptions: List<FilterGroup> = emptyList(),
     showToolbar: Boolean = true,
@@ -125,6 +127,7 @@ fun <STATE, ITEMS> ListScaffoldWeb(
             if (showToolbar) {
                 ToolbarRow(
                     screenConfig = screenConfig,
+                    backIcon = backIcon,
                     title = title,
                     onAdd = onAdd,
                     onBack = onBack
@@ -274,6 +277,7 @@ fun <STATE, ITEMS> ListScaffoldWeb(
 private fun ToolbarRow(
     screenConfig: ScreenConfig = ScreenConfig(),
     title: String,
+    backIcon: ImageVector = Icons.AutoMirrored.Filled.ArrowBack,
     onBack: (() -> Unit)?,
     onAdd: (() -> Unit)?,
 ) {
@@ -300,7 +304,7 @@ private fun ToolbarRow(
             if (onBack != null) {
                 IconButton(onClick = onBack) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        imageVector = backIcon,
                         contentDescription = "Back"
                     )
                 }
