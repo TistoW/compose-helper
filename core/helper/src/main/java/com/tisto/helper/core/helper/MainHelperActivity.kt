@@ -11,14 +11,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.tisto.helper.core.helper.ui.theme.ZenentaHelperTheme
+import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
 
 class MainHelperActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            ZenentaHelperTheme {
+            ComposeHelperTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         name = "Android",
@@ -41,7 +41,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    ZenentaHelperTheme {
+    ComposeHelperTheme {
         Greeting("Android")
     }
 }

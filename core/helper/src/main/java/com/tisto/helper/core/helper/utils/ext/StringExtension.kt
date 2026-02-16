@@ -240,117 +240,82 @@ fun String.searchQuery(): String {
     return "%$this%"
 }
 
-fun getRandomName(withNumber: Boolean = false): String {
-    val listName = listOf(
-        "Agus Pratama",
-        "Budi Santoso",
-        "Citra Dewi",
-        "Dedi Kusuma",
-        "Eko Saputra",
-        "Fitri Ayu",
-        "Gita Sari",
-        "Hari Susanto",
-        "Indra Setiawan",
-        "Joko Riyadi",
-        "Kiki Ananda",
-        "Lina Permata",
-        "Maya Puspita",
-        "Nina Sari",
-        "Oka Wirawan",
-        "Putu Dewi",
-        "Rian Syahputra",
-        "Susi Susanti",
-        "Taufik Hidayat",
-        "Umar Bakri",
-        "Vina Melinda",
-        "Wahyu Nugroho",
-        "Yusuf Mansur",
-        "Zahra Putri",
-        "Andi Wirawan",
-        "Bella Siregar",
-        "Candra Wijaya",
-        "Dewi Lestari",
-        "Edi Supriyadi",
-        "Farhan Ridwan",
-        "Gilang Mahendra",
-        "Hendra Gunawan",
-        "Ika Susanti",
-        "Joni Sugiarto",
-        "Kurniawan Putra",
-        "Linda Kurnia",
-        "Meli Yanti",
-        "Nadia Fitria",
-        "Oni Siregar",
-        "Pandu Wibowo",
-        "Rina Amelia",
-        "Siti Fadhilah",
-        "Toni Andika",
-        "Usman Hakim",
-        "Viona Kusuma",
-        "Wira Aditya",
-        "Yuli Hartono",
-        "Zaki Rahman",
-        "Adi Pratama",
-        "Benny Gunawan",
-        "Cici Herlina",
-        "Dian Sastrowardoyo",
-        "Endang Widodo",
-        "Feri Irawan",
-        "Gusman Kurniawan",
-        "Hani Wulandari",
-        "Irfan Ramadhan",
-        "Jaka Supriyadi",
-        "Kartika Dewi",
-        "Lutfi Rahman",
-        "Mira Utami",
-        "Nino Saputra",
-        "Olga Maharani",
-        "Via Amelia",
-        "Rendi Kurnia",
-        "Sandy Pratama",
-        "Tirta Purnama",
-        "Uli Handayani",
-        "Vega Sari",
-        "Wulan Anggraini",
-        "Yogi Priyanto",
-        "Zulfi Syahputra",
-        "Asep Rahmat",
-        "Beni Supriyadi",
-        "Cici Purnama",
-        "Dika Mahendra",
-        "Eva Susanti",
-        "Faisal Akbar",
-        "Guntur Saputra",
-        "Heryanto Wijaya",
-        "Iwan Setiawan",
-        "Joko Widodo",
-        "Krisna Wijaya",
-        "Lala Sari",
-        "Meli Septiani",
-        "Nadia Anggraini",
-        "Oky Andika",
-        "Putu Sari",
-        "Rani Amalia",
-        "Sigit Pratama",
-        "Tina Permata",
-        "Utami Sari",
-        "Vino Fadillah",
-        "Wahyu Hidayat",
-        "Yulia Hartati",
-        "Zainal Abidin"
-    )
-    return listName[randomInt(0, listName.size - 1)] + "" + if (withNumber) randomInt(
-        10,
-        99
-    ) else ""
-}
+private val firstNames = listOf(
+    "Agus", "Budi", "Citra", "Dedi", "Eko", "Fitri", "Gita", "Hari", "Indra", "Joko",
+    "Kiki", "Lina", "Maya", "Nina", "Oka", "Putu", "Rian", "Susi", "Taufik", "Umar",
+    "Vina", "Wahyu", "Yusuf", "Zahra", "Andi", "Bella", "Candra", "Dewi", "Edi", "Farhan",
+    "Gilang", "Hendra", "Ika", "Joni", "Kurniawan", "Linda", "Meli", "Nadia", "Oni", "Pandu",
+    "Rina", "Siti", "Toni", "Usman", "Viona", "Wira", "Yuli", "Zaki", "Adi", "Benny",
+    "Cici", "Dian", "Endang", "Feri", "Gusman", "Hani", "Irfan", "Jaka", "Kartika", "Lutfi",
+    "Mira", "Nino", "Olga", "Via", "Rendi", "Sandy", "Tirta", "Uli", "Vega", "Wulan",
+    "Yogi", "Zulfi", "Asep", "Beni", "Dika", "Eva", "Faisal", "Guntur", "Heryanto", "Iwan",
+    "Krisna", "Lala", "Oky", "Rani", "Sigit", "Tina", "Utami", "Vino", "Yulia", "Zainal"
+)
+
+private val lastNames = listOf(
+    "Pratama",
+    "Santoso",
+    "Dewi",
+    "Kusuma",
+    "Saputra",
+    "Ayu",
+    "Sari",
+    "Susanto",
+    "Setiawan",
+    "Riyadi",
+    "Ananda",
+    "Permata",
+    "Puspita",
+    "Wirawan",
+    "Syahputra",
+    "Susanti",
+    "Hidayat",
+    "Bakri",
+    "Melinda",
+    "Nugroho",
+    "Mansur",
+    "Putri",
+    "Siregar",
+    "Wijaya",
+    "Lestari",
+    "Supriyadi",
+    "Ridwan",
+    "Mahendra",
+    "Gunawan",
+    "Ramadhan",
+    "Utami",
+    "Maharani",
+    "Amelia",
+    "Andika",
+    "Purnama",
+    "Hakim",
+    "Aditya",
+    "Hartono",
+    "Rahman",
+    "Anggraini",
+    "Akbar",
+    "Widodo",
+    "Septiani",
+    "Hartati",
+    "Abidin",
+    "Fadhilah"
+)
 
 fun randomInt(from: Int, to: Int): Int {
-    val randomGenerator = Random(System.currentTimeMillis())
-    return randomGenerator.nextInt(from, to)
+    require(from < to) { "from must be < to" }
+    return Random.nextInt(from, to) // to exclusive
 }
 
-fun generateRandomName(withNumber: Boolean = false) = getRandomName(withNumber)
+fun generateRandomName(withNumber: Boolean = false): String {
+    val first = firstNames.random()
+    val last = lastNames.random()
+    val suffix = if (withNumber) randomInt(10, 100).toString() else "" // 10..99
+    return "$first $last$suffix"
+}
+
+fun getRandomName(withNumber: Boolean = false): String {
+    return generateRandomName(withNumber)
+}
 
 @SuppressLint("SimpleDateFormat")
 fun getSalam(): String {

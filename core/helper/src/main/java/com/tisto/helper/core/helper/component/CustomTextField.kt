@@ -50,7 +50,7 @@ import androidx.compose.ui.unit.sp
 import com.tisto.helper.core.helper.R
 import com.tisto.helper.core.helper.utils.ext.ifZero
 import com.tisto.helper.core.helper.ui.theme.Colors
-import com.tisto.helper.core.helper.ui.theme.ZenentaHelperTheme
+import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
 import com.tisto.helper.core.helper.ui.theme.Radius
 import com.tisto.helper.core.helper.ui.theme.Spacing
 import com.tisto.helper.core.helper.ui.theme.TextAppearance
@@ -691,7 +691,7 @@ fun EditTextCustomExamples() {
 @MobilePreview
 @Composable
 fun MobilePreviews() {
-    ZenentaHelperTheme {
+    ComposeHelperTheme {
         EditTextCustomExamples()
     }
 }

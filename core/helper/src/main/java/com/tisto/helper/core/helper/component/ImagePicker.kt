@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.decodeToImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.tisto.helper.core.helper.ui.theme.ZenentaHelperTheme
+import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
 import com.tisto.helper.core.helper.utils.ext.MobilePreview
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.PlatformFile
@@ -140,7 +140,7 @@ fun ImagePickerScreen() {
 @MobilePreview
 @Composable
 fun ImagePickerScreenPreview() {
-    ZenentaHelperTheme {
+    ComposeHelperTheme {
         ImagePickerScreen()
     }
 }

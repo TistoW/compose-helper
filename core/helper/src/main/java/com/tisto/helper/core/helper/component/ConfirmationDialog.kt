@@ -23,7 +23,7 @@ import com.tisto.helper.core.helper.ui.theme.Colors
 import com.tisto.helper.core.helper.ui.theme.Radius
 import com.tisto.helper.core.helper.ui.theme.Spacing
 import com.tisto.helper.core.helper.ui.theme.TextAppearance
-import com.tisto.helper.core.helper.ui.theme.ZenentaHelperTheme
+import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
 import com.tisto.helper.core.helper.utils.ext.MobilePreview
 
 // ========================================
@@ -1034,7 +1034,7 @@ fun QuickUsageExample() {
 @MobilePreview
 @Composable
 fun DeleteDialogExamplePreviews() {
-    ZenentaHelperTheme {
+    ComposeHelperTheme {
         DeleteConfirmationDialog(
             showDialog = true,
             onDismiss = { },

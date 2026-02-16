@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun ZenentaHelperTheme(content: @Composable () -> Unit) {
+fun ComposeHelperTheme(content: @Composable () -> Unit) {
     val colors = lightColorScheme(
         primary = Colors.Green700,
         background = Color.White,

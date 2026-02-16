@@ -17,7 +17,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.tisto.helper.core.helper.ui.theme.Colors
-import com.tisto.helper.core.helper.ui.theme.ZenentaHelperTheme
+import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
 import com.tisto.helper.core.helper.ui.theme.Radius
 import com.tisto.helper.core.helper.ui.theme.Spacing
 import com.tisto.helper.core.helper.utils.ext.MobilePreview
@@ -232,7 +232,7 @@ fun FromScreenContentPreview(
 @TabletPreview
 @Composable
 fun TabletPreviewsForm() {
-    ZenentaHelperTheme {
+    ComposeHelperTheme {
         FromScreenContentPreview(ScreenConfig(700.dp))
     }
 
@@ -241,7 +241,7 @@ fun TabletPreviewsForm() {
 @MobilePreview
 @Composable
 fun MobilePreviewsForm() {
-    ZenentaHelperTheme {
+    ComposeHelperTheme {
         FromScreenContentPreview()
     }
 }
