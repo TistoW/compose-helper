@@ -1,6 +1,8 @@
 package com.tisto.helper.core.helper.source.network
 
 import com.tisto.helper.core.helper.component.PickedImage
+import com.tisto.helper.core.helper.source.request.SearchRequest
+import com.tisto.helper.core.helper.utils.convertToQuery
 import io.github.vinceglb.filekit.readBytes
 import io.ktor.client.*
 import io.ktor.client.call.body
@@ -17,14 +19,14 @@ import kotlinx.serialization.serializer
 suspend inline fun <reified T> HttpClient.getMethod(
     url: String,
     query: Map<String, String>? = null,
+    searchRequest: SearchRequest? = null,
     headers: Map<String, String>? = null
 ): T {
     return get(url) {
         contentType(ContentType.Application.Json)
-        headers?.forEach { (key, value) ->
-            header(key, value)
-        }
+        headers?.forEach { (key, value) -> header(key, value) }
         query?.forEach { (k, v) -> parameter(k, v) }
+        searchRequest?.convertToQuery()?.forEach { (k, v) -> parameter(k, v) }
     }.body()
 }
 
