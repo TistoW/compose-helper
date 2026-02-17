@@ -200,14 +200,6 @@ abstract class BaseViewModel<STATE> : ViewModel() {
         _uiState.update { it.reducer() }
     }
 
-    fun setState(
-        reducer: STATE.() -> STATE
-    ) {
-        _uiState.update {
-            it.copy(data = it.data?.reducer())
-        }
-    }
-
     fun updateState(
         reducer: STATE.() -> STATE
     ) {
