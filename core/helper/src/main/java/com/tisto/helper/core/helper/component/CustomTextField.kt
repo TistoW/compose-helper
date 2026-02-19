@@ -114,6 +114,7 @@ fun CustomTextField(
     strokeColorOnFocused: Color = Colors.Gray2,
     autoHandlePassword: Boolean = true,
     onEnter: (() -> Unit)? = null,
+    onItemSelected: ((Int) -> Unit)? = null,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     var expanded by remember { mutableStateOf(false) }
@@ -438,7 +439,10 @@ fun CustomTextField(
                 expanded = expanded,
                 onDismiss = { expanded = false },
                 items = itemOptions,
-                onSelected = onValueChange
+                onSelected = {
+                    onValueChange(it)
+                    onItemSelected?.invoke(itemOptions.indexOf(it))
+                }
             )
         }
     }
