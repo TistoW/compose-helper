@@ -237,7 +237,7 @@ fun <STATE, ITEMS> ListScaffold(
                 }
 
                 if (onSave != null && screenConfig.isMobileOnly) {
-                    ButtonNormalSimple(
+                    ButtonNormal(
                         text = saveText,
                         modifier = Modifier
                             .fillMaxWidth()

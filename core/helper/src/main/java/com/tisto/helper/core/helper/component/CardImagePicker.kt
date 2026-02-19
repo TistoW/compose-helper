@@ -14,22 +14,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.tisto.helper.core.helper.ui.icon.MyIcon
 import com.tisto.helper.core.helper.ui.icon.myicon.IcCameraSolar
 import com.tisto.helper.core.helper.ui.theme.Colors
+import com.tisto.helper.core.helper.ui.theme.Radius
 import com.tisto.helper.core.helper.ui.theme.Spacing
 import com.tisto.helper.core.helper.ui.theme.TextAppearance
 import com.tisto.helper.core.helper.utils.ext.logs
 
 @Composable
 fun CardImagePicker(
-    modifier: Modifier = Modifier
-        .width(150.dp)
-        .height(150.dp),
+    modifier: Modifier = Modifier,
     imageUrl: String? = null,
+    elevation: Dp = 0.dp,
+    strokeWidth: Dp = 0.3.dp,
+    strokeColor: Color = Colors.Gray4,
     onPicker: ((PickedImage?) -> Unit)? = null
 ) {
 
@@ -44,9 +48,9 @@ fun CardImagePicker(
 
     CustomCard(
         modifier = modifier,
-        elevation = 0.dp,
-        strokeWidth = 0.3.dp,
-        strokeColor = Colors.Gray4
+        elevation = elevation,
+        strokeWidth = strokeWidth,
+        strokeColor = strokeColor
     ) {
         CustomCardBox(
             modifier = Modifier
