@@ -4,7 +4,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -21,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -45,16 +49,23 @@ fun CustomImageView(
     imageUrl: String? = null,
     image: Painter? = null,
     name: String? = null,
-    size: Dp = 50.dp,
+    size: Dp? = null,
+    width: Dp? = null,
+    height: Dp? = null,
     placeholder: Painter? = null,
     error: Painter? = null,
     shape: AvatarShape = AvatarShape.SQUARE,
     contentScale: ContentScale = ContentScale.Crop,
-    cornerRadius: Dp = 4.dp // default kalau SQUARE
+    cornerRadius: Dp = 4.dp
 ) {
     val tempName = name.def("")
     var isError by remember { mutableStateOf(false) }
     var isSuccess by remember { mutableStateOf(false) }
+    val density = LocalDensity.current
+
+    // Track actual size
+    var actualHeight by remember { mutableStateOf(50.dp) }
+
     val initials = remember(tempName) {
         tempName.split(" ")
             .filter { it.isNotBlank() }
@@ -62,19 +73,34 @@ fun CustomImageView(
             .map { it.first().uppercaseChar() }
             .joinToString("")
     }
-
     val avatarShape = when (shape) {
         AvatarShape.CIRCLE -> CircleShape
         AvatarShape.SQUARE -> RoundedCornerShape(cornerRadius)
     }
 
+    val sizeModifier = when {
+        size != null -> Modifier.size(size)
+        width != null && height != null -> Modifier.width(width).height(height)
+        width != null -> Modifier.width(width)
+        height != null -> Modifier.height(height)
+        else -> Modifier
+    }
+
+    // Use actual measured height, or fallback to provided size/height
+    val referenceSize = size ?: height ?: actualHeight
+
     Box(
         modifier = modifier
-            .size(size)
-            .clip(avatarShape),
+            .then(sizeModifier)
+            .clip(avatarShape)
+            .onSizeChanged { intSize ->
+                // Update actual height when measured
+                with(density) {
+                    actualHeight = intSize.height.toDp()
+                }
+            },
         contentAlignment = Alignment.Center
     ) {
-
         if (image != null && imageUrl == null) {
             Image(
                 painter = image,
@@ -85,7 +111,7 @@ fun CustomImageView(
         } else {
             if (imageUrl.isNullOrBlank() || isError) {
                 Box(
-                    modifier = modifier
+                    modifier = Modifier
                         .fillMaxSize()
                         .background(if (initials.isNotEmpty()) colorFromText(tempName) else Colors.Gray5),
                     contentAlignment = Alignment.Center
@@ -93,7 +119,7 @@ fun CustomImageView(
                     if (initials.isNotEmpty()) {
                         Text(
                             text = initials,
-                            fontSize = size.value.sp * 0.4f,
+                            fontSize = referenceSize.value.sp * 0.4f,
                             fontWeight = FontWeight.Bold,
                             color = Colors.Gray3
                         )
@@ -101,11 +127,10 @@ fun CustomImageView(
                         Icon(
                             imageVector = Icons.Default.Image,
                             contentDescription = null,
-                            modifier = Modifier.size(size.value.dp * 0.5f),
+                            modifier = Modifier.size(referenceSize * 0.5f),
                             tint = Colors.Gray4
                         )
                     }
-
                 }
             } else {
                 AsyncImage(
@@ -124,7 +149,7 @@ fun CustomImageView(
                 )
                 if (!isSuccess) {
                     Box(
-                        modifier = modifier
+                        modifier = Modifier
                             .fillMaxSize()
                             .background(Colors.Gray5),
                         contentAlignment = Alignment.Center
@@ -132,15 +157,13 @@ fun CustomImageView(
                         Icon(
                             imageVector = MyIcon.IcLoading,
                             contentDescription = null,
-                            modifier = Modifier.size(size.value.dp * 0.5f),
+                            modifier = Modifier.size(referenceSize * 0.5f),
                             tint = Colors.Gray4
                         )
                     }
                 }
             }
         }
-
-
     }
 }
 

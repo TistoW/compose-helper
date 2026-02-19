@@ -32,7 +32,7 @@ suspend inline fun <reified T> HttpClient.getMethod(
 
 suspend inline fun <reified Req : Any, reified Res> HttpClient.postMethod(
     url: String,
-    body: Req?,
+    body: Req? = null,
     headers: Map<String, String>? = null,
     pickedImage: PickedImage? = null,
     fileFieldName: String = "image",
