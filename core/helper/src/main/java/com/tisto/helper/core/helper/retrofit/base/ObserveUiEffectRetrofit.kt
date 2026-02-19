@@ -22,10 +22,10 @@ fun <REQ> ObserveUiEffectRetrofit(
             when (e) {
                 is UiEffect.Toast -> {
                     when (e.type) {
-                        SnackbarType.SUCCESS -> uiState.snackbarHost.showSuccess(e.message)
-                        SnackbarType.ERROR -> uiState.snackbarHost.showError(e.message)
-                        SnackbarType.WARNING -> uiState.snackbarHost.showWarning(e.message)
-                        SnackbarType.INFO -> uiState.snackbarHost.showInfo(e.message)
+                        SnackbarType.SUCCESS -> uiState.snackbarHostState.showSuccess(e.message)
+                        SnackbarType.ERROR -> uiState.snackbarHostState.showError(e.message)
+                        SnackbarType.WARNING -> uiState.snackbarHostState.showWarning(e.message)
+                        SnackbarType.INFO -> uiState.snackbarHostState.showInfo(e.message)
                     }
                 }
             }
