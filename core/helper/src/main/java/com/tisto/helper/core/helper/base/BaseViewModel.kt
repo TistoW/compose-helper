@@ -190,7 +190,7 @@ abstract class BaseViewModel<STATE> : ViewModel() {
         sendToast(message, SnackbarType.INFO)
     }
 
-    fun toastWaring(message: String) {
+    fun toastWarning(message: String) {
         sendToast(message, SnackbarType.WARNING)
     }
 
