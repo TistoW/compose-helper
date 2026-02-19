@@ -207,7 +207,7 @@ fun FromScreenContentPreview(
 ) {
     FormContainer(
         screenConfig = screenConfig,
-        item = Example(),
+        item = ExampleModel(),
         content = {
 
             Column {

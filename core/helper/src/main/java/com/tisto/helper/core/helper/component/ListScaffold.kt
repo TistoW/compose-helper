@@ -13,7 +13,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.tisto.helper.core.helper.utils.ext.reformatDate
@@ -253,7 +252,7 @@ fun <STATE, ITEMS> ListScaffold(
 
 
 @Serializable
-data class Example(
+data class ExampleModel(
     val id: String = "",
     val code: String = "",
     val name: String = "",
@@ -263,7 +262,7 @@ data class Example(
 
 
 private val list = List(10) {
-    Example(
+    ExampleModel(
         id = it.toString(),
         name = "Desa $it",
         code = "CODE-${it}${it - 1}",
@@ -274,7 +273,7 @@ private val list = List(10) {
 
 @Composable
 private fun ListItem(
-    item: Example,
+    item: ExampleModel,
     onClick: () -> Unit = {},
 ) {
     Column {
@@ -315,9 +314,9 @@ fun ScreenContentPreview(
 ) {
     ListScaffold(
         uiState = BaseUiState(
-            data = Example()
+            data = ExampleModel()
         ),
-        items = listOf<Example>(),
+        items = listOf<ExampleModel>(),
         screenConfig = screenConfig
     ) {
         items(list, key = { it.id }) { item ->

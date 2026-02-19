@@ -388,9 +388,9 @@ private fun SearchFilterRow(
 }
 
 
-fun exampleTableSpec(): TableSpec<Example> {
+fun exampleTableSpec(): TableSpec<ExampleModel> {
     val columns = listOf(
-        TableColumn<Example>(
+        TableColumn<ExampleModel>(
             key = "name",
             title = "Nama",
             weight = 2f,
@@ -463,7 +463,7 @@ fun RowText(
 
 
 private val list = List(10) {
-    Example(
+    ExampleModel(
         id = it.toString(),
         name = "Desa $it",
         code = "CODE-${it}${it - 1}",
@@ -484,7 +484,7 @@ fun ScreenContentWebPreview(
 
     ListScaffoldWeb(
         uiState = BaseUiState(
-            data = Example()
+            data = ExampleModel()
         ),
         items = list,
         screenConfig = screenConfig,
