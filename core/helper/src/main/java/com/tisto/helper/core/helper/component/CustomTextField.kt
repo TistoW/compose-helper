@@ -48,6 +48,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tisto.helper.core.helper.R
+import com.tisto.helper.core.helper.ui.icon.MyIcon
+import com.tisto.helper.core.helper.ui.icon.myicon.IcSearch
 import com.tisto.helper.core.helper.utils.ext.ifZero
 import com.tisto.helper.core.helper.ui.theme.Colors
 import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
@@ -144,7 +146,12 @@ fun CustomTextField(
 
     var tfv by remember {
         val mValue = if (formatCurrency) value.ifZero() else value
-        mutableStateOf(TextFieldValue(text = mValue.def(), selection = TextRange(mValue.def().length)))
+        mutableStateOf(
+            TextFieldValue(
+                text = mValue.def(),
+                selection = TextRange(mValue.def().length)
+            )
+        )
     }
 
 
@@ -476,10 +483,38 @@ private fun formatCurrencyValue(value: String): String {
     }
 }
 
+
 enum class TextFieldStyle {
     OUTLINED,
     FILLED,
     CLEAR
+}
+
+@Composable
+fun SearchTextField(
+    modifier: Modifier = Modifier,
+    value: String = "",
+    onValueChange: (String) -> Unit = {},
+    hint: String = "Cari",
+    style: TextFieldStyle = TextFieldStyle.OUTLINED,
+    leadingIcon: ImageVector = MyIcon.IcSearch,
+    strokeWidth: Dp = 0.5.dp,
+    strokeColor: Color = Colors.Gray2,
+    onEnter: () -> Unit = {}
+) {
+    CustomTextField(
+        value = value,
+        onValueChange = onValueChange,
+        hint = hint,
+        style = style,
+        leadingIcon = leadingIcon,
+        strokeWidth = strokeWidth,
+        strokeColor = strokeColor,
+        floatingLabel = false,
+        modifier = modifier.fillMaxWidth(),
+        singleLine = true,
+        onEnter = onEnter
+    )
 }
 
 @Composable
