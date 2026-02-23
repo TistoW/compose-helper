@@ -49,6 +49,8 @@ fun <STATE, ITEMS> ListScaffold(
     onAddClick: (() -> Unit)? = null,
 
     saveText: String = "Simpan",
+    emptyTitle: String = "Data Kosong",
+    emptySubtitle: String = "Belum ada data tersedia",
     onSave: (() -> Unit)? = null,
 
     filterOptions: List<FilterGroup> = emptyList(),
@@ -207,8 +209,8 @@ fun <STATE, ITEMS> ListScaffold(
                     // empty state
                     if (items.isEmpty() && !isLoading) {
                         EmptyState(
-                            title = "Data Kosong",
-                            subtitle = "Belum ada data tersedia",
+                            title = emptyTitle,
+                            subtitle = emptySubtitle,
                             modifier = Modifier.align(Alignment.Center)
                         )
                     }
