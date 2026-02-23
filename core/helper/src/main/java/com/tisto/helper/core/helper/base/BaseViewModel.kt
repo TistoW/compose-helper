@@ -216,6 +216,10 @@ abstract class BaseViewModel<STATE> : ViewModel() {
         _uiState.update { it.copy(isLoading = value) }
     }
 
+    protected fun setRefreshing(value: Boolean) {
+        _uiState.update { it.copy(isRefreshing = value) }
+    }
+
     fun navigate(screen: String) {
         _uiState.update { it.copy(screen = screen) }
     }

@@ -1,6 +1,7 @@
 package com.tisto.helper.core.helper.component
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
@@ -13,7 +14,7 @@ fun RefreshContainer(
     isRefreshing: Boolean,
     contentAlignment: Alignment = Alignment.TopCenter,
     onRefresh: () -> Unit,
-    content: @Composable () -> Unit
+    content: @Composable BoxScope.() -> Unit
 ) {
 //    if (isMobile()) {
 //        PullToRefreshBox(
@@ -37,8 +38,7 @@ fun RefreshContainer(
         isRefreshing = isRefreshing,
         onRefresh = onRefresh,
         contentAlignment = contentAlignment,
-        modifier = modifier.fillMaxSize()
-    ) {
-        content()
-    }
+        modifier = modifier.fillMaxSize(),
+        content = content
+    )
 }
