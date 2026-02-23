@@ -108,12 +108,12 @@ fun <STATE, ITEMS> ListScaffold(
 
         RefreshContainer(
             isRefreshing = isRefreshing || (isLoading && uiState.isSearching),
-            onRefresh = onRefresh
+            onRefresh = onRefresh,
+            modifier = contentModifier.fillMaxSize()
         ) {
 
             Column(
-                modifier = contentModifier
-                    .fillMaxSize()
+                modifier = contentModifier.fillMaxSize()
             ) {
 
                 /* =============================
@@ -176,6 +176,18 @@ fun <STATE, ITEMS> ListScaffold(
 
                     LazyColumn(state = listState) {
                         content()
+
+
+                        if (list.size < 10) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .height(500.dp)
+                                        .fillMaxWidth()
+                                        .background(Colors.Gray5)
+                                )
+                            }
+                        }
                     }
 
                     // loading indicator
