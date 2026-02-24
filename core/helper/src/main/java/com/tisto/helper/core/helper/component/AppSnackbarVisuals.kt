@@ -45,7 +45,7 @@ fun AppSnackbarHost(
                 Icons.Outlined.Warning
             )
 
-            SnackbarType.WARNING -> Triple(Color(0xFFF57C00), Color.Black, Icons.Outlined.Warning)
+            SnackbarType.WARNING -> Triple(Color(0xFFF57C00), Color.White, Icons.Outlined.Warning)
             SnackbarType.INFO -> Triple(
                 MaterialTheme.colorScheme.primary,
                 Color.White,
