@@ -3,6 +3,7 @@ package com.tisto.helper.core.helper.source.network
 import com.tisto.helper.core.helper.component.PickedImage
 import com.tisto.helper.core.helper.source.request.SearchRequest
 import com.tisto.helper.core.helper.utils.convertToQuery
+import com.tisto.helper.core.helper.utils.ext.logs
 import io.github.vinceglb.filekit.readBytes
 import io.ktor.client.*
 import io.ktor.client.call.body
@@ -58,7 +59,7 @@ suspend inline fun <reified Req : Any, reified Res> HttpClient.postMethod(
 
 suspend inline fun <reified Req : Any, reified Res> HttpClient.putMethod(
     url: String,
-    body: Req?,
+    body: Req? = null,
     headers: Map<String, String>? = null,
     pickedImage: PickedImage? = null,
     fileFieldName: String = "image",
@@ -115,6 +116,9 @@ suspend inline fun <reified Req : Any, reified Res : Any> HttpClient.requestMult
 
     // ✅ form fields
     fields.forEach { (k, v) ->
+
+        logs("vals : $v")
+
         parts += PartData.FormItem(
             value = v,
             dispose = {},
