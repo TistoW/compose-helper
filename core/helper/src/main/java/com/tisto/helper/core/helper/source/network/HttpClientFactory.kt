@@ -68,7 +68,8 @@ object HttpClientFactory {
                     prettyPrint = true
                     isLenient = true
                     ignoreUnknownKeys = true
-                    encodeDefaults = true // 🔥 INI KUNCINYA
+                    encodeDefaults = true
+                    explicitNulls = false
                 })
             }
 

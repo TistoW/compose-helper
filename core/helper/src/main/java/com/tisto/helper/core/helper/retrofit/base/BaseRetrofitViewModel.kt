@@ -146,16 +146,16 @@ abstract class BaseRetrofitViewModel<STATE> : ViewModel() {
         }
     }
 
-    fun <T> onLoaded(page: Int, currentList: List<T>, res: ResourceRetrofit<List<T>>) {
-        val items = res.body ?: listOf()
+    fun <T> onLoaded(page: Int, currentItems: List<T>, items: ResourceRetrofit<List<T>>) {
+        val mItems = items.body ?: listOf()
         updateUiState {
             copy(
                 page = page,
-                hasMore = items.size >= pageLimit,
-                totalPage = res.lastPage,
-                totalSize = res.total,
-                loadingSize = items.size,
-                loadedCount = currentList.size + items.size
+                hasMore = mItems.size >= pageLimit,
+                totalPage = items.lastPage,
+                totalSize = items.total,
+                loadingSize = mItems.size,
+                loadedCount = currentItems.size + mItems.size
             )
         }
     }
