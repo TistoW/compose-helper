@@ -276,6 +276,7 @@ abstract class BaseViewModel<STATE> : ViewModel() {
         updateUiState {
             copy(
                 hasMore = items.size >= pageLimit,
+                isRefreshing = false,
                 page = page,
                 loadingSize = items.size,
                 loadedCount = currentItems.size + items.size

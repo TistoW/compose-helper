@@ -70,7 +70,6 @@ object HttpClientFactory {
                     ignoreUnknownKeys = true
                     encodeDefaults = true
                     explicitNulls = false
-                    ignoreUnknownKeys = true
                 })
             }
 

@@ -47,7 +47,7 @@ data class TableColumn<T>(
 data class TableSpec<T>(
     val columns: List<TableColumn<T>>,
     val actionsWidth: Dp = 80.dp, // your "action" area width
-    val actions: (@Composable RowScope.(T) -> Unit)? = null
+    val actions: (@Composable RowScope.(T) -> Unit)? = null,
 )
 
 fun <T> tableActions(
