@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -28,6 +29,7 @@ fun ScaffoldBox(
     contentColor: Color = contentColorFor(containerColor),
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     isLoadingProcess: Boolean = false,
+    enableInnerPadding: Boolean = false,
     content: @Composable BoxScope.(PaddingValues) -> Unit
 ) {
 
@@ -47,7 +49,9 @@ fun ScaffoldBox(
         contentWindowInsets = contentWindowInsets,
     ) {
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().then(
+                if (enableInnerPadding) Modifier.padding(it) else Modifier
+            )
         ) {
             content(it)
             LoadingDialog(isLoadingProcess)

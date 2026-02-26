@@ -4,6 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -36,6 +40,450 @@ import com.tisto.helper.core.helper.utils.ext.TabletPreview
 import com.tisto.helper.core.helper.utils.ext.ScreenConfig
 import com.tisto.helper.core.helper.utils.ext.isMobilePhone
 
+// ====================================
+// 1. Add to BaseUiState
+// ====================================
+
+// Add this import:
+// import androidx.compose.foundation.lazy.grid.LazyGridState
+
+// Add this field in BaseUiState:
+// val gridScrollState: LazyGridState = LazyGridState(),
+
+// Full updated BaseUiState:
+
+
+// ====================================
+// 2. DisplayMode & GridColumns
+// ====================================
+
+enum class DisplayMode {
+    List,
+    Grid
+}
+
+sealed class GridColumns {
+    /** Fixed number of columns, e.g. GridColumns.Fixed(2) */
+    data class Fixed(val count: Int) : GridColumns()
+
+    /** Adaptive columns based on minimum item width, e.g. GridColumns.Adaptive(150.dp) */
+    data class Adaptive(val minWidth: Dp) : GridColumns()
+
+    /** Convert to Compose GridCells */
+    fun toGridCells(): GridCells = when (this) {
+        is Fixed -> GridCells.Fixed(count)
+        is Adaptive -> GridCells.Adaptive(minWidth)
+    }
+}
+
+// ====================================
+// 3. ListGridScaffoldWeb
+// ====================================
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun <STATE, ITEMS> ListGridScaffoldWeb(
+    modifier: Modifier = Modifier,
+    title: String = "Title",
+    screenConfig: ScreenConfig = ScreenConfig(),
+    uiState: BaseUiState<STATE>,
+    items: List<ITEMS> = emptyList(),
+    horizontalPadding: Float? = null,
+
+    contentModifier: Modifier = Modifier
+        .fillMaxWidth(screenConfig.getHorizontalPaddingListWeight(horizontalPadding))
+        .then(
+            if (screenConfig.isMobile)
+                Modifier.padding(horizontal = Spacing.normal)
+            else Modifier
+        ),
+
+    // ✅ Display mode: List or Grid
+    displayMode: DisplayMode = DisplayMode.List,
+    gridColumns: GridColumns = GridColumns.Fixed(2),
+
+    // Callbacks
+    onUpdateUiState: (BaseUiState<STATE>.() -> BaseUiState<STATE>) -> Unit = {},
+    onSearch: (String) -> Unit = {},
+    onRefresh: () -> Unit = {},
+    onRowsPerPageChange: (Int) -> Unit = {},
+    onPrevPage: () -> Unit = {},
+    onNextPage: () -> Unit = {},
+    onLoadMore: () -> Unit = {},
+    onAdd: (() -> Unit)? = null,
+    onBack: (() -> Unit)? = null,
+    backIcon: ImageVector = Icons.AutoMirrored.Filled.ArrowBack,
+
+    // UI options
+    filterOptions: List<FilterGroup> = emptyList(),
+    showToolbar: Boolean = true,
+    showSearch: Boolean = true,
+    showPaginationButton: Boolean = true,
+    header: (@Composable () -> Unit)? = null,
+
+    // ✅ Two separate content lambdas
+    listContent: (LazyListScope.() -> Unit)? = null,
+    gridContent: (LazyGridScope.() -> Unit)? = null,
+
+    // Min height
+    minListHeight: Dp = 350.dp,
+    estimatedRowHeight: Dp = 56.dp,
+) {
+    val isLoading = uiState.isLoading
+    val isRefreshing = uiState.isRefreshing
+
+    var searchQuery by rememberSaveable { mutableStateOf("") }
+    var showFilterSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    val isMobile = screenConfig.isMobile || isMobilePhone()
+
+    // ✅ Filler height logic
+    val contentHeight = estimatedRowHeight * items.size
+    val fillerHeight = (minListHeight - contentHeight).coerceAtLeast(0.dp)
+
+    // ✅ Scroll states based on mode
+    val listState = uiState.listScrollState
+    val gridState = uiState.gridScrollState
+
+    // ✅ Scroll to top after refresh
+    LaunchedEffect(isRefreshing, displayMode) {
+        if (!isRefreshing) {
+            when (displayMode) {
+                DisplayMode.List -> {
+                    if (listState.firstVisibleItemIndex > 0) {
+                        listState.animateScrollToItem(0)
+                    }
+                }
+
+                DisplayMode.Grid -> {
+                    if (gridState.firstVisibleItemIndex > 0) {
+                        gridState.animateScrollToItem(0)
+                    }
+                }
+            }
+        }
+    }
+
+    // ✅ Load more when scrolled to bottom
+    when (displayMode) {
+        DisplayMode.List -> {
+            LaunchedEffect(listState.canScrollForward, listState.isScrollInProgress) {
+                if (!listState.canScrollForward && !listState.isScrollInProgress
+                    && uiState.hasMore && !isLoading && !showPaginationButton
+                ) {
+                    onLoadMore()
+                }
+            }
+        }
+
+        DisplayMode.Grid -> {
+            LaunchedEffect(gridState.canScrollForward, gridState.isScrollInProgress) {
+                if (!gridState.canScrollForward && !gridState.isScrollInProgress
+                    && uiState.hasMore && !isLoading && !showPaginationButton
+                ) {
+                    onLoadMore()
+                }
+            }
+        }
+    }
+
+    Box(
+        modifier = modifier
+            .background(Colors.White)
+            .fillMaxSize(),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        Column(
+            modifier = modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // =============================
+            // TOOLBAR
+            // =============================
+            if (showToolbar) {
+                ToolbarRow(
+                    screenConfig = screenConfig,
+                    backIcon = backIcon,
+                    title = title,
+                    onAdd = onAdd,
+                    onBack = onBack
+                )
+            }
+
+            RefreshContainer(
+                isRefreshing = isRefreshing || (isLoading && uiState.isSearching),
+                onRefresh = onRefresh,
+                modifier = contentModifier
+            ) {
+                when (displayMode) {
+                    // =============================
+                    // LIST MODE
+                    // =============================
+                    DisplayMode.List -> {
+                        LazyColumn(
+                            state = listState,
+                            modifier = Modifier.fillMaxSize(),
+                        ) {
+                            // Spacer top
+                            item {
+                                Spacer(
+                                    modifier = Modifier.height(
+                                        if (screenConfig.isMobile) Spacing.normal else Spacing.extraLarge
+                                    )
+                                )
+                            }
+
+                            // Search + Filter
+                            searchFilterItem(
+                                isMobile = isMobile,
+                                showSearch = showSearch,
+                                filterOptions = filterOptions,
+                                searchQuery = searchQuery,
+                                uiState = uiState,
+                                onSearchQueryChange = {
+                                    searchQuery = it
+                                    onSearch(it)
+                                },
+                                onClearSearch = {
+                                    searchQuery = ""
+                                    onSearch("")
+                                },
+                                onRefresh = onRefresh,
+                                onOpenFilter = { showFilterSheet = true }
+                            )
+
+                            // Header
+                            header?.let { item(key = "header") { it() } }
+
+                            // Content or Empty
+                            if (items.isEmpty() && !isLoading) {
+                                item(key = "empty") { EmptyStateItem() }
+                            } else {
+                                listContent?.invoke(this)
+                            }
+
+                            // Filler
+                            if (items.isNotEmpty() && fillerHeight > 0.dp) {
+                                item(key = "filler") { Spacer(Modifier.height(fillerHeight)) }
+                            }
+
+                            // Pagination
+                            paginationItem(
+                                items = items,
+                                showPaginationButton = showPaginationButton,
+                                uiState = uiState,
+                                onNextPage = onNextPage,
+                                onPrevPage = onPrevPage,
+                                onRowsPerPageChange = onRowsPerPageChange
+                            )
+                        }
+                    }
+
+                    // =============================
+                    // GRID MODE
+                    // =============================
+                    DisplayMode.Grid -> {
+                        LazyVerticalGrid(
+                            columns = gridColumns.toGridCells(),
+                            state = gridState,
+                            modifier = Modifier.fillMaxSize(),
+                        ) {
+                            // Spacer top — span full width
+                            item(key = "spacer-top", span = { GridItemSpan(maxLineSpan) }) {
+                                Spacer(
+                                    modifier = Modifier.height(
+                                        if (screenConfig.isMobile) Spacing.normal else Spacing.extraLarge
+                                    )
+                                )
+                            }
+
+                            // Search + Filter — span full width
+                            if (showSearch || filterOptions.isNotEmpty()) {
+                                item(key = "search-filter", span = { GridItemSpan(maxLineSpan) }) {
+                                    SearchFilterRow(
+                                        isMobile = isMobile,
+                                        showSearch = showSearch,
+                                        filterOptions = filterOptions,
+                                        searchQuery = searchQuery,
+                                        onSearchQueryChange = {
+                                            searchQuery = it
+                                            onSearch(it)
+                                        },
+                                        onClearSearch = {
+                                            searchQuery = ""
+                                            onSearch("")
+                                        },
+                                        refreshCount = uiState.filters.size,
+                                        onRefresh = onRefresh,
+                                        onOpenFilter = { showFilterSheet = true }
+                                    )
+                                    Spacer(modifier = Modifier.height(Spacing.normal))
+                                }
+                            }
+
+                            // Header — span full width
+                            header?.let {
+                                item(key = "header", span = { GridItemSpan(maxLineSpan) }) { it() }
+                            }
+
+                            // Content or Empty
+                            if (items.isEmpty() && !isLoading) {
+                                item(
+                                    key = "empty",
+                                    span = { GridItemSpan(maxLineSpan) }
+                                ) { EmptyStateItem() }
+                            } else {
+                                gridContent?.invoke(this)
+                            }
+
+                            // Filler — span full width
+                            if (items.isNotEmpty() && fillerHeight > 0.dp) {
+                                item(
+                                    key = "filler",
+                                    span = { GridItemSpan(maxLineSpan) }
+                                ) {
+                                    Spacer(Modifier.height(fillerHeight))
+                                }
+                            }
+
+                            // Pagination — span full width
+                            if (items.isNotEmpty() && showPaginationButton) {
+                                item(
+                                    key = "pagination",
+                                    span = { GridItemSpan(maxLineSpan) }
+                                ) {
+                                    TablePaginationFooter(
+                                        rowsPerPage = uiState.pageLimit,
+                                        totalItems = uiState.totalSize,
+                                        currentPage = uiState.page,
+                                        onNextPage = onNextPage,
+                                        onPrevPage = onPrevPage,
+                                        onRowsPerPageChange = onRowsPerPageChange
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // =============================
+        // LOADING INDICATOR
+        // =============================
+        if (isLoading && !isRefreshing) {
+            val isFirstLoading = !uiState.isSearching && uiState.page == 1
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = Spacing.normal)
+                    .then(
+                        if (isFirstLoading || showPaginationButton) {
+                            Modifier.align(Alignment.Center)
+                        } else {
+                            Modifier.align(Alignment.BottomCenter)
+                        }
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = Colors.ColorPrimary)
+            }
+        }
+
+        // =============================
+        // FILTER SHEET
+        // =============================
+        if (showFilterSheet) {
+            ModalBottomSheet(
+                onDismissRequest = { showFilterSheet = false },
+                sheetState = sheetState,
+                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+            ) {
+                GeneralFilterBottomSheet(
+                    options = filterOptions,
+                    preselected = uiState.filters,
+                    onClose = { showFilterSheet = false },
+                    onApply = { selected ->
+                        onUpdateUiState { copy(filters = selected) }
+                        showFilterSheet = false
+                        onRefresh()
+                    }
+                )
+            }
+        }
+    }
+}
+
+
+// ====================================
+// Helper: shared composables to reduce duplication
+// ====================================
+
+@Composable
+private fun EmptyStateItem() {
+    EmptyState(
+        title = "Data Kosong",
+        subtitle = "Belum ada data tersedia",
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = Spacing.extraLarge)
+    )
+}
+
+/** Search filter as LazyList item — extracted to avoid code duplication in list mode */
+private fun <STATE> LazyListScope.searchFilterItem(
+    isMobile: Boolean,
+    showSearch: Boolean,
+    filterOptions: List<FilterGroup>,
+    searchQuery: String,
+    uiState: BaseUiState<STATE>,
+    onSearchQueryChange: (String) -> Unit,
+    onClearSearch: () -> Unit,
+    onRefresh: () -> Unit,
+    onOpenFilter: () -> Unit,
+) {
+    if (showSearch || filterOptions.isNotEmpty()) {
+        item(key = "search-filter") {
+            SearchFilterRow(
+                isMobile = isMobile,
+                showSearch = showSearch,
+                filterOptions = filterOptions,
+                searchQuery = searchQuery,
+                onSearchQueryChange = onSearchQueryChange,
+                onClearSearch = onClearSearch,
+                refreshCount = uiState.filters.size,
+                onRefresh = onRefresh,
+                onOpenFilter = onOpenFilter
+            )
+            Spacer(modifier = Modifier.height(Spacing.normal))
+        }
+    }
+}
+
+/** Pagination as LazyList item */
+private fun <STATE, ITEMS> LazyListScope.paginationItem(
+    items: List<ITEMS>,
+    showPaginationButton: Boolean,
+    uiState: BaseUiState<STATE>,
+    onNextPage: () -> Unit,
+    onPrevPage: () -> Unit,
+    onRowsPerPageChange: (Int) -> Unit,
+) {
+    if (items.isNotEmpty() && showPaginationButton) {
+        item(key = "pagination") {
+            TablePaginationFooter(
+                rowsPerPage = uiState.pageLimit,
+                totalItems = uiState.totalSize,
+                currentPage = uiState.page,
+                onNextPage = onNextPage,
+                onPrevPage = onPrevPage,
+                onRowsPerPageChange = onRowsPerPageChange
+            )
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <STATE, ITEMS> ListScaffoldWeb(
@@ -53,8 +501,7 @@ fun <STATE, ITEMS> ListScaffoldWeb(
             if (screenConfig.isMobile)
                 Modifier
                     .padding(horizontal = Spacing.normal)
-            else
-                Modifier
+            else Modifier
         ),
 
     onUpdateUiState: (BaseUiState<STATE>.() -> BaseUiState<STATE>) -> Unit = {},
@@ -71,7 +518,7 @@ fun <STATE, ITEMS> ListScaffoldWeb(
     filterOptions: List<FilterGroup> = emptyList(),
     showToolbar: Boolean = true,
     showSearch: Boolean = true,
-    showPaginationButton: Boolean = true,
+    showPaginationButton: Boolean = false,
     header: (@Composable () -> Unit)? = null,
     content: LazyListScope.() -> Unit,
 
