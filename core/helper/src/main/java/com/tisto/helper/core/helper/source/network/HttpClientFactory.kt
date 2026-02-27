@@ -73,7 +73,6 @@ object HttpClientFactory {
                 })
             }
 
-            // Logging
             if (config.enableLogging) {
                 install(Logging) {
                     logger = object : Logger {

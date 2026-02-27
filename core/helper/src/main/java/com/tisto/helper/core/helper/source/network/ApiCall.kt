@@ -1,6 +1,8 @@
 package com.tisto.helper.core.helper.source.network
 
 import com.tisto.helper.core.helper.source.response.BaseResponse
+import com.tisto.helper.core.helper.utils.ext.logs
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -50,8 +52,8 @@ fun <T, R> apiCall(
     // Emit loading state
     emit(Resource.Loading)
 
-    // Execute API call
-    val response = apiCall()
+    // Execute API call with retry for transient errors
+    val response = retryApiCall { apiCall() }
 
     if (response.isSuccess) {
         if (response.data != null) {
@@ -100,6 +102,35 @@ fun <T, R> apiCall(
             message = errorMessage
         )
     )
+}
+
+/**
+ * Retry the API call on transient errors like "Broken pipe"
+ * or "Parent job is Cancelling" (Ktor + OkHttp engine bug).
+ * Max 3 attempts with 1s delay between retries.
+ */
+private suspend fun <T> retryApiCall(
+    maxRetries: Int = 3,
+    block: suspend () -> T
+): T {
+    var lastException: Exception? = null
+    repeat(maxRetries) { attempt ->
+        try {
+            return block()
+        } catch (e: Exception) {
+            val msg = e.message ?: ""
+            if (msg.contains("Broken pipe", ignoreCase = true) ||
+                msg.contains("Parent job is Cancelling", ignoreCase = true)
+            ) {
+                lastException = e
+                logs("⚠️ API call attempt ${attempt + 1} failed (${msg.take(50)}), retrying...")
+                delay(1000L)
+            } else {
+                throw e
+            }
+        }
+    }
+    throw lastException!!
 }
 
 /**

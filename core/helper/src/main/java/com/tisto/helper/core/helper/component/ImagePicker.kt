@@ -58,7 +58,11 @@ class ImagePickerState internal constructor(
             isLoading = true
 
             try {
-                val file: PlatformFile? = FileKit.openFilePicker(type = FileKitType.Image)
+                val file: PlatformFile? = FileKit.openFilePicker(
+                    type = FileKitType.File(
+                        extensions = listOf("jpg", "jpeg", "png", "gif", "webp", "bmp")
+                    )
+                )
                 if (file == null) {
                     // cancel
                     isLoading = false
