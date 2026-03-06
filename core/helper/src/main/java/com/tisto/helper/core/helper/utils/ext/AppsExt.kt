@@ -6,6 +6,7 @@ import androidx.compose.ui.tooling.preview.Devices.PHONE
 import androidx.compose.ui.tooling.preview.Devices.TABLET
 import androidx.compose.ui.tooling.preview.Preview
 import com.tisto.helper.core.helper.R
+import java.util.UUID.randomUUID
 
 @Preview(showBackground = true, device = PHONE)
 annotation class MobilePreview
@@ -24,3 +25,7 @@ fun String.title(isDataAvailable: Boolean): String {
 }
 
 fun isMobilePhone(): Boolean = false // for real device android
+
+fun generateUUID(): String {
+    return randomUUID().toString()
+}

@@ -1,5 +1,6 @@
 package com.tisto.helper.core.helper.component
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
@@ -14,6 +15,7 @@ fun AdaptiveRowColumn(
     isColumn: Boolean = false,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
     content: @Composable () -> Unit
 ) {
     if (isColumn) {
@@ -21,7 +23,11 @@ fun AdaptiveRowColumn(
             content()
         }
     } else {
-        Row(modifier = modifier, verticalAlignment = verticalAlignment) {
+        Row(
+            modifier = modifier,
+            verticalAlignment = verticalAlignment,
+            horizontalArrangement= horizontalArrangement
+        ) {
             content()
         }
     }
