@@ -1,6 +1,7 @@
 package com.tisto.helper.core.helper.source.network
 
 import com.tisto.helper.core.helper.source.response.BaseResponse
+import com.tisto.helper.core.helper.utils.ext.def
 import com.tisto.helper.core.helper.utils.ext.logs
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -66,7 +67,7 @@ fun <T, R> apiCall(
                 Resource.Success(
                     data = mappedData,
                     message = response.message,
-                    lastPage = response.lastPage,
+                    lastPage = response.lastPage.def(),
                     currentPage = response.currentPage,
                     total = response.total,
                     perPage = response.perPage,

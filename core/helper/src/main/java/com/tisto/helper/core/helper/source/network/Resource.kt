@@ -9,13 +9,14 @@ sealed class Resource<out T> {
     data class Success<out T>(
         val data: T,
         val message: String? = null,
-        val lastPage: Int? = null,
+        val code: String? = null,
+        val lastPage: Int = 1,
         val currentPage: Int? = null,
         val total: Int? = null,
         val perPage: Int? = null,
         val lastSync: String? = null
     ) : Resource<T>() {
-        val isPaginated: Boolean get() = lastPage != null || currentPage != null || total != null
+        val isPaginated: Boolean get() = currentPage != null || total != null
     }
 
     data class Error(

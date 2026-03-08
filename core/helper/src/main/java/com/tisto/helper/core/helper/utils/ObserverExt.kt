@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import com.tisto.helper.core.helper.retrofit.network.ResourceRetrofit
 import com.tisto.helper.core.helper.retrofit.network.State
 import com.tisto.helper.core.helper.retrofit.response.base.ErrorResponse
+import com.tisto.helper.core.helper.source.network.Resource
 
 fun <T> LiveData<ResourceRetrofit<T>>.observer(
     lifecycleOwner: LifecycleOwner,
@@ -44,3 +45,45 @@ fun <T> LiveData<ResourceRetrofit<T>>.observer(
         }
     }
 }
+
+fun <T> LiveData<Resource<T>>.observer(
+    lifecycleOwner: LifecycleOwner,
+    onError: (ErrorResponse) -> Unit = {},
+    onErrorAllResponse: ((Resource<T>) -> Unit) = { },
+    onLoading: () -> Unit = { },
+    onFinished: () -> Unit = { },
+    onSuccessAllResponse: (Resource.Success<T>) -> Unit = {},
+    onSuccessNew: (Resource<T>) -> Unit = {},
+    onSuccess: (T) -> Unit = {}
+) {
+    observe(lifecycleOwner) {
+
+        when (it) {
+            is Resource.Loading -> {
+                onLoading()
+            }
+
+            is Resource.Success -> {
+                onSuccessAllResponse(it)
+                if (it.data != null) {
+                    onSuccess(it.data)
+                } else onError(
+                    ErrorResponse(
+                        message = "Data is null", errorCode = it.code
+                    )
+                )
+                onFinished()
+            }
+
+            is Resource.Error -> {
+                val error = ErrorResponse(
+                    message = it.message, errorCode = it.code
+                )
+                onError(error)
+                onErrorAllResponse.invoke(it)
+                onFinished()
+            }
+        }
+    }
+}
+
