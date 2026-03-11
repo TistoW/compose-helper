@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.flowOn
 import retrofit2.Response
 import kotlin.let
 
-fun <T, R> apiCall(
+fun <T, R> apiCallRetrofit(
     apiCall: suspend () -> Response<out BaseResponseRetrofit<T>>,
     onSuccess: ((R?) -> Unit)? = null,
     mapper: (T) -> R
