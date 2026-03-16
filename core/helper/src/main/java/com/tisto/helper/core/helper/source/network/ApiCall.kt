@@ -120,6 +120,7 @@ private suspend fun <T> retryApiCall(
             return block()
         } catch (e: Exception) {
             val msg = e.message ?: ""
+            logs(message = "Error messages $msg")
             if (msg.contains("Broken pipe", ignoreCase = true) ||
                 msg.contains("Parent job is Cancelling", ignoreCase = true)
             ) {
