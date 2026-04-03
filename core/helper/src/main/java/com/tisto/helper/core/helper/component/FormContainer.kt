@@ -26,6 +26,11 @@ import com.tisto.helper.core.helper.utils.ext.TabletPreview
 import com.tisto.helper.core.helper.utils.ext.shorten
 import com.tisto.helper.core.helper.utils.ext.title
 
+sealed interface FormContent {
+    data class Column(val content: @Composable ColumnScope.() -> Unit) : FormContent
+    data class Form(val content: @Composable FormScopeImpl.() -> Unit) : FormContent
+}
+
 @Composable
 fun <ITEM> FormContainer(
     title: String = "Title",
@@ -41,7 +46,8 @@ fun <ITEM> FormContainer(
     onDelete: () -> Unit = {},
     verticalArrangement: Arrangement.Vertical = Arrangement.Top,
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
-    content: @Composable ColumnScope.() -> Unit, // 👈 important: allow ColumnScope
+    formScope: (@Composable FormScopeImpl.() -> Unit)? = null,
+    content: @Composable ColumnScope.() -> Unit = {},
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
     val isMobile = screenConfig.isMobile
@@ -107,20 +113,33 @@ fun <ITEM> FormContainer(
                     verticalArrangement = Arrangement.Top
                 ) {
                     // ✅ all form fields
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .then(
-                                if (isMobile)
-                                    Modifier
-                                else
-                                    Modifier
-                            ),
-                        verticalArrangement = verticalArrangement,
-                        horizontalAlignment = horizontalAlignment,
-                        content = content
-                    )
-
+                    if (formScope != null) {
+                        FormScope {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .then(if (isMobile) Modifier else Modifier),
+                                verticalArrangement = verticalArrangement,
+                                horizontalAlignment = horizontalAlignment,
+                            ) {
+                                formScope()
+                            }
+                        }
+                    } else {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .then(
+                                    if (isMobile)
+                                        Modifier
+                                    else
+                                        Modifier
+                                ),
+                            verticalArrangement = verticalArrangement,
+                            horizontalAlignment = horizontalAlignment,
+                            content = content
+                        )
+                    }
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()

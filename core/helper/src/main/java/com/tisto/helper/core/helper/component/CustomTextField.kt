@@ -15,8 +15,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,10 +35,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isShiftPressed
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -56,6 +71,7 @@ import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
 import com.tisto.helper.core.helper.ui.theme.Radius
 import com.tisto.helper.core.helper.ui.theme.Spacing
 import com.tisto.helper.core.helper.ui.theme.TextAppearance
+import com.tisto.helper.core.helper.utils.expect.getPlatform
 import com.tisto.helper.core.helper.utils.ext.MobilePreview
 import com.tisto.helper.core.helper.utils.ext.def
 import kotlin.collections.isNotEmpty
@@ -67,6 +83,148 @@ import kotlin.text.isDigit
 import kotlin.text.isEmpty
 import kotlin.text.isNotEmpty
 import kotlin.text.take
+
+@Composable
+fun FormScope(
+    maxFields: Int = 50,
+    content: @Composable FormScopeImpl.() -> Unit
+) {
+    val focusRequesters = remember { List(maxFields) { FocusRequester() } }
+
+    // ✅ PERBAIKAN: Buat scope baru yang selalu reset
+    val scope = remember(focusRequesters) {
+        FormScopeImpl(focusRequesters)
+    }
+
+    // ✅ PERBAIKAN: Reset SEBELUM content dipanggil
+    scope.reset()
+    scope.content()
+}
+
+class FormScopeImpl(private val focusRequesters: List<FocusRequester>) {
+    private var currentIndex = 0
+
+    @Composable
+    fun CustomTextField(
+        modifier: Modifier = Modifier,
+        value: String? = "",
+        textStyle: TextStyle = TextAppearance.body1(),
+        hint: String = "",
+        hintStyle: TextStyle = TextAppearance.body2(),
+        placeholder: String = "",
+        placeholderStyle: TextStyle = TextAppearance.body1(),
+        prefix: String = "",
+        prefixStyle: TextStyle = TextAppearance.body1(),
+        suffix: String = "",
+        suffixStyle: TextStyle = TextAppearance.body1(),
+        supportingText: String? = null,
+        supportingTextStyle: TextStyle = TextAppearance.body2(),
+        editable: Boolean = true,
+        endIcon: ImageVector? = null,
+        endIconSize: Dp = 20.dp,
+        endIconOnClick: () -> Unit = {},
+        leadingIcon: ImageVector? = null,
+        leadingIconSize: Dp = 20.dp,
+        leadingIconOnClick: () -> Unit = {},
+        inputType: KeyboardOptions = KeyboardOptions.Default, // KeyboardOptions(keyboardType = KeyboardType.Email)
+        onClick: () -> Unit = {},
+        enabled: Boolean = true,
+        isError: Boolean = false,
+        singleLine: Boolean = false,
+        onFocused: () -> Unit = {},
+        onValueChange: (String) -> Unit = {},
+        maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
+        minLines: Int = 1,
+        maxLength: Int? = null,
+        cornerRadius: Dp = Radius.box,
+        formatCurrency: Boolean = false,
+        maxDecimalDigits: Int = 3,
+        visualTransformation: VisualTransformation? = null,
+        itemOptions: List<String> = listOf(),
+        floatingLabel: Boolean = true,
+        style: TextFieldStyle = TextFieldStyle.OUTLINED,
+        backgroundColor: Color = Color.Transparent,
+        focusedBackgroundColor: Color? = null,
+        strokeWidth: Dp = 0.5.dp,
+        focusedStrokeWidth: Dp? = null,
+        strokeColor: Color = Colors.Gray2,
+        strokeColorOnFocused: Color = Colors.Gray2,
+        autoHandlePassword: Boolean = true,
+        onEnter: (() -> Unit)? = null,
+        onItemSelected: ((Int) -> Unit)? = null,
+    ) {
+        val myIndex = currentIndex
+        // ✅ Increment index
+        if (editable) {
+            currentIndex++
+        }
+
+        // ✅ TAMBAHAN: Reset index setelah composable ini selesai
+        DisposableEffect(Unit) {
+            onDispose {
+                // Tidak perlu reset di sini
+            }
+        }
+
+        CustomTextField(
+            modifier = modifier,
+            value = value,
+            textStyle = textStyle,
+            hint = hint,
+            hintStyle = hintStyle,
+            placeholder = placeholder,
+            placeholderStyle = placeholderStyle,
+            prefix = prefix,
+            prefixStyle = prefixStyle,
+            suffix = suffix,
+            suffixStyle = suffixStyle,
+            supportingText = supportingText,
+            supportingTextStyle = supportingTextStyle,
+            editable = editable,
+            endIcon = endIcon,
+            endIconSize = endIconSize,
+            endIconOnClick = endIconOnClick,
+            leadingIcon = leadingIcon,
+            leadingIconSize = leadingIconSize,
+            leadingIconOnClick = leadingIconOnClick,
+            inputType = inputType,
+            onClick = onClick,
+            enabled = enabled,
+            isError = isError,
+            singleLine = singleLine,
+            onFocused = onFocused,
+            onValueChange = onValueChange,
+            maxLines = maxLines,
+            minLines = minLines,
+            maxLength = maxLength,
+            cornerRadius = cornerRadius,
+            formatCurrency = formatCurrency,
+            maxDecimalDigits = maxDecimalDigits,
+            visualTransformation = visualTransformation,
+            itemOptions = itemOptions,
+            floatingLabel = floatingLabel,
+            style = style,
+            backgroundColor = backgroundColor,
+            focusedBackgroundColor = focusedBackgroundColor,
+            strokeWidth = strokeWidth,
+            focusedStrokeWidth = focusedStrokeWidth,
+            strokeColor = strokeColor,
+            strokeColorOnFocused = strokeColorOnFocused,
+            autoHandlePassword = autoHandlePassword,
+
+            focusRequester = if (editable) focusRequesters.getOrNull(myIndex) else null,
+            nextFocusRequester = if (editable) focusRequesters.getOrNull(myIndex + 1) else null,
+            previousFocusRequester = if (editable) focusRequesters.getOrNull(myIndex - 1) else null,
+
+            onEnter = onEnter,
+            onItemSelected = onItemSelected,
+        )
+    }
+
+    fun reset() {
+        currentIndex = 0
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -115,20 +273,26 @@ fun CustomTextField(
     strokeColor: Color = Colors.Gray2,
     strokeColorOnFocused: Color = Colors.Gray2,
     autoHandlePassword: Boolean = true,
+
+    focusRequester: FocusRequester? = null,
+    nextFocusRequester: FocusRequester? = null,
+    previousFocusRequester: FocusRequester? = null,
+
     onEnter: (() -> Unit)? = null,
     onItemSelected: ((Int) -> Unit)? = null,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     var expanded by remember { mutableStateOf(false) }
     val isFocused = interactionSource.collectIsFocusedAsState().value
+    val focusManager = LocalFocusManager.current
+    val isWeb = remember { getPlatform().name.contains("WebJs") }
 
     // ✅ Password visibility state
     var isPasswordVisible by remember { mutableStateOf(false) }
 
     // ✅ Detect if this is a password field
     val isPasswordField = remember(inputType) {
-        inputType.keyboardType == KeyboardType.Password ||
-                inputType.keyboardType == KeyboardType.NumberPassword
+        inputType.keyboardType == KeyboardType.Password || inputType.keyboardType == KeyboardType.NumberPassword
     }
 
     val currentBgColor = if (isFocused && focusedBackgroundColor != null) {
@@ -200,9 +364,78 @@ fun CustomTextField(
         }
     }
 
+    // Added KeyboardActions
+    val keyboardActions = KeyboardActions(
+        onNext = {
+            focusManager.moveFocus(FocusDirection.Down) // ← THE FIX!
+        },
+        onDone = {
+            if (onEnter != null) onEnter()
+            else focusManager.clearFocus()
+        }
+    )
+
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .then(
+                if (focusRequester != null) {
+                    Modifier.focusRequester(focusRequester)
+                } else Modifier
+            )
+            .onPreviewKeyEvent { keyEvent ->
+                // ✅ TAMBAH: Skip jika not editable
+                if (!editable) {
+                    return@onPreviewKeyEvent false
+                }
+
+                // ✅ TAMBAH: Handle Enter key
+                when (keyEvent.key) {
+                    Key.Enter if keyEvent.type == KeyEventType.KeyDown -> {
+                        onEnter?.let {
+                            it.invoke()
+                            return@onPreviewKeyEvent true
+                        }
+                        // Jika onEnter null dan singleLine, pindah ke next field
+                        if (singleLine) {
+                            if (isWeb) {
+                                nextFocusRequester?.requestFocus()
+                                    ?: focusManager.moveFocus(FocusDirection.Next)
+                            } else {
+                                nextFocusRequester?.requestFocus()
+                                    ?: focusManager.moveFocus(FocusDirection.Next)
+                            }
+                            return@onPreviewKeyEvent true
+                        }
+                        false
+                    }
+                    // Tab handling (existing)
+                    Key.Tab if keyEvent.type == KeyEventType.KeyDown -> {
+                        if (keyEvent.isShiftPressed) {
+                            if (isWeb) {
+                                previousFocusRequester?.requestFocus()
+                                    ?: focusManager.moveFocus(FocusDirection.Previous)
+                            } else {
+                                previousFocusRequester?.requestFocus()
+                                    ?: focusManager.moveFocus(FocusDirection.Previous)
+                            }
+                        } else {
+                            if (isWeb) {
+                                nextFocusRequester?.requestFocus()
+                                    ?: focusManager.moveFocus(FocusDirection.Next)
+                            } else {
+                                nextFocusRequester?.requestFocus()
+                                    ?: focusManager.moveFocus(FocusDirection.Next)
+                            }
+                        }
+                        true
+                    }
+
+                    else -> {
+                        false
+                    }
+                }
+            }
             .then(
                 if (!editable) {
                     Modifier.clickable(
@@ -286,6 +519,16 @@ fun CustomTextField(
                     inputType
                 }
             },
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    nextFocusRequester?.requestFocus()
+                        ?: focusManager.moveFocus(FocusDirection.Next)
+                },
+                onDone = {
+                    onEnter?.invoke()
+                }
+            ),
+//            keyboardActions = keyboardActions,
             interactionSource = interactionSource,
             singleLine = singleLine,
             maxLines = maxLines,
@@ -631,8 +874,8 @@ fun EditTextCustomExamples() {
                 strokeWidth = 0.dp,
                 cornerRadius = 24.dp,
                 floatingLabel = false,
-                leadingIcon = vectorResource(R.drawable.ic_search),
-                endIcon = vectorResource(R.drawable.ic_search),
+                leadingIcon = Icons.Default.Search,
+                endIcon = Icons.Default.Close,
                 modifier = Modifier.fillMaxWidth()
             )
         }
