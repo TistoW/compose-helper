@@ -2,18 +2,8 @@ package com.tisto.helper.core.helper.utils.ext
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Devices.PHONE
-import androidx.compose.ui.tooling.preview.Devices.TABLET
-import androidx.compose.ui.tooling.preview.Preview
 import com.tisto.helper.core.helper.R
 import java.util.UUID.randomUUID
-
-@Preview(showBackground = true, device = PHONE)
-annotation class MobilePreview
-
-
-@Preview(showBackground = true, device = TABLET)
-annotation class TabletPreview
 
 @Composable
 fun String.title(isDataAvailable: Boolean): String {
