@@ -760,7 +760,7 @@ private fun ToolbarRow(
 
             Text(
                 text = title,
-                style = TextAppearance.title2Bold(),
+                style = TextAppearances.title2Bold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
