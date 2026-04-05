@@ -57,7 +57,7 @@ dependencies {
     // =====================================================
     // Jetpack Compose (BOM)
     // =====================================================
-//    implementation(platform(libs.androidx.compose.bom))
+////    implementation(platform(libs.androidx.compose.bom))
 
     // =====================================================
     // Compose UI
@@ -66,9 +66,9 @@ dependencies {
     implementation(libs.compose.foundation)
     implementation(libs.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.compose.material3)
-    implementation(libs.compose.material.icons.extended)
+    implementation(libs.androidx.compose.material.icons.extended)
 
     // Koin
     implementation(libs.koin.androidx.compose)
@@ -99,7 +99,7 @@ dependencies {
     implementation(libs.coil3.coil.compose) // AsyncImage composable
     implementation(libs.coil.network.ktor3)
 
-    androidTestImplementation(platform(libs.androidx.compose.bom))
+//    androidTestImplementation(platform(libs.androidx.compose.bom))
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
