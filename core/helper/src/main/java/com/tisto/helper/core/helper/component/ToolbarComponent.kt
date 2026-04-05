@@ -22,14 +22,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
-import com.tisto.helper.core.helper.ui.theme.Heights
-import com.tisto.helper.core.helper.ui.theme.Padding
-import com.tisto.helper.core.helper.ui.theme.TextAppearance
-import com.tisto.helper.core.helper.ui.theme.Colors
-import com.tisto.helper.core.helper.ui.theme.Spacing
-import com.tisto.helper.core.helper.utils.ext.MobilePreview
-import com.tisto.helper.core.helper.utils.ext.TabletPreview
+import com.tisto.kmp.helper.ui.theme.ComposeHelperTheme
+import com.tisto.kmp.helper.ui.theme.Heights
+import com.tisto.kmp.helper.ui.theme.Padding
+import com.tisto.kmp.helper.ui.theme.TextAppearance
+import com.tisto.kmp.helper.ui.theme.Colors
+import com.tisto.kmp.helper.ui.theme.Spacing
+import com.tisto.kmp.helper.ui.utils.ext.MobilePreview
+import com.tisto.kmp.helper.ui.utils.ext.TabletPreview
 
 @Composable
 fun Toolbars(

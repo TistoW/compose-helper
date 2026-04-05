@@ -18,13 +18,13 @@ import androidx.compose.ui.unit.dp
 import com.tisto.helper.core.helper.utils.ext.reformatDate
 import com.tisto.helper.core.helper.base.BaseUiState
 import com.tisto.helper.core.helper.retrofit.model.FilterGroup
-import com.tisto.helper.core.helper.ui.theme.Colors
-import com.tisto.helper.core.helper.ui.theme.Radius
-import com.tisto.helper.core.helper.ui.theme.Spacing
-import com.tisto.helper.core.helper.ui.theme.TextAppearance
-import com.tisto.helper.core.helper.utils.ext.MobilePreview
-import com.tisto.helper.core.helper.utils.ext.TabletPreview
-import com.tisto.helper.core.helper.utils.ext.ScreenConfig
+import com.tisto.kmp.helper.ui.theme.Colors
+import com.tisto.kmp.helper.ui.theme.Radius
+import com.tisto.kmp.helper.ui.theme.Spacing
+import com.tisto.kmp.helper.ui.theme.TextAppearance
+import com.tisto.kmp.helper.ui.utils.ext.MobilePreview
+import com.tisto.kmp.helper.ui.utils.ext.TabletPreview
+import com.tisto.kmp.helper.ui.utils.ext.ScreenConfig
 import com.tisto.helper.core.helper.R
 import kotlinx.serialization.Serializable
 

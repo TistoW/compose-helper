@@ -47,8 +47,8 @@ import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
 import com.tisto.helper.core.helper.ui.icon.MyIcon
 import com.tisto.helper.core.helper.ui.icon.myicon.IcLoading
-import com.tisto.helper.core.helper.ui.theme.Colors
-import com.tisto.helper.core.helper.utils.ext.MobilePreview
+import com.tisto.kmp.helper.ui.theme.Colors
+import com.tisto.kmp.helper.ui.utils.ext.MobilePreview
 import com.tisto.helper.core.helper.utils.ext.colorFromText
 import com.tisto.helper.core.helper.utils.ext.def
 import com.tisto.helper.core.helper.utils.toPainter

@@ -19,8 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
-import com.tisto.helper.core.helper.ui.theme.TextAppearance
+import com.tisto.kmp.helper.ui.theme.ComposeHelperTheme
+import com.tisto.kmp.helper.ui.theme.TextAppearance
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

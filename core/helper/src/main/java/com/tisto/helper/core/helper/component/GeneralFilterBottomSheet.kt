@@ -45,10 +45,10 @@ import com.tisto.helper.core.helper.R
 import com.tisto.helper.core.helper.retrofit.model.FilterGroup
 import com.tisto.helper.core.helper.retrofit.model.FilterItem
 import com.tisto.helper.core.helper.retrofit.model.FilterType
-import com.tisto.helper.core.helper.ui.theme.Colors
-import com.tisto.helper.core.helper.ui.theme.ComposeHelperTheme
-import com.tisto.helper.core.helper.ui.theme.Spacing
-import com.tisto.helper.core.helper.ui.theme.TextAppearance
+import com.tisto.kmp.helper.ui.theme.Colors
+import com.tisto.kmp.helper.ui.theme.ComposeHelperTheme
+import com.tisto.kmp.helper.ui.theme.Spacing
+import com.tisto.kmp.helper.ui.theme.TextAppearance
 import kotlin.apply
 import kotlin.collections.filterNotNull
 import kotlin.collections.firstOrNull
