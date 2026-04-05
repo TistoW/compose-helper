@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.tisto.helper.core.helper.R
 import com.tisto.helper.core.helper.base.BaseUiState
-import com.tisto.helper.core.helper.retrofit.model.FilterGroup
 import com.tisto.kmp.helper.ui.theme.Colors
 import com.tisto.kmp.helper.ui.theme.Heights
 import com.tisto.kmp.helper.ui.theme.Radius
@@ -39,6 +38,7 @@ import com.tisto.kmp.helper.ui.utils.ext.MobilePreview
 import com.tisto.kmp.helper.ui.utils.ext.TabletPreview
 import com.tisto.kmp.helper.ui.utils.ext.ScreenConfig
 import com.tisto.helper.core.helper.utils.ext.isMobilePhone
+import com.tisto.kmp.helper.utils.model.FilterGroup
 
 // ====================================
 // 1. Add to BaseUiState

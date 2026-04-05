@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.tisto.helper.core.helper.retrofit.network.ResourceRetrofit
-import com.tisto.helper.core.helper.retrofit.model.FilterItem
+import com.tisto.kmp.helper.utils.model.FilterItem
 import com.tisto.helper.core.helper.component.showError
 import com.tisto.helper.core.helper.component.showInfo
 import com.tisto.helper.core.helper.component.showSuccess

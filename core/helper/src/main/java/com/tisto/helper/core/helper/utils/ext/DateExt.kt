@@ -45,7 +45,6 @@ fun formatData(
     return SimpleDateFormat(formatDate, locale)
 }
 
-@SuppressLint("SimpleDateFormat")
 fun today(
     formatDate: String = defaultDateFormat,
     boundary: DayBoundary = DayBoundary.CURRENT

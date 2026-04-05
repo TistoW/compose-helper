@@ -17,7 +17,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.tisto.helper.core.helper.utils.ext.reformatDate
 import com.tisto.helper.core.helper.base.BaseUiState
-import com.tisto.helper.core.helper.retrofit.model.FilterGroup
 import com.tisto.kmp.helper.ui.theme.Colors
 import com.tisto.kmp.helper.ui.theme.Radius
 import com.tisto.kmp.helper.ui.theme.Spacing
@@ -26,6 +25,7 @@ import com.tisto.kmp.helper.ui.utils.ext.MobilePreview
 import com.tisto.kmp.helper.ui.utils.ext.TabletPreview
 import com.tisto.kmp.helper.ui.utils.ext.ScreenConfig
 import com.tisto.helper.core.helper.R
+import com.tisto.kmp.helper.utils.model.FilterGroup
 import kotlinx.serialization.Serializable
 
 @OptIn(ExperimentalMaterial3Api::class)

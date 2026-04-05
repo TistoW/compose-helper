@@ -42,19 +42,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tisto.helper.core.helper.R
-import com.tisto.helper.core.helper.retrofit.model.FilterGroup
-import com.tisto.helper.core.helper.retrofit.model.FilterItem
-import com.tisto.helper.core.helper.retrofit.model.FilterType
 import com.tisto.kmp.helper.ui.theme.Colors
 import com.tisto.kmp.helper.ui.theme.ComposeHelperTheme
 import com.tisto.kmp.helper.ui.theme.Spacing
 import com.tisto.kmp.helper.ui.theme.TextAppearance
+import com.tisto.kmp.helper.utils.model.FilterGroup
+import com.tisto.kmp.helper.utils.model.FilterItem
+import com.tisto.kmp.helper.utils.model.FilterType
 import kotlin.apply
 import kotlin.collections.filterNotNull
 import kotlin.collections.firstOrNull
-import kotlin.collections.forEach
-import kotlin.collections.set
 import kotlin.collections.toMutableMap
+import kotlin.text.get
 
 @Composable
 fun simpleFilter(): List<FilterGroup> {

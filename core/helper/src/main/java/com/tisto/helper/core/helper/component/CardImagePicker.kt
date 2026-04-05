@@ -18,12 +18,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.tisto.helper.core.helper.ui.icon.MyIcon
-import com.tisto.helper.core.helper.ui.icon.myicon.IcCameraSolar
+import com.tisto.kmp.helper.ui.icon.MyIcon
+import com.tisto.kmp.helper.ui.icon.myicon.IcCameraSolar
 import com.tisto.kmp.helper.ui.theme.Colors
 import com.tisto.kmp.helper.ui.theme.Spacing
 import com.tisto.kmp.helper.ui.theme.TextAppearance
-import com.tisto.helper.core.helper.utils.ext.logs
 
 @Composable
 fun CardImagePicker(
@@ -41,7 +40,7 @@ fun CardImagePicker(
     }
 
     LaunchedEffect(picker.errorMessage) {
-        logs("picker.errorMessage: ${picker.errorMessage}")
+        println("picker.errorMessage: ${picker.errorMessage}")
     }
 
     CustomCard(
