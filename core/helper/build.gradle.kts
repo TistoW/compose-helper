@@ -45,7 +45,7 @@ android {
 
 dependencies {
 
-//    implementation(project(":compose:helper:ui"))
+    implementation(project(":compose:helper:ui"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

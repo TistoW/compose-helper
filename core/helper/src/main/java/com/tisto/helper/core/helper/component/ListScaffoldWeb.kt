@@ -39,6 +39,7 @@ import com.tisto.helper.core.helper.utils.ext.MobilePreview
 import com.tisto.helper.core.helper.utils.ext.TabletPreview
 import com.tisto.helper.core.helper.utils.ext.ScreenConfig
 import com.tisto.helper.core.helper.utils.ext.isMobilePhone
+import com.tisto.kmp.helper.ui.theme.TextAppearances
 
 // ====================================
 // 1. Add to BaseUiState
@@ -760,7 +761,7 @@ private fun ToolbarRow(
 
             Text(
                 text = title,
-                style = TextAppearance.title2Bold(),
+                style = TextAppearances.title2Bold(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
