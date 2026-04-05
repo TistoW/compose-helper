@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -39,6 +40,7 @@ import com.tisto.helper.core.helper.utils.ext.MobilePreview
 import com.tisto.helper.core.helper.utils.ext.TabletPreview
 import com.tisto.helper.core.helper.utils.ext.ScreenConfig
 import com.tisto.helper.core.helper.utils.ext.isMobilePhone
+import com.tisto.kmp.helper.ui.theme.TextAppearances
 
 // ====================================
 // 1. Add to BaseUiState
@@ -760,7 +762,7 @@ private fun ToolbarRow(
 
             Text(
                 text = title,
-                style = TextAppearances.title2Bold,
+                style = TextAppearances.title2Bold(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
