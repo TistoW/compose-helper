@@ -17,19 +17,13 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
 import java.net.URL
 import java.net.URLEncoder
 import java.text.ParseException
@@ -38,10 +32,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import androidx.core.graphics.createBitmap
-import androidx.core.graphics.set
 import com.tisto.helper.core.helper.utils.ext.AppConstants.TIME_STAMP_FORMAT
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.qrcode.QRCodeWriter
 
 fun visible() = View.VISIBLE
 fun invisible() = View.INVISIBLE
@@ -93,12 +84,7 @@ fun <T> T.logm(string: String = "This:") {
     logs("$string:" + this.toJson())
 }
 
-fun Context.setToolbar(view: Toolbar, title: String) {
-    (this as AppCompatActivity).setSupportActionBar(view)
-    this.supportActionBar!!.title = title
-    this.supportActionBar!!.setDisplayShowHomeEnabled(true)
-    this.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-}
+
 
 fun Activity.setTransparantStatusBar() {
     val w: Window = this.window
@@ -110,12 +96,6 @@ fun Activity.setTransparantStatusBar() {
 
 fun Activity.hidenKeyboard() {
     this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
-}
-
-fun Fragment.hideKeyboard() {
-    val imm: InputMethodManager =
-        requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.hideSoftInputFromWindow(view!!.windowToken, 0)
 }
 
 fun Context.setError(editText: EditText, message: String = "Kolom tidak boleh kosong") {
@@ -148,30 +128,6 @@ fun getFragmentWidthPercentage(percentage: Int): Int {
     val dm = Resources.getSystem().displayMetrics
     val rect = dm.run { Rect(0, 0, widthPixels, heightPixels) }
     return (rect.width() * percent).toInt()
-}
-
-fun Context.verticalLayoutManager(): LinearLayoutManager {
-    val layoutManager = LinearLayoutManager(this)
-    layoutManager.orientation = LinearLayoutManager.VERTICAL
-    return layoutManager
-}
-
-fun Fragment.verticalLayoutManager(): LinearLayoutManager {
-    val layoutManager = LinearLayoutManager(requireActivity())
-    layoutManager.orientation = LinearLayoutManager.VERTICAL
-    return layoutManager
-}
-
-fun Context.horizontalLayoutManager(): LinearLayoutManager {
-    val layoutManager = LinearLayoutManager(this)
-    layoutManager.orientation = LinearLayoutManager.HORIZONTAL
-    return layoutManager
-}
-
-fun Fragment.horizontalLayoutManager(): LinearLayoutManager {
-    val layoutManager = LinearLayoutManager(requireActivity())
-    layoutManager.orientation = LinearLayoutManager.HORIZONTAL
-    return layoutManager
 }
 
 
@@ -383,26 +339,6 @@ fun Long?.def(v: Long = 0L): Long {
     return this ?: v
 }
 
-fun <T> T.toMap(): Map<String, String> {
-    val map: Map<String, String> = HashMap()
-    return Gson().fromJson(this.toJson(), map.javaClass)
-}
-
-@RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
-fun Context.isOffline(): Boolean {
-    return !isOnline()
-}
-
-@RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
-fun Fragment.isOffline(): Boolean {
-    return !requireActivity().isOnline()
-}
-
-@RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
-fun Fragment.isOnline(): Boolean {
-    return requireActivity().isOnline()
-}
-
 @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
 fun Context.isOnline(): Boolean {
     val context = this
@@ -486,17 +422,6 @@ fun String.convertUrlToBitmap(): Bitmap? {
         bitmap = BitmapFactory.decodeStream(input)
     } catch (e: Exception) {
         e.printStackTrace()
-    }
-    return bitmap
-}
-
-fun String.toQRCode(dimensions: Int): Bitmap {
-    val bitMatrix = QRCodeWriter().encode(this, BarcodeFormat.QR_CODE, dimensions, dimensions)
-    val bitmap = createBitmap(dimensions, dimensions, Bitmap.Config.RGB_565)
-    for (x in 0 until dimensions) {
-        for (y in 0 until dimensions) {
-            bitmap[x, y] = if (bitMatrix[x, y]) Color.BLACK else Color.WHITE
-        }
     }
     return bitmap
 }
