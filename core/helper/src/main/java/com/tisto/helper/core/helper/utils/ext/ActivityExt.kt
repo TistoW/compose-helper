@@ -235,3 +235,8 @@ fun Activity.isTabletScreen(): Boolean {
     val diagonalInches = sqrt((widthInches * widthInches + heightInches * heightInches).toDouble())
     return isLargeScreen || diagonalInches >= 7.0
 }
+
+fun <R> Activity.getObjectExtra(classOfT: Class<R>, extra: String = "extra"): R? {
+    val json: String = getStringExtra(extra) ?: ""
+    return json.toModel(classOfT)
+}
