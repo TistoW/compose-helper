@@ -1,14 +1,9 @@
 package com.tisto.helper.core.helper.utils.ext
 
-import android.annotation.SuppressLint
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random
 
@@ -31,148 +26,6 @@ fun String?.uppercaseFirstChar(): String {
     return value?.replaceFirstChar { it.uppercaseChar() } ?: ""
 }
 
-@SuppressLint("SimpleDateFormat")
-fun String.convertTanggal(
-    toFormat: String,
-    fromFormat: String = "yyyy-MM-dd kk:mm:ss"
-): String {
-    if (this.contains("Z", ignoreCase = true)) {
-        return this.convertFromUTC(toFormat = toFormat)
-    }
-
-    val inputFormat = SimpleDateFormat(fromFormat)
-    val outputFormat = SimpleDateFormat(toFormat)
-    return try {
-        val date = inputFormat.parse(this) ?: dateExample
-        outputFormat.format(date)
-    } catch (e: Exception) {
-        outputFormat.format(inputFormat.parse(dateExample) ?: dateExample)
-    }
-}
-
-fun String.convertDate(
-    toFormat: String,
-    fromFormat: String = "yyyy-MM-dd kk:mm:ss"
-): String {
-    return this.convertTanggal(toFormat, fromFormat)
-}
-
-fun String?.reformatDate(
-    toFormat: String = "dd MMM yyyy HH:mm:ss",
-    fromFormat: String = "yyyy-MM-dd HH:mm:ss"
-): String {
-    return this?.convertDate(toFormat, fromFormat).def(
-        dummyResult(
-            toFormat
-        )
-    )
-}
-
-const val defaultDateFormat = "yyyy-MM-dd kk:mm:ss"
-const val defaultDateFormatMillisecond = "yyyy-MM-dd kk:mm:ss.SSS"
-const val dateExampleUTC = "1990-01-01T00:00:00.000000Z"
-const val dateExample = "1990-01-01 00:00:00"
-const val defaultUTCDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-
-@SuppressLint("SimpleDateFormat")
-fun String.convertToUTC(
-    fromFormat: String = defaultDateFormat,
-    addDay: Int? = null
-): String {
-    val newFormat = defaultUTCDateFormat
-    val dateFormat = SimpleDateFormat(fromFormat)
-    var result = dateExampleUTC
-    try {
-        result = if (addDay.isNotNull()) {
-            val dd = dateFormat.parse(this)
-            // tambah 7 jam untuk indonesia
-            val hour: Long = 3600 * 1000 // in milli-seconds.
-            val newDate = Date((dd?.time.def(1)) + (addDay.def(1)) * hour)
-            dateFormat.applyPattern(newFormat)
-            dateFormat.format(newDate)
-        } else {
-            val date = dateFormat.parse(this)
-            dateFormat.applyPattern(newFormat)
-            dateFormat.format(date ?: dateExample)
-        }
-    } catch (e: ParseException) {
-        loge(e.message)
-    }
-    return result.replace(" 24", " 00")
-}
-
-@SuppressLint("SimpleDateFormat")
-fun dummyResult(toFormat: String): String {
-    val dateFormat = SimpleDateFormat(defaultDateFormat)
-    val date = dateFormat.parse(dateExample)
-    dateFormat.applyPattern(toFormat)
-    return dateFormat.format(date ?: dateExample)
-}
-
-@SuppressLint("SimpleDateFormat")
-fun String?.convertFromUTC(
-    toFormat: String = defaultDateFormat,
-    fromFormat: String = defaultUTCDateFormat,
-    timeZone: String = "Asia/Jakarta"
-): String {
-    if (this == null) return dummyResult(toFormat)
-    var result: String
-    try {
-        val utcFormat = SimpleDateFormat(fromFormat, Locale.getDefault())
-        utcFormat.timeZone = TimeZone.getTimeZone("UTC")
-        val indonesianFormat = SimpleDateFormat(toFormat, Locale.getDefault())
-        indonesianFormat.timeZone = TimeZone.getTimeZone(timeZone)
-        val utcDate = utcFormat.parse(this)
-        result = utcDate?.let { indonesianFormat.format(it) } ?: "2000-01-01 01:00:00"
-    } catch (e: Exception) {
-        result = dummyResult(toFormat)
-        logs("Error Time Format:${e.message}")
-    }
-    return result.replace(" 24", " 00")
-}
-
-fun String.convertFromUTCDay(): String {
-    return this.convertFromUTCDayTime(false)
-}
-
-@SuppressLint("SimpleDateFormat")
-fun String.convertFromUTCDayTime(time: Boolean = true): String {
-    val date = this.convertFromUTC()
-
-    var tanggal = ""
-    var hari = ""
-
-    val formatTgl = "dd MMM yyyy${if (time) " kk:mm" else ""}"
-    val formatHari = "EEEE"
-    val formatLama = defaultDateFormat
-
-    val dateFormat = SimpleDateFormat(formatLama)
-    val dateFormat2 = SimpleDateFormat(formatLama)
-    try {
-        val dd = dateFormat.parse(date)
-        dateFormat.applyPattern(formatTgl)
-        tanggal = dateFormat.format(dd!!)
-
-        val mHari = dateFormat2.parse(date)
-        dateFormat2.applyPattern(formatHari)
-        hari = dateFormat2.format(mHari!!)
-    } catch (e: ParseException) {
-        e.printStackTrace()
-    }
-
-    when (hari) {
-        "Sunday" -> hari = "Minggu"
-        "Monday" -> hari = "Senin"
-        "Tuesday" -> hari = "Selasa"
-        "Wednesday" -> hari = "Rabo"
-        "Thursday" -> hari = "Kamis"
-        "Friday" -> hari = "Jumat"
-        "Saturday" -> hari = "Sabtu"
-    }
-
-    return "$hari, $tanggal${if (time) " WIB" else ""}"
-}
-
 fun String.getYoutubeId(): String {
     return when {
         this.contains("youtu.be") -> this.split("/")[3]
@@ -190,23 +43,6 @@ fun String.getYoutubeId(): String {
 //fun Int.toRequestBody(): RequestBody {
 //    return this.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 //}
-
-@SuppressLint("SimpleDateFormat")
-fun String.toSalam(): String {
-    val dateNow = System.currentTimeMillis()
-    val sTgl = SimpleDateFormat("dd MMMM yyyy")
-    val sJam = SimpleDateFormat("kk")
-    val tgl: String = sTgl.format(dateNow)
-    val jam: String = sJam.format(dateNow)
-
-    val iJam = jam.toInt()
-    var salam = ""
-    if (iJam <= 10) salam = "Selamat Pagi"
-    if (iJam in 11..14) salam = "Selamat Siang"
-    if (iJam in 13..18) salam = "Selamat Sore"
-    if (iJam in 19..24) salam = "Selamat Malam"
-    return salam
-}
 
 fun String?.getInitial(): String {
     try {
@@ -317,23 +153,6 @@ fun randomInt(from: Int, to: Int): Int {
     return Random.nextInt(from, to) // to exclusive
 }
 
-@SuppressLint("SimpleDateFormat")
-fun getSalam(): String {
-    val dateNow = System.currentTimeMillis()
-    val sTgl = SimpleDateFormat("dd MMMM yyyy")
-    val sJam = SimpleDateFormat("kk")
-    val tgl: String = sTgl.format(dateNow)
-    val jam: String = sJam.format(dateNow)
-
-    val iJam = jam.toInt()
-    var salam = ""
-    if (iJam <= 10) salam = "Selamat Pagi"
-    if (iJam in 11..14) salam = "Selamat Siang"
-    if (iJam in 13..18) salam = "Selamat Sore"
-    if (iJam in 19..24) salam = "Selamat Malam"
-    return salam
-}
-
 fun String?.clearJsonString(): String {
     return this?.replace("\"{", "{")?.replace("}\"", "}")?.replace("\\", "") ?: ""
 }
@@ -346,60 +165,6 @@ fun String.translateJson(): String {
     return this.replace("\\u003d", "=")
 }
 
-fun Number?.formatCurrency(
-    showCurrency: Boolean = false,
-    maxFractionDigits: Int = 3,
-    rounding: RoundingMode = RoundingMode.DOWN
-): String {
-    if (this == null) return if (showCurrency) "Rp0" else "0"
-
-    val locale = Locale("in", "ID")
-    val symbols = DecimalFormatSymbols(locale).apply {
-        groupingSeparator = '.'
-        decimalSeparator = ','
-    }
-
-    val df = DecimalFormat().apply {
-        decimalFormatSymbols = symbols
-        isGroupingUsed = true
-        minimumFractionDigits = 0       // no forced “,000”
-        maximumFractionDigits = maxFractionDigits
-        roundingMode = rounding
-    }
-
-    // format through BigDecimal to reduce Double artifacts
-    val bd = when (this) {
-        is BigDecimal -> this
-        else -> BigDecimal.valueOf(this.toDouble())
-    }
-
-    val numberPart = df.format(bd)
-    return if (showCurrency) "Rp$numberPart" else numberPart
-}
-
-fun String?.formatCurrency(showCurrency: Boolean = false): String {
-    return this.toDoubleSafety().formatCurrency(showCurrency)
-}
-
-fun Int?.toRupiah(hideCurrency: Boolean = false): String {
-    return (this ?: 0).formatCurrency(!hideCurrency)
-}
-
-fun Double?.toRupiah(hideCurrency: Boolean = false): String {
-    return (this ?: 0.0).formatCurrency(!hideCurrency)
-}
-
-fun String?.toRupiah(hideCurrency: Boolean = false): String {
-    return (this ?: "0").formatCurrency(!hideCurrency)
-}
-
-fun Double?.formatRupiah(hideCurrency: Boolean = false): String {
-    return (this ?: 0.0).formatCurrency(!hideCurrency)
-}
-
-fun String?.formatRupiah(hideCurrency: Boolean = false): String {
-    return (this ?: "0").formatCurrency(!hideCurrency)
-}
 
 fun String?.startWithZero(): String {
     var result = this
