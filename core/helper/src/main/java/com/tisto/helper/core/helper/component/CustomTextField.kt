@@ -67,7 +67,7 @@ import com.tisto.kmp.helper.ui.theme.ComposeHelperTheme
 import com.tisto.kmp.helper.ui.theme.Radius
 import com.tisto.kmp.helper.ui.theme.Spacing
 import com.tisto.kmp.helper.ui.theme.TextAppearance
-import com.tisto.helper.core.helper.utils.expect.getPlatform
+import com.tisto.kmp.helper.network.expect.getPlatform
 import com.tisto.kmp.helper.ui.utils.ext.MobilePreview
 import com.tisto.kmp.helper.utils.ext.def
 import com.tisto.kmp.helper.ui.icon.MyIcon

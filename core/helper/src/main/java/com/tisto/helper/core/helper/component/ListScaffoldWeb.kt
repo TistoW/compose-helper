@@ -37,7 +37,7 @@ import com.tisto.kmp.helper.ui.theme.TextAppearance
 import com.tisto.kmp.helper.ui.utils.ext.MobilePreview
 import com.tisto.kmp.helper.ui.utils.ext.TabletPreview
 import com.tisto.kmp.helper.ui.utils.ext.ScreenConfig
-import com.tisto.helper.core.helper.utils.ext.isMobilePhone
+import com.tisto.kmp.helper.ui.utils.ext.isMobilePhone
 import com.tisto.kmp.helper.utils.model.FilterGroup
 
 // ====================================
