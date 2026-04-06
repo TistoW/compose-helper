@@ -11,6 +11,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.tisto.kmp.helper.ui.theme.ComposeHelperTheme
 import com.tisto.kmp.helper.ui.utils.ext.MobilePreview
+import com.tisto.kmp.helper.utils.model.PickedImage
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.PlatformFile
 import io.github.vinceglb.filekit.dialogs.FileKitType
@@ -21,13 +22,6 @@ import io.github.vinceglb.filekit.readBytes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-
-@Immutable
-data class PickedImage(
-    val file: PlatformFile,
-    val name: String,
-    val mimeType: String?,
-)
 
 @Stable
 class ImagePickerState internal constructor(

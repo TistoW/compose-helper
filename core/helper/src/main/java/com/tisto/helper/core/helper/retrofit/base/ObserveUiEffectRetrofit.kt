@@ -4,8 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.tisto.helper.core.helper.base.SnackbarType
-import com.tisto.helper.core.helper.base.UiEffect
 
 @Composable
 fun <REQ> ObserveUiEffectRetrofit(

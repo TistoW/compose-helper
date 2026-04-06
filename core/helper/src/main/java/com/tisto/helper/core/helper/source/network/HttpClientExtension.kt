@@ -1,8 +1,8 @@
 package com.tisto.helper.core.helper.source.network
 
-import com.tisto.helper.core.helper.component.PickedImage
+import com.tisto.kmp.helper.utils.model.PickedImage
 import com.tisto.helper.core.helper.source.request.SearchRequest
-import com.tisto.helper.core.helper.utils.convertToQuery
+import com.tisto.helper.core.helper.source.request.convertToQuery
 import com.tisto.kmp.helper.utils.ext.logs
 import io.github.vinceglb.filekit.readBytes
 import io.ktor.client.*

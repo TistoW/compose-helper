@@ -3,9 +3,9 @@ package com.tisto.helper.core.helper.retrofit.base
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tisto.helper.core.helper.base.BaseUiState
-import com.tisto.helper.core.helper.base.SnackbarType
-import com.tisto.helper.core.helper.base.UiEffect
-import com.tisto.helper.core.helper.base.UiEvent
+import com.tisto.kmp.helper.utils.SnackbarType
+import com.tisto.kmp.helper.utils.UiEffect
+import com.tisto.kmp.helper.utils.UiEvent
 import com.tisto.helper.core.helper.retrofit.network.ResourceRetrofit
 import com.tisto.helper.core.helper.retrofit.network.State
 import kotlinx.coroutines.channels.Channel

@@ -23,6 +23,7 @@ import com.tisto.kmp.helper.ui.icon.myicon.IcCameraSolar
 import com.tisto.kmp.helper.ui.theme.Colors
 import com.tisto.kmp.helper.ui.theme.Spacing
 import com.tisto.kmp.helper.ui.theme.TextAppearance
+import com.tisto.kmp.helper.utils.model.PickedImage
 
 @Composable
 fun CardImagePicker(

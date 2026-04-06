@@ -8,9 +8,9 @@
 //import androidx.compose.runtime.LaunchedEffect
 //import com.tisto.helper.core.helper.base.BaseViewModel
 //import com.tisto.helper.core.helper.base.BaseUiState
-//import com.tisto.helper.core.helper.base.SnackbarType
-//import com.tisto.helper.core.helper.base.UiEffect
-//import com.tisto.helper.core.helper.base.UiEvent
+//import com.tisto.kmp.helper.utils.SnackbarType
+//import com.tisto.kmp.helper.utils.UiEffect
+//import com.tisto.kmp.helper.utils.UiEvent
 //import com.tisto.helper.core.helper.component.showError
 //import com.tisto.helper.core.helper.component.showInfo
 //import com.tisto.helper.core.helper.component.showSuccess
