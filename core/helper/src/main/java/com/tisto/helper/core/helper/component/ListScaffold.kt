@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.tisto.helper.core.helper.utils.ext.reformatDate
+import com.tisto.kmp.helper.android.utils.ext.reformatDate
 import com.tisto.helper.core.helper.base.BaseUiState
 import com.tisto.kmp.helper.ui.theme.Colors
 import com.tisto.kmp.helper.ui.theme.Radius
