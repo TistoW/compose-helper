@@ -47,7 +47,7 @@ dependencies {
 
     implementation(project(":helper:ui"))
     implementation(project(":helper:network"))
-//    implementation(project(":helper:utils"))
+    implementation(project(":helper:utils"))
     implementation(project(":helper:android"))
 
     implementation(libs.androidx.core.ktx)
