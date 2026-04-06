@@ -24,12 +24,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import coil3.request.ImageRequest
-import com.tisto.helper.core.helper.base.BaseUiState
+import com.tisto.kmp.helper.network.base.BaseUiState
 import com.tisto.kmp.helper.ui.icon.MyIcon
 import com.tisto.kmp.helper.ui.icon.myicon.IcSearch
 import com.tisto.kmp.helper.ui.theme.Colors

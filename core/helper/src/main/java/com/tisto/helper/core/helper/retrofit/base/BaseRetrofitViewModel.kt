@@ -2,7 +2,7 @@ package com.tisto.helper.core.helper.retrofit.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tisto.helper.core.helper.base.BaseUiState
+import com.tisto.kmp.helper.network.base.BaseUiState
 import com.tisto.kmp.helper.utils.SnackbarType
 import com.tisto.kmp.helper.utils.UiEffect
 import com.tisto.kmp.helper.utils.UiEvent

@@ -6,8 +6,8 @@
 //import androidx.compose.material3.SnackbarHostState
 //import androidx.compose.runtime.Composable
 //import androidx.compose.runtime.LaunchedEffect
-//import com.tisto.helper.core.helper.base.BaseViewModel
-//import com.tisto.helper.core.helper.base.BaseUiState
+//import com.tisto.kmp.helper.network.base.BaseViewModel
+//import com.tisto.kmp.helper.network.base.BaseUiState
 //import com.tisto.kmp.helper.utils.SnackbarType
 //import com.tisto.kmp.helper.utils.UiEffect
 //import com.tisto.kmp.helper.utils.UiEvent
