@@ -2,7 +2,7 @@
 //
 //import androidx.lifecycle.ViewModel
 //import androidx.lifecycle.viewModelScope
-//import com.tisto.helper.core.helper.source.network.Resource
+//import com.tisto.kmp.helper.network.utils.Resource
 //import com.tisto.helper.core.helper.retrofit.network.ResourceRetrofit
 //import com.tisto.kmp.helper.utils.ext.def
 //import kotlinx.coroutines.channels.Channel

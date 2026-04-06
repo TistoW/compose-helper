@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import com.tisto.helper.core.helper.retrofit.network.ResourceRetrofit
 import com.tisto.helper.core.helper.retrofit.network.State
 import com.tisto.helper.core.helper.retrofit.response.base.ErrorResponse
-import com.tisto.helper.core.helper.source.network.Resource
+import com.tisto.kmp.helper.network.utils.Resource
 
 fun <T> LiveData<ResourceRetrofit<T>>.observer(
     lifecycleOwner: LifecycleOwner,
