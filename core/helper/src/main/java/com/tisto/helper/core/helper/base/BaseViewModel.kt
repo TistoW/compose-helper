@@ -1,12 +1,18 @@
 package com.tisto.helper.core.helper.base
 
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tisto.kmp.helper.network.utils.Resource
+import com.tisto.kmp.helper.utils.ScreenTypes
 import com.tisto.kmp.helper.utils.SnackbarType
 import com.tisto.kmp.helper.utils.UiEffect
 import com.tisto.kmp.helper.utils.UiEvent
 import com.tisto.kmp.helper.utils.ext.def
+import com.tisto.kmp.helper.utils.model.FilterItem
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,6 +25,36 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+data class BaseUiState<T>(
+    val data: T? = null,
+    val isLoading: Boolean = false,
+    val isLoadingProcess: Boolean = false,
+    val isRefreshing: Boolean = false,
+    val screen: String = ScreenTypes.list,
+    val search: String? = null,
+    val filters: List<FilterItem> = emptyList(),
+    val successMessage: String? = null,
+    val backAction: String? = null,
+
+    val snackbarHostState: SnackbarHostState = SnackbarHostState(),
+    val formScrollState: ScrollState = ScrollState(0),
+    val listScrollState: LazyListState = LazyListState(),
+    val gridScrollState: LazyGridState = LazyGridState(), // ✅ NEW
+
+    // Pagination
+    val page: Int = 1,
+    val pageLimit: Int = 10,
+    val totalPage: Int = 1,
+    val loadingSize: Int = 0,
+    val loadedCount: Int = 0,
+    val totalSize: Int = 0,
+    val hasMore: Boolean = false,
+) {
+    val isSearching: Boolean
+        get() = !search.isNullOrEmpty()
+    val isEmpty: Boolean
+        get() = loadingSize == 0 && loadedCount == 0
+}
 suspend fun SharedFlow<UiEvent>?.collectEvent(
     onError: (String) -> Unit = {},
     onSuccess: (String) -> Unit = {},

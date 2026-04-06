@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
@@ -41,7 +43,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.tisto.helper.core.helper.R
+import com.tisto.kmp.helper.ui.icon.MyIcon
+import com.tisto.kmp.helper.ui.icon.myicon.IcFilterSolar
 import com.tisto.kmp.helper.ui.theme.Colors
 import com.tisto.kmp.helper.ui.theme.ComposeHelperTheme
 import com.tisto.kmp.helper.ui.theme.Spacing
@@ -58,14 +61,14 @@ import kotlin.collections.toMutableMap
 fun simpleFilter(): List<FilterGroup> {
     return listOf(
         FilterGroup(
-            title = stringResource(R.string.urutkan),
+            title = "Urutkan",
             type = FilterType.SORT,
             listOf(
-                FilterItem(stringResource(R.string.nama_a_z), "asc", "name"),
-                FilterItem(stringResource(R.string.nama_z_a), "desc", "name"),
-                FilterItem(stringResource(R.string.terbaru), "desc", "createdAt"),
-                FilterItem(stringResource(R.string.terlama), "asc", "createdAt"),
-                FilterItem(stringResource(R.string.terakhir_diubah), "desc", "updatedAt")
+                FilterItem("Nama: A-Z", "asc", "name"),
+                FilterItem("Nama: Z-A", "desc", "name"),
+                FilterItem("Terbaru", "desc", "createdAt"),
+                FilterItem("Terlama", "asc", "createdAt"),
+                FilterItem("Terakhir Diubah", "desc", "updatedAt")
             )
         ),
         FilterGroup(
@@ -92,6 +95,7 @@ fun defaultFilter() = listOf(
         )
     )
 )
+
 @Composable
 fun GeneralFilterBottomSheet(
     onClose: () -> Unit,
@@ -130,11 +134,11 @@ fun GeneralFilterBottomSheet(
                 .padding(vertical = Spacing.box),
         ) {
             Text(
-                text = stringResource(R.string.filter),
+                text = "Filter",
                 style = TextAppearance.title2Bold(),
             )
             Icon(
-                painter = painterResource(R.drawable.ic_asset_close),
+                imageVector = Icons.Default.Close,
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
@@ -177,7 +181,7 @@ fun GeneralFilterBottomSheet(
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.reset),
+                    text = "Reset",
                     style = TextAppearance.body2(),
                 )
             }
@@ -293,7 +297,7 @@ fun FilterButton(
                 }
             } else {
                 Icon(
-                    painter = painterResource(R.drawable.ic_filter_solar),
+                    imageVector = MyIcon.IcFilterSolar,
                     contentDescription = "Filter",
                     tint = Color.Unspecified,
                     modifier = Modifier
@@ -304,7 +308,7 @@ fun FilterButton(
             // 🔹 Label “Filter”
             Spacer(modifier = Modifier.width(Spacing.small))
             Text(
-                text = stringResource(R.string.filter),
+                text = "Filter",
                 style = TextAppearance.body2()
             )
         }

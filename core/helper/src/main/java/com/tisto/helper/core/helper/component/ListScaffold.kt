@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,7 +26,6 @@ import com.tisto.kmp.helper.ui.theme.TextAppearance
 import com.tisto.kmp.helper.ui.utils.ext.MobilePreview
 import com.tisto.kmp.helper.ui.utils.ext.TabletPreview
 import com.tisto.kmp.helper.ui.utils.ext.ScreenConfig
-import com.tisto.helper.core.helper.R
 import com.tisto.kmp.helper.utils.model.FilterGroup
 import kotlinx.serialization.Serializable
 
@@ -144,9 +145,8 @@ fun <STATE, ITEMS> ListScaffold(
                                 strokeColor = Colors.Gray3,
                                 floatingLabel = false,
                                 cornerRadius = Radius.normal,
-                                leadingIcon = vectorResource(R.drawable.ic_search),
-                                endIcon = if (searchQuery.isNotEmpty())
-                                    vectorResource(R.drawable.ic_asset_close)
+                                leadingIcon = Icons.Default.Search,
+                                endIcon = if (searchQuery.isNotEmpty()) Icons.Default.Close
                                 else null,
                                 endIconOnClick = {
                                     searchQuery = ""

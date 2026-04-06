@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
@@ -27,8 +28,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.tisto.helper.core.helper.R
+import coil3.request.ImageRequest
 import com.tisto.helper.core.helper.base.BaseUiState
+import com.tisto.kmp.helper.ui.icon.MyIcon
+import com.tisto.kmp.helper.ui.icon.myicon.IcSearch
 import com.tisto.kmp.helper.ui.theme.Colors
 import com.tisto.kmp.helper.ui.theme.Heights
 import com.tisto.kmp.helper.ui.theme.Radius
@@ -770,7 +773,7 @@ private fun ToolbarRow(
 
             if (onAdd != null) {
                 ButtonNormal(
-                    text = stringResource(R.string.tambah),
+                    text = "Tambah",
                     backgroundColor = Colors.Black,
                     horizontalContentPadding = Spacing.normal,
                     imageVector = Icons.Default.Add,
@@ -813,8 +816,8 @@ private fun SearchFilterRow(
                 strokeColor = Colors.Gray3,
                 floatingLabel = false,
                 cornerRadius = Radius.normal,
-                leadingIcon = vectorResource(R.drawable.ic_search),
-                endIcon = if (searchQuery.isNotEmpty()) vectorResource(R.drawable.ic_asset_close) else null,
+                leadingIcon = MyIcon.IcSearch,
+                endIcon = if (searchQuery.isNotEmpty()) Icons.Default.Close else null,
                 endIconOnClick = onClearSearch,
                 modifier = Modifier.weight(1f)
             )
