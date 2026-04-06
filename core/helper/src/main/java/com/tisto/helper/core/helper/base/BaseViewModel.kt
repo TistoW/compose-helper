@@ -10,13 +10,13 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
-import com.tisto.kmp.helper.android.model.FilterItem
 import com.tisto.helper.core.helper.component.showError
 import com.tisto.helper.core.helper.component.showInfo
 import com.tisto.helper.core.helper.component.showSuccess
 import com.tisto.helper.core.helper.component.showWarning
 import com.tisto.helper.core.helper.source.network.Resource
 import com.tisto.helper.core.helper.utils.ext.def
+import com.tisto.kmp.helper.utils.model.FilterItem
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow

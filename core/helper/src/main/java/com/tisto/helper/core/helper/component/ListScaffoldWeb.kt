@@ -38,7 +38,7 @@ import com.tisto.kmp.helper.ui.utils.ext.MobilePreview
 import com.tisto.kmp.helper.ui.utils.ext.TabletPreview
 import com.tisto.kmp.helper.ui.utils.ext.ScreenConfig
 import com.tisto.helper.core.helper.utils.ext.isMobilePhone
-import com.tisto.kmp.helper.android.model.FilterGroup
+import com.tisto.kmp.helper.utils.model.FilterGroup
 
 // ====================================
 // 1. Add to BaseUiState

@@ -1,5 +1,6 @@
-package com.tisto.helper.core.helper.base
+package com.tisto.helper.core.helper.base.temp
 
+import com.tisto.helper.core.helper.base.BaseState
 import com.tisto.helper.core.helper.retrofit.base.BaseRetrofitViewModel
 import com.tisto.helper.core.helper.retrofit.network.ResourceRetrofit
 

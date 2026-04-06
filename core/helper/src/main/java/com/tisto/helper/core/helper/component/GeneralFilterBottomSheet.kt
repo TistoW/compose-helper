@@ -46,9 +46,9 @@ import com.tisto.kmp.helper.ui.theme.Colors
 import com.tisto.kmp.helper.ui.theme.ComposeHelperTheme
 import com.tisto.kmp.helper.ui.theme.Spacing
 import com.tisto.kmp.helper.ui.theme.TextAppearance
-import com.tisto.kmp.helper.android.model.FilterGroup
-import com.tisto.kmp.helper.android.model.FilterItem
-import com.tisto.kmp.helper.android.model.FilterType
+import com.tisto.kmp.helper.utils.model.FilterGroup
+import com.tisto.kmp.helper.utils.model.FilterItem
+import com.tisto.kmp.helper.utils.model.FilterType
 import kotlin.apply
 import kotlin.collections.filterNotNull
 import kotlin.collections.firstOrNull
