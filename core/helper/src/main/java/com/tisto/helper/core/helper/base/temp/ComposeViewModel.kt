@@ -11,10 +11,10 @@
 //import com.tisto.kmp.helper.utils.SnackbarType
 //import com.tisto.kmp.helper.utils.UiEffect
 //import com.tisto.kmp.helper.utils.UiEvent
-//import com.tisto.helper.core.helper.component.showError
-//import com.tisto.helper.core.helper.component.showInfo
-//import com.tisto.helper.core.helper.component.showSuccess
-//import com.tisto.helper.core.helper.component.showWarning
+//import com.tisto.kmp.helper.ui.component.showError
+//import com.tisto.kmp.helper.ui.component.showInfo
+//import com.tisto.kmp.helper.ui.component.showSuccess
+//import com.tisto.kmp.helper.ui.component.showWarning
 //import kotlinx.coroutines.flow.SharedFlow
 //
 //// ============================================
