@@ -47,11 +47,11 @@ import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
 import com.tisto.kmp.helper.ui.theme.Colors
 import com.tisto.kmp.helper.ui.utils.ext.MobilePreview
-import com.tisto.kmp.helper.utils.ext.colorFromText
 import com.tisto.kmp.helper.utils.ext.def
 import com.tisto.helper.core.helper.utils.toPainter
 import com.tisto.kmp.helper.ui.icon.MyIcon
 import com.tisto.kmp.helper.ui.icon.myicon.IcLoading
+import com.tisto.kmp.helper.ui.utils.ext.colorFromText
 
 enum class AvatarShape {
     CIRCLE,
