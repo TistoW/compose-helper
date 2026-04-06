@@ -25,7 +25,7 @@ import com.tisto.kmp.helper.ui.utils.ext.MobilePreview
 import com.tisto.kmp.helper.ui.utils.ext.TabletPreview
 import com.tisto.kmp.helper.ui.utils.ext.ScreenConfig
 import com.tisto.helper.core.helper.R
-import com.tisto.kmp.helper.utils.model.FilterGroup
+import com.tisto.kmp.helper.android.model.FilterGroup
 import kotlinx.serialization.Serializable
 
 @OptIn(ExperimentalMaterial3Api::class)
