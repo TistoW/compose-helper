@@ -1,5 +1,5 @@
 package com.tisto.helper.core.helper.retrofit.network
-import com.tisto.helper.core.helper.utils.ext.def
+import com.tisto.kmp.helper.utils.ext.def
 
 data class ResourceRetrofit<out T>(
     val state: State,

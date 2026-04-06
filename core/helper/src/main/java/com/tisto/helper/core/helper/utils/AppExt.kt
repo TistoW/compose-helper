@@ -5,9 +5,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import com.tisto.helper.core.helper.source.request.SearchRequest
-import com.tisto.helper.core.helper.utils.ext.logs
+import com.tisto.kmp.helper.utils.ext.logs
 import com.tisto.kmp.helper.android.utils.ext.toJson
-import com.tisto.helper.core.helper.utils.ext.translateJson
+import com.tisto.kmp.helper.utils.ext.translateJson
 import java.util.HashMap
 
 fun SearchRequest?.convertToQuery(): HashMap<String, String> {

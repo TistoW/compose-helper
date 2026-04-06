@@ -255,58 +255,6 @@ fun Example5_DangerZones() {
     }
 }
 
-// ============================================
-// EXAMPLE 6: With ViewModel
-// ============================================
-class PaymentViewModel : ViewModel() {
-    private val _countdownFinished = MutableStateFlow(false)
-    val countdownFinished: StateFlow<Boolean> = _countdownFinished
-
-    fun onCountdownFinish() {
-        _countdownFinished.value = true
-        // Cancel order
-        // Show expiration dialog
-    }
-}
-
-@Composable
-fun Example6_WithViewModel(viewModel: PaymentViewModel = viewModel()) {
-    val isExpired by viewModel.countdownFinished.collectAsState()
-
-    if (isExpired) {
-        // Show expired dialog
-        Text("Order expired!")
-    } else {
-        val countdown = rememberCountdownTimer(
-            initialMinutes = 45,
-            onFinish = viewModel::onCountdownFinish
-        )
-
-        Text("Pay within: $countdown")
-    }
-}
-
-// ============================================
-// TIMER PROPERTIES REFERENCE
-// ============================================
-/*
-CountdownState properties:
-
-.hours              // Int: Remaining hours
-.minutes            // Int: Remaining minutes
-.seconds            // Int: Remaining seconds
-.formattedTime      // String: "HH:MM:SS" format
-.isFinished         // Boolean: true when time = 0
-.totalMillis        // Long: Initial time in milliseconds
-.remainingMillis    // Long: Time left in milliseconds
-.progressPercentage // Float: 0.0 to 1.0 (useful for progress bars)
-
-Extension functions:
-
-.getTimerColor()    // Color: Red/Orange/Green based on time
-.isDangerZone()     // Boolean: true if < 5 minutes
-.isWarningZone()    // Boolean: true if < 15 minutes
-*/
 
 @Preview(showBackground = true)
 @Composable

@@ -1,8 +1,8 @@
 package com.tisto.helper.core.helper.source.network
 
 import com.tisto.helper.core.helper.source.response.BaseResponse
-import com.tisto.helper.core.helper.utils.ext.def
-import com.tisto.helper.core.helper.utils.ext.logs
+import com.tisto.kmp.helper.utils.ext.def
+import com.tisto.kmp.helper.utils.ext.logs
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

@@ -23,7 +23,7 @@ import com.tisto.kmp.helper.ui.theme.Spacing
 import com.tisto.kmp.helper.ui.utils.ext.MobilePreview
 import com.tisto.kmp.helper.ui.utils.ext.ScreenConfig
 import com.tisto.kmp.helper.ui.utils.ext.TabletPreview
-import com.tisto.helper.core.helper.utils.ext.shorten
+import com.tisto.kmp.helper.utils.ext.shorten
 import com.tisto.helper.core.helper.utils.ext.title
 
 sealed interface FormContent {
